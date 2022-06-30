@@ -10,9 +10,10 @@ import { ExploreModule } from './explore/explore.module';
 import { SellModule } from './sell/sell.module';
 import { FavoritesModule } from './favorites/favorites.module';
 import { EventsModule } from './events/events.module';
+import { AuthorUsersModule } from './authorUsers/authorUsers.module';
 
 @Module({
-  imports: [UsersModule, CollectionsModule, ItemsModule, AuctionsModule, SearchModule, ExploreModule, SellModule, FavoritesModule, EventsModule],
+  imports: [UsersModule, CollectionsModule, ItemsModule, AuctionsModule, SearchModule, ExploreModule, SellModule, FavoritesModule, EventsModule, AuthorUsersModule],
   controllers: [AppController],
   providers: [AppService],
 })

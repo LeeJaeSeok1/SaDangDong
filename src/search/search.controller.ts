@@ -2,33 +2,30 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { SearchService } from './search.service';
 import { CreateSearchDto } from './dto/create-search.dto';
 import { UpdateSearchDto } from './dto/update-search.dto';
+import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 
-@Controller('search')
+@ApiTags('Search')
+@Controller('api/search')
 export class SearchController {
   constructor(private readonly searchService: SearchService) {}
-
-  @Post()
+  
+  @ApiQuery({
+    name: 'name',
+    required: true,
+    description: 'name = value',
+  })
+  @ApiQuery({
+    name: 'tab',
+    required: true,
+    description: 'tab = collection, item, auction',
+  })
+  @ApiOperation({
+    summary: '검색',
+    description: '검색 페이지',
+  })
+  @Get()
   create(@Body() createSearchDto: CreateSearchDto) {
     return this.searchService.create(createSearchDto);
   }
 
-  @Get()
-  findAll() {
-    return this.searchService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.searchService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateSearchDto: UpdateSearchDto) {
-    return this.searchService.update(+id, updateSearchDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.searchService.remove(+id);
-  }
 }

@@ -1,34 +1,62 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Put,
+} from '@nestjs/common';
 import { ItemsService } from './items.service';
 import { CreateItemDto } from './dto/create-item.dto';
 import { UpdateItemDto } from './dto/update-item.dto';
+import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 
-@Controller('items')
+@ApiTags('Items')
+@Controller('api/items')
 export class ItemsController {
   constructor(private readonly itemsService: ItemsService) {}
 
-  @Post()
+  @ApiOperation({ summary: '아이템 민팅', description: '아이템 민팅 페이지' })
+  @Post('minting')
   create(@Body() createItemDto: CreateItemDto) {
     return this.itemsService.create(createItemDto);
   }
 
-  @Get()
-  findAll() {
-    return this.itemsService.findAll();
+  @ApiOperation({
+    summary: '아이템 상세보기',
+    description: '아이템 상세보기 페이지',
+  })
+  @Get(':NFTtocken')
+  findOne(@Param('NFTtoken') NFTtoken: string) {
+    return this.itemsService.findOne(+NFTtoken);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.itemsService.findOne(+id);
+  @ApiOperation({
+    summary: '아이템 좋아요',
+    description: '아이템 좋아요 페이지',
+  })
+  @Put(':NFTtocken')
+  isLike(@Param('NFTtoken') NFTtoken: string) {
+    return this.itemsService.findOne(+NFTtoken);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateItemDto: UpdateItemDto) {
-    return this.itemsService.update(+id, updateItemDto);
+  @ApiOperation({
+    summary: '아이템 수정',
+    description: '아이템 수정 페이지',
+  })
+  @Put(':NFTtocken')
+  edit(@Param('NFTtoken') NFTtoken: string) {
+    return this.itemsService.findOne(+NFTtoken);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.itemsService.remove(+id);
+  @ApiOperation({
+    summary: '아이템 삭제',
+    description: '아이템 삭제 페이지',
+  })
+  @Delete(':NFTtocken')
+  remove(@Param('NFTtocken') NFTtocken: string) {
+    return this.itemsService.remove(+NFTtocken);
   }
 }
