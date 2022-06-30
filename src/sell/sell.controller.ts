@@ -7,28 +7,28 @@ import { UpdateSellDto } from './dto/update-sell.dto';
 export class SellController {
   constructor(private readonly sellService: SellService) {}
 
-  @Post()
-  create(@Body() createSellDto: CreateSellDto) {
-    return this.sellService.create(createSellDto);
-  }
+  // @Post()
+  // create(@Body() createSellDto: CreateSellDto) {
+  //   return this.sellService.create(createSellDto);
+  // }
 
-  @Get()
-  findAll() {
-    return this.sellService.findAll();
-  }
+  // @Get()
+  // findAll() {
+  //   return this.sellService.findAll();
+  // }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.sellService.findOne(+id);
-  }
+  // @Get(':id')
+  // findOne(@Param('id') id: string) {
+  //   return this.sellService.findOne(+id);
+  // }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateSellDto: UpdateSellDto) {
-    return this.sellService.update(+id, updateSellDto);
-  }
+  // @Patch(':id')
+  // update(@Param('id') id: string, @Body() updateSellDto: UpdateSellDto) {
+  //   return this.sellService.update(+id, updateSellDto);
+  // }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.sellService.remove(+id);
-  }
+  // @Delete(':id')
+  // remove(@Param('id') id: string) {
+  //   return this.sellService.remove(+id);
+  // }
 }

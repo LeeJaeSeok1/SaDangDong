@@ -1,34 +1,48 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { AuctionsService } from './auctions.service';
 import { CreateAuctionDto } from './dto/create-auction.dto';
 import { UpdateAuctionDto } from './dto/update-auction.dto';
 
-@Controller('auctions')
+@ApiTags('Auction')
+@Controller('api/auction')
 export class AuctionsController {
   constructor(private readonly auctionsService: AuctionsService) {}
 
-  @Post()
-  create(@Body() createAuctionDto: CreateAuctionDto) {
+  @ApiOperation({
+    summary: '경매 등록',
+    description: '경매에 아이템 등록하기'
+  })
+  @Post(':NFTtoken')
+  create(@Param('NFTtoken') NFTtoken: string, @Body() createAuctionDto: CreateAuctionDto) {
     return this.auctionsService.create(createAuctionDto);
   }
 
-  @Get()
-  findAll() {
-    return this.auctionsService.findAll();
+  @ApiOperation({
+    summary: '경매 참여',
+    description: '경매중인 아이템에 경매 참여'
+  })
+  @Get(':NFTtoken')
+  findAll(@Param('NFTtoken') NFTtoken: string) {
+    return this.auctionsService.findOne(+NFTtoken);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.auctionsService.findOne(+id);
+  @ApiOperation({
+    summary: '경매 채팅',
+    description: '경매중인 아이템에 채팅리스트'
+  })
+  @Get(':NFTtoken/chatting')
+  findChatting(@Param('NFTtoken') NFTtoken: string) {
+    return this.auctionsService.findOne(+NFTtoken);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAuctionDto: UpdateAuctionDto) {
-    return this.auctionsService.update(+id, updateAuctionDto);
+  @ApiOperation({
+    summary: '경매 채팅',
+    description: '경매중인 아이템에 채팅리스트'
+  })
+  @Get(':NFTtoken/offer')
+  findOffer(@Param('NFTtoken') NFTtoken: string) {
+    return this.auctionsService.findOne(+NFTtoken);
   }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.auctionsService.remove(+id);
-  }
+ 
 }
