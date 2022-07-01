@@ -20,12 +20,12 @@ import { ConfigModule } from '@nestjs/config';
             }),UsersModule, CollectionsModule, ItemsModule, AuctionsModule, SearchModule,
               ExploreModule, SellModule, FavoritesModule, EventsModule, TypeOrmModule.forRoot({
               type: 'mysql',
-              host: '13.125.82.28',
+              host: '0.0.0.0',
               username: process.env.DB_NAME,
               password: process.env.DB_PASSWORD,
-              database: 'user',
+              database: 'test',
               entities: [User],
-              synchronize:true,
+              synchronize:false,
             }),
             UsersModule
           ],
