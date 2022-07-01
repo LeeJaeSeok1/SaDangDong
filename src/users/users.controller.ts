@@ -1,34 +1,37 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, Delete } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+// import { CreateUserDto } from './dto/create-user.dto';
+// import { UpdateUserDto } from './dto/update-user.dto';
+import { User } from './entities/user.entity';
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+    constructor(private usersService: UsersService){};
 
-  @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
-  }
+    @Get()
+    findAll(): Promise<User[]> {
+        return this.usersService.findAll();
+    }
 
-  @Get()
-  findAll() {
-    return this.usersService.findAll();
-  }
+    @Get(':nickname')
+    findOne(@Param('nickname')nickname: string): string {
+        return `This action returns a #${nickname} user`;
+    }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.usersService.findOne(+id);
-  }
+    @Post()
+    create(@Body() user: User){
+        return this.usersService.create(user);
+    }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(+id, updateUserDto);
-  }
+    @Put(':nickname')
+    update(@Param('nickname')nickname: string, @Body() user: User){
+        this.usersService.update(nickname, user);
+        return `This action updates a #${nickname} user`;
+    }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.usersService.remove(+id);
-  }
+    @Delete(':nickname')
+    remove(@Param('nickname')nickname: string){
+        this.usersService.remove(nickname);
+        return `This action removes a #${nickname} user`;
+    }
 }
