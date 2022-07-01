@@ -20,7 +20,7 @@ import { ConfigModule } from '@nestjs/config';
             }),UsersModule, CollectionsModule, ItemsModule, AuctionsModule, SearchModule,
               ExploreModule, SellModule, FavoritesModule, EventsModule, TypeOrmModule.forRoot({
               type: 'mysql',
-              host: '0.0.0.0',
+              host: 'localhost',
               username: process.env.DB_NAME,
               password: process.env.DB_PASSWORD,
               database: 'test',
