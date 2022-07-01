@@ -2,33 +2,23 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { CollectionsService } from './collections.service';
 import { CreateCollectionDto } from './dto/create-collection.dto';
 import { UpdateCollectionDto } from './dto/update-collection.dto';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
-@Controller('collections')
+
+@ApiTags('Collections')
+@Controller('api/collections')
 export class CollectionsController {
   constructor(private readonly collectionsService: CollectionsService) {}
 
+  @ApiOperation({ summary: '컬렉션 생성', description:'컬렉션 생성 페이지'})
   @Post()
   create(@Body() createCollectionDto: CreateCollectionDto) {
     return this.collectionsService.create(createCollectionDto);
   }
 
-  @Get()
-  findAll() {
-    return this.collectionsService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.collectionsService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCollectionDto: UpdateCollectionDto) {
-    return this.collectionsService.update(+id, updateCollectionDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.collectionsService.remove(+id);
+  @ApiOperation({ summary: '컬렉션 디테일', description:'컬렉션에 아이템들 보는 페이지'})
+  @Get('collection/:collectionName')
+  findOne(@Param('collectionName') collectionName: string) {
+    return this.collectionsService.findOne(+collectionName);
   }
 }
