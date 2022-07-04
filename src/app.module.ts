@@ -12,18 +12,15 @@ import { FavoritesModule } from './favorites/favorites.module';
 import { EventsModule } from './events/events.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './users/entities/user.entity';
-import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [ConfigModule.forRoot({
-              isGlobal: true
-            }),UsersModule, CollectionsModule, ItemsModule, AuctionsModule, SearchModule,
-              ExploreModule, SellModule, FavoritesModule, EventsModule, TypeOrmModule.forRoot({
+  imports: [UsersModule, CollectionsModule, ItemsModule, AuctionsModule, SearchModule,
+            ExploreModule, SellModule, FavoritesModule, EventsModule, TypeOrmModule.forRoot({
               type: 'mysql',
               host: 'localhost',
               port: 3306,
-              username: process.env.DB_NAME,
-              password: process.env.DB_PASSWORD,
+              username: '',
+              password: '',
               database: 'user',
               entities: [User],
               synchronize:false,
