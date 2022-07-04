@@ -1,9 +1,7 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
-
 @Entity()
 export class User {
-
     // @PrimaryGeneratedColumn()
     // walletId: number;
 
@@ -15,13 +13,12 @@ export class User {
 
     @Column()
     bannerImage: string;
-    
+
     @Column()
     description: string;
-    
+
     // @Column()
     // block: string;
     @Column({ default: true })
     isActive: boolean;
 }
-
