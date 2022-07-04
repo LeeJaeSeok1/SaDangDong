@@ -18,12 +18,12 @@ import { User } from './users/entities/user.entity';
             ExploreModule, SellModule, FavoritesModule, EventsModule, TypeOrmModule.forRoot({
               type: 'mysql',
               host: 'localhost',
-              port: 3306,
-              username: '',
-              password: '',
-              database: 'user',
+
+              username: process.env.DB_NAME,
+              password: process.env.DB_PASSWORD,
+              database: 'test',
               entities: [User],
-              synchronize:false,
+              synchronize:true,
             }),
             UsersModule
           ],
