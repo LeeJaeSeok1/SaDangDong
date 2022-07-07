@@ -1,14 +1,5 @@
 import { Item } from "src/items/entities/item.entity";
-import { User } from "src/users/entities/user.entity";
-import {
-    Column,
-    CreateDateColumn,
-    Entity,
-    ManyToOne,
-    OneToOne,
-    PrimaryGeneratedColumn,
-    UpdateDateColumn,
-} from "typeorm";
+import { Column, CreateDateColumn, Entity, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { Chat } from "./chat.entity";
 import { Offer } from "./offer.entity";
 

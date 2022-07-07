@@ -16,11 +16,11 @@ export class Item {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @PrimaryColumn()
+    @Column()
     NFTtoken: string;
 
     @Column()
-    name: string;
+    name2: string;
 
     @Column()
     owner: string;

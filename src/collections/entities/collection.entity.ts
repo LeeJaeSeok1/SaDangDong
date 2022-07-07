@@ -14,8 +14,8 @@ export class Collection {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @PrimaryColumn()
-    name: string;
+    @Column()
+    name1: string;
 
     @Column()
     description: string;
