@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
-import { CreateCollectionDto } from "./dto/create-collection.dto";
-import { UpdateCollectionDto } from "./dto/update-collection.dto";
+import { CreateCollectionDto } from "./dto/createCollection.dto";
+import { UpdateCollectionDto } from "./dto/updateCollection.dto";
 
 @Injectable()
 export class CollectionsService {

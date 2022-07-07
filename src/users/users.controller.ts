@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query, Put } from "@nestjs/common";
 import { UsersService } from "./users.service";
-import { CreateUserDto } from "./dto/create-user.dto";
-import { UpdateUserDto } from "./dto/update-user.dto";
+import { CreateUserDto } from "./dto/createUser.dto";
+import { UpdateUserDto } from "./dto/updateUser.dto";
 import { ApiOperation, ApiQuery, ApiTags } from "@nestjs/swagger";
 import { User } from "./entities/user.entity";
 
@@ -15,13 +15,11 @@ export class UsersController {
     //     return this.usersService.create(user);
     // }
 
-
     @ApiOperation({ summary: "유저로그인", description: "유저 로그인 페이지" })
     @Post("/auth")
     create(@Body() createUserDto: CreateUserDto) {
         return; // this.usersService.create(createUserDto);
     }
-
 
     // @ApiQuery({
     //     name: "tab",
@@ -36,7 +34,6 @@ export class UsersController {
     // findAll(): Promise<User[]> {
     //     return this.usersService.findAll();
     // }
-
 
     // @ApiOperation({
     //     summary: "USER 정보수정 페이지",

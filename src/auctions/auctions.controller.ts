@@ -1,8 +1,8 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from "@nestjs/common";
 import { ApiOperation, ApiTags } from "@nestjs/swagger";
 import { AuctionsService } from "./auctions.service";
-import { CreateAuctionDto } from "./dto/create-auction.dto";
-import { UpdateAuctionDto } from "./dto/update-auction.dto";
+import { CreateAuctionDto } from "./dto/createAuction.dto";
+import { UpdateAuctionDto } from "./dto/updateAuction.dto";
 
 @ApiTags("Auction")
 @Controller("api/auction")
