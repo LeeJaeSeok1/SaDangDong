@@ -1,0 +1,9 @@
+version: '3'
+
+services:
+  redis:
+    image: redis
+    restart: always
+    container_name: ilyong-redis
+    ports:
+      - 10300:6379
