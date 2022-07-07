@@ -12,9 +12,22 @@ import { FavoritesModule } from "./favorites/favorites.module";
 import { EventsModule } from "./events/events.module";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { User } from "./users/entities/user.entity";
+import { ChatModule } from './chat/chat.module';
+import * as Joi from 'joi'
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
     imports: [
+        ConfigModule.forRoot({
+            isGlobal:true,
+            envFilePath: `.env`,
+            validationSchema: Joi.object({
+              NODE_PORT: Joi.string().required(),
+              REDIS_PORT: Joi.string().required(),
+              REDIS_HOST: Joi.string().required(),
+            }),
+          }),
+          ChatModule,
         UsersModule,
         CollectionsModule,
         ItemsModule,
@@ -27,10 +40,9 @@ import { User } from "./users/entities/user.entity";
         TypeOrmModule.forRoot({
             type: "mysql",
             host: "localhost",
-
             username: process.env.DB_NAME,
             password: process.env.DB_PASSWORD,
-            database: "test",
+            database: "user",
             entities: [User],
             synchronize: true,
         }),
