@@ -1,13 +1,14 @@
 import { NestFactory } from "@nestjs/core";
 import { SwaggerModule, DocumentBuilder } from "@nestjs/swagger";
 import { AppModule } from "./app.module";
-import { NestExpressApplication } from '@nestjs/platform-express';
+import { NestExpressApplication } from "@nestjs/platform-express";
+import { Logger } from "@nestjs/common";
 // import { join } from 'path';
 // import { RedisIoAdapter } from './chat/redis.adapter';
 
-
 async function bootstrap() {
     const app = await NestFactory.create<NestExpressApplication>(AppModule);
+    const port = process.env.NODE_PORT;
     // app.useWebSocketAdapter(new RedisIoAdapter(app));
     // app.useStaticAssets(join(__dirname, '..', 'static'));
     const config = new DocumentBuilder()
@@ -20,6 +21,7 @@ async function bootstrap() {
     SwaggerModule.setup("api", app, document);
     // 테스트
     // await app.listen(3000);
-    await app.listen(process.env.NODE_PORT);
+    await app.listen(port);
+    Logger.log(`Application runnin on port ${port}`);
 }
 bootstrap();

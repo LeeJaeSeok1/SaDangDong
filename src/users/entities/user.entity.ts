@@ -6,6 +6,9 @@ export class User {
     // walletId: number;
 
     @PrimaryGeneratedColumn()
+    id: number;
+
+    @Column()
     nickname: string;
 
     @Column()
