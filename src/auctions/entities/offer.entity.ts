@@ -4,33 +4,19 @@ import {
     CreateDateColumn,
     Entity,
     ManyToOne,
-    PrimaryColumn,
+    OneToOne,
     PrimaryGeneratedColumn,
     UpdateDateColumn,
 } from "typeorm";
+import { Auction } from "./auction.entity";
 
 @Entity()
-export class Collection {
+export class Offer {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @PrimaryColumn()
-    name: string;
-
     @Column()
-    description: string;
-
-    @Column()
-    earning: number;
-
-    @Column()
-    bennerImage: string;
-
-    @Column()
-    logoImge: string;
-
-    @Column()
-    fearureImage: string;
+    biddingPrice: number;
 
     @CreateDateColumn()
     createdAt: Date;
@@ -38,6 +24,9 @@ export class Collection {
     @UpdateDateColumn()
     updatedAt: Date;
 
-    @ManyToOne((type) => User, (user) => user.collection)
+    @OneToOne((type) => Auction, (auction) => auction.offer)
+    auction: Auction;
+
+    @ManyToOne((type) => User, (user) => user.offer)
     user: User;
 }
