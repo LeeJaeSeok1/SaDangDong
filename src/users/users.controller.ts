@@ -10,16 +10,18 @@ import { User } from "./entities/user.entity";
 export class UsersController {
     constructor(private readonly usersService: UsersService) {}
 
-    @Post()
-    create(@Body() user: User) {
-        return this.usersService.create(user);
+    // @Post()
+    // create(@Body() user: User) {
+    //     return this.usersService.create(user);
+    // }
+
+
+    @ApiOperation({ summary: "유저로그인", description: "유저 로그인 페이지" })
+    @Post("/auth")
+    create(@Body() createUserDto: CreateUserDto) {
+        return; // this.usersService.create(createUserDto);
     }
 
-    // @ApiOperation({ summary: "유저로그인", description: "유저 로그인 페이지" })
-    // @Post("/auth")
-    // create(@Body() createUserDto: CreateUserDto) {
-    //     return this.usersService.create(createUserDto);
-    // }
 
     // @ApiQuery({
     //     name: "tab",
@@ -34,6 +36,7 @@ export class UsersController {
     // findAll(): Promise<User[]> {
     //     return this.usersService.findAll();
     // }
+
 
     // @ApiOperation({
     //     summary: "USER 정보수정 페이지",

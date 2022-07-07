@@ -16,6 +16,7 @@ import { ChatModule } from './chat/chat.module';
 import * as Joi from 'joi'
 import { ConfigModule } from '@nestjs/config';
 
+
 @Module({
     imports: [
         ConfigModule.forRoot({
@@ -40,7 +41,9 @@ import { ConfigModule } from '@nestjs/config';
         TypeOrmModule.forRoot({
             type: "mysql",
             host: "localhost",
-            username: process.env.DB_NAME,
+
+
+            username: process.env.DB_USERNAME,
             password: process.env.DB_PASSWORD,
             database: "user",
             entities: [User],
