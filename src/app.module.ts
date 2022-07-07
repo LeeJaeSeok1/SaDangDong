@@ -12,9 +12,13 @@ import { FavoritesModule } from "./favorites/favorites.module";
 import { EventsModule } from "./events/events.module";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { User } from "./users/entities/user.entity";
+import { ConfigModule } from "@nestjs/config";
 
 @Module({
     imports: [
+        ConfigModule.forRoot({
+            isGlobal: true,
+        }),
         UsersModule,
         CollectionsModule,
         ItemsModule,
@@ -28,7 +32,7 @@ import { User } from "./users/entities/user.entity";
             type: "mysql",
             host: "localhost",
 
-            username: process.env.DB_NAME,
+            username: process.env.DB_USERNAME,
             password: process.env.DB_PASSWORD,
             database: "test",
             entities: [User],
