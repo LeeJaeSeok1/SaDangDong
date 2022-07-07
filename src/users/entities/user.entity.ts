@@ -18,9 +18,6 @@ export class User {
     id: number;
 
     @PrimaryColumn()
-    name: string;
-
-    @Column()
     nickname: string;
 
     @Column()

@@ -1,5 +1,4 @@
 import { Auction } from "src/auctions/entities/auction.entity";
-import { Favorite, FavoriteCount } from "src/favorites/entities/favorite.entity";
 import { User } from "src/users/entities/user.entity";
 import {
     Column,
@@ -18,19 +17,19 @@ export class Item {
     id: number;
 
     @PrimaryColumn()
+    NFTtoken: string;
+
+    @Column()
     name: string;
 
     @Column()
-    nickname: string;
+    owner: string;
 
     @Column()
     description: string;
 
     @Column()
-    profileImage: string;
-
-    @Column()
-    bannerImage: string;
+    Blockchain: string;
 
     @CreateDateColumn()
     createdAt: Date;

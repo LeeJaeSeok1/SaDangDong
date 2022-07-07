@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
-import { CreateAuctionDto } from "./dto/create-auction.dto";
-import { UpdateAuctionDto } from "./dto/update-auction.dto";
+import { CreateAuctionDto } from "./dto/createAuction.dto";
+import { UpdateAuctionDto } from "./dto/updateAuction.dto";
 
 @Injectable()
 export class AuctionsService {

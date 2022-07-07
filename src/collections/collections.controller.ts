@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from "@nestjs/common";
 import { CollectionsService } from "./collections.service";
-import { CreateCollectionDto } from "./dto/create-collection.dto";
-import { UpdateCollectionDto } from "./dto/update-collection.dto";
+import { CreateCollectionDto } from "./dto/createCollection.dto";
+import { UpdateCollectionDto } from "./dto/updateCollection.dto";
 import { ApiOperation, ApiTags } from "@nestjs/swagger";
 
 @ApiTags("Collections")

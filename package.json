@@ -66,6 +66,8 @@
 
     "@types/js-yaml": "^4.0.5",
 
+    "class-validator": "^0.13.2",
+
     "config": "^3.3.7",
 
     "fastify-swagger": "^5.2.0",
