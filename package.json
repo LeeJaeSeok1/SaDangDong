@@ -110,6 +110,8 @@
 
     "@types/jest": "27.5.0",
 
+    "@types/multer": "^1.4.7",
+
     "@types/node": "^16.11.42",
 
     "@types/sequelize": "^4.28.13",
