@@ -15,6 +15,7 @@ import { ChatModule } from "./chat/chat.module";
 import * as Joi from "joi";
 import { ConfigModule } from "@nestjs/config";
 import { typeORMConfig } from "./configs/typeorm.config";
+import { ImagesModule } from "./images/images.module";
 
 @Module({
     imports: [
@@ -38,6 +39,7 @@ import { typeORMConfig } from "./configs/typeorm.config";
         FavoritesModule,
         EventsModule,
         TypeOrmModule.forRoot(typeORMConfig),
+        ImagesModule,
     ],
 
     controllers: [AppController],
