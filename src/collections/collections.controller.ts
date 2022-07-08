@@ -1,8 +1,9 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from "@nestjs/common";
+import { Controller, Get, Post, Body, Patch, Param, Delete, Put } from "@nestjs/common";
 import { CollectionsService } from "./collections.service";
 import { CreateCollectionDto } from "./dto/createCollection.dto";
 import { UpdateCollectionDto } from "./dto/updateCollection.dto";
 import { ApiOperation, ApiTags } from "@nestjs/swagger";
+import { Collection } from "./entities/collection.entity";
 
 @ApiTags("Collections")
 @Controller("api/collections")
@@ -11,16 +12,25 @@ export class CollectionsController {
 
     @ApiOperation({ summary: "컬렉션 생성", description: "컬렉션 생성 페이지" })
     @Post()
-    create(@Body() createCollectionDto: CreateCollectionDto) {
-        return this.collectionsService.create(createCollectionDto);
+    createCollection(@Body() createCollectionDto: CreateCollectionDto) {
+        return this.collectionsService.createCollection(createCollectionDto);
     }
 
-    @ApiOperation({
-        summary: "컬렉션 디테일",
-        description: "컬렉션에 아이템들 보는 페이지",
-    })
-    @Get("collection/:collectionName")
-    findOne(@Param("collectionName") collectionName: string) {
-        return this.collectionsService.findOne(+collectionName);
+    @ApiOperation({ summary: "컬렉션 보기" })
+    @Get()
+    findCollections(): Promise<Collection[]> {
+        return this.collectionsService.findCollection();
+    }
+
+    @ApiOperation({ summary: "컬렉션 수정" })
+    @Put(":id")
+    updateCollection(@Param("id") id: number, @Body() updateCollection: UpdateCollectionDto) {
+        return this.collectionsService.updateCollection(id, updateCollection);
+    }
+
+    @ApiOperation({ summary: "컬렉션 삭제" })
+    @Delete(":id")
+    deleteCollection(@Param("id") id: number) {
+        return this.collectionsService.deleteCollection(id);
     }
 }

@@ -1,10 +1,12 @@
+import { Item } from "src/items/entities/item.entity";
 import { User } from "src/users/entities/user.entity";
 import {
     Column,
     CreateDateColumn,
     Entity,
+    JoinColumn,
+    ManyToMany,
     ManyToOne,
-    PrimaryColumn,
     PrimaryGeneratedColumn,
     UpdateDateColumn,
 } from "typeorm";
@@ -15,7 +17,7 @@ export class Collection {
     id: number;
 
     @Column()
-    name1: string;
+    name: string;
 
     @Column()
     description: string;
@@ -40,4 +42,7 @@ export class Collection {
 
     @ManyToOne((type) => User, (user) => user.collection)
     user: User;
+
+    @ManyToMany((type) => Item, (item) => item.collection)
+    item: Item[];
 }

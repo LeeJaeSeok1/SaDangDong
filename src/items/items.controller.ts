@@ -9,48 +9,33 @@ import { ApiOperation, ApiQuery, ApiTags } from "@nestjs/swagger";
 export class ItemsController {
     constructor(private readonly itemsService: ItemsService) {}
 
-    @ApiOperation({
-        summary: "아이템 민팅",
-        description: "아이템 민팅 페이지",
-    })
+    @ApiOperation({ summary: "아이템 민팅", description: "아이템 민팅 페이지" })
     @Post("minting")
-    create(@Body() createItemDto: CreateItemDto) {
-        return "여기는 아이템 민팅하는 페이지";
+    createItem(@Body() createItemDto: CreateItemDto) {
+        return this.itemsService.createItem(createItemDto);
     }
 
-    @ApiOperation({
-        summary: "아이템 상세보기",
-        description: "아이템 상세보기 페이지",
-    })
-    @Get(":NFTtocken")
-    findOne(@Param("NFTtoken") NFTtoken: string) {
-        return `여기는 아이템 #${NFTtoken}의 상세보기`;
+    @ApiOperation({ summary: "아이템 상세보기", description: "아이템 상세보기 페이지" })
+    @Get(":id")
+    findByIdItem(@Param("id") id: number) {
+        return this.itemsService.findByIdItem(id);
     }
 
-    @ApiOperation({
-        summary: "아이템 좋아요",
-        description: "아이템 좋아요 페이지",
-    })
-    @Put(":NFTtocken")
-    isLike(@Param("NFTtoken") NFTtoken: string) {
-        return `여기는 아이템 #${NFTtoken}의 좋아요 누르는 페이지`;
+    // @ApiOperation({summary: "아이템 좋아요",description: "아이템 좋아요 페이지",})
+    // @Put(":NFTtocken")
+    // isLike(@Param("NFTtoken") NFTtoken: string) {
+    //     return `여기는 아이템 #${NFTtoken}의 좋아요 누르는 페이지`;
+    // }
+
+    @ApiOperation({ summary: "아이템 수정", description: "아이템 수정 페이지" })
+    @Put(":id")
+    updateItem(@Param("id") id: number, @Body() updateItemDto: UpdateItemDto) {
+        return this.itemsService.updateItem(id, updateItemDto);
     }
 
-    @ApiOperation({
-        summary: "아이템 수정",
-        description: "아이템 수정 페이지",
-    })
-    @Put(":NFTtocken")
-    edit(@Param("NFTtoken") NFTtoken: string) {
-        return `여기는 아이템 #${NFTtoken}의 수정 페이지`;
-    }
-
-    @ApiOperation({
-        summary: "아이템 삭제",
-        description: "아이템 삭제 페이지",
-    })
-    @Delete(":NFTtocken")
-    remove(@Param("NFTtocken") NFTtoken: string) {
-        return `여기는 아이템 #${NFTtoken}의 삭제 페이지`;
+    @ApiOperation({ summary: "아이템 삭제", description: "아이템 삭제 페이지" })
+    @Delete(":id")
+    deleteItem(@Param("id") id: number) {
+        return this.itemsService.deleteItem(id);
     }
 }

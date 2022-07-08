@@ -9,16 +9,19 @@ export class User {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column()
+    @Column({ nullable: true })
     nickname: string;
 
-    @Column()
+    @Column({ nullable: true })
+    password: string;
+
+    @Column({ nullable: true })
     description: string;
 
-    @Column()
+    @Column({ nullable: true })
     profileImage: string;
 
-    @Column()
+    @Column({ nullable: true })
     bannerImage: string;
 
     @CreateDateColumn()
@@ -28,10 +31,10 @@ export class User {
     updatedAt: Date;
 
     @OneToMany((type) => Collection, (collection) => collection.user)
-    collection: Collection;
+    collection: Collection[];
 
     @OneToMany((type) => Item, (item) => item.user)
-    item: Item;
+    item: Item[];
 
     @OneToMany((type) => Offer, (offer) => offer.user)
     offer: Offer;

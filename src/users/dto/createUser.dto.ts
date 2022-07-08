@@ -8,6 +8,8 @@ export class CreateUserDto {
     })
     nickname: string;
 
+    password: string;
+
     @ApiProperty({
         example: "저는 사당동 입니다.",
         description: "유저 설명",

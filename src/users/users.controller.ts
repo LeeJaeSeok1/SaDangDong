@@ -8,17 +8,12 @@ import { User } from "./entities/user.entity";
 @ApiTags("Account")
 @Controller("api/account")
 export class UsersController {
-    constructor(private readonly usersService: UsersService) {}
+    constructor(private usersService: UsersService) {}
 
-    // @Post()
-    // create(@Body() user: User) {
-    //     return this.usersService.create(user);
-    // }
-
-    @ApiOperation({ summary: "유저로그인", description: "유저 로그인 페이지" })
+    @ApiOperation({ summary: "회원가입", description: "회원 페이지" })
     @Post("/auth")
-    create(@Body() createUserDto: CreateUserDto) {
-        return; // this.usersService.create(createUserDto);
+    async signUp(@Body() createUserDto: CreateUserDto) {
+        return this.usersService.signUp(createUserDto);
     }
 
     // @ApiQuery({

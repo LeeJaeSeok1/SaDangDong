@@ -1,9 +1,11 @@
 import { Auction } from "src/auctions/entities/auction.entity";
+import { Collection } from "src/collections/entities/collection.entity";
 import { User } from "src/users/entities/user.entity";
 import {
     Column,
     CreateDateColumn,
     Entity,
+    ManyToMany,
     ManyToOne,
     OneToOne,
     PrimaryColumn,
@@ -20,7 +22,7 @@ export class Item {
     NFTtoken: string;
 
     @Column()
-    name2: string;
+    name: string;
 
     @Column()
     owner: string;
@@ -42,4 +44,7 @@ export class Item {
 
     @OneToOne((type) => Auction, (auction) => auction.item)
     auction: Auction;
+
+    @ManyToMany((type) => Collection, (collection) => collection.item)
+    collection: Collection[];
 }
