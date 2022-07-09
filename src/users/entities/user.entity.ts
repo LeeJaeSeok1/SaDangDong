@@ -2,31 +2,26 @@ import { Chat } from "src/auctions/entities/chat.entity";
 import { Offer } from "src/auctions/entities/offer.entity";
 import { Collection } from "src/collections/entities/collection.entity";
 import { Item } from "src/items/entities/item.entity";
-import {
-    Column,
-    CreateDateColumn,
-    Entity,
-    OneToMany,
-    PrimaryColumn,
-    PrimaryGeneratedColumn,
-    UpdateDateColumn,
-} from "typeorm";
+import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity()
 export class User {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @PrimaryColumn()
+    @Column({ nullable: true })
     nickname: string;
 
-    @Column()
+    @Column({ nullable: true })
+    password: string;
+
+    @Column({ nullable: true })
     description: string;
 
-    @Column()
+    @Column({ nullable: true })
     profileImage: string;
 
-    @Column()
+    @Column({ nullable: true })
     bannerImage: string;
 
     @CreateDateColumn()
@@ -36,10 +31,10 @@ export class User {
     updatedAt: Date;
 
     @OneToMany((type) => Collection, (collection) => collection.user)
-    collection: Collection;
+    collection: Collection[];
 
     @OneToMany((type) => Item, (item) => item.user)
-    item: Item;
+    item: Item[];
 
     @OneToMany((type) => Offer, (offer) => offer.user)
     offer: Offer;

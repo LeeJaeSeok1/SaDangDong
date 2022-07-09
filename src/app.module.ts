@@ -14,13 +14,15 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { ChatModule } from "./chat/chat.module";
 import * as Joi from "joi";
 import { ConfigModule } from "@nestjs/config";
-import { typeORMConfig } from "./configs/typeorm.config";
+import { typeORMConfig } from "./config/typeorm.config";
+import config from "./config/config";
+import { ImagesModule } from "./images/images.module";
 
 @Module({
     imports: [
         ConfigModule.forRoot({
+            load: [config],
             isGlobal: true,
-            envFilePath: `.env`,
             validationSchema: Joi.object({
                 NODE_PORT: Joi.string().required(),
                 REDIS_PORT: Joi.string().required(),
@@ -38,8 +40,8 @@ import { typeORMConfig } from "./configs/typeorm.config";
         FavoritesModule,
         EventsModule,
         TypeOrmModule.forRoot(typeORMConfig),
+        ImagesModule,
     ],
-
     controllers: [AppController],
     providers: [AppService],
 })
