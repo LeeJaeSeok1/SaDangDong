@@ -16,7 +16,7 @@ import * as Joi from "joi";
 import { ConfigModule } from "@nestjs/config";
 import { typeORMConfig } from "./config/typeorm.config";
 import config from "./config/config";
-// import { ImagesModule } from "./images/images.module";
+import { ImagesModule } from "./images/images.module";
 
 @Module({
     imports: [
@@ -40,7 +40,7 @@ import config from "./config/config";
         FavoritesModule,
         EventsModule,
         TypeOrmModule.forRoot(typeORMConfig),
-        // ImagesModule,
+        ImagesModule,
     ],
     controllers: [AppController],
     providers: [AppService],

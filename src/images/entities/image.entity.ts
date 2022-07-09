@@ -1,20 +1,17 @@
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity()
-export class Image {
-    @PrimaryGeneratedColumn()
-    id: number;
+export class ImageUpload {
+    @PrimaryGeneratedColumn("uuid")
+    id: string;
 
-    @Column()
+    @Column({ nullable: true })
     originalName: string;
 
-    @Column()
-    encoding: string;
-
-    @Column()
+    @Column({ nullable: true })
     mimeType: string;
 
-    @Column()
+    @Column({ nullable: true })
     url: string;
 
     @CreateDateColumn()

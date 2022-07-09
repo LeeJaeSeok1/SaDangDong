@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, Put } from "@nestjs/
 import { ItemsService } from "./items.service";
 import { CreateItemDto } from "./dto/createItem.dto";
 import { UpdateItemDto } from "./dto/updateItem.dto";
-import { ApiOperation, ApiQuery, ApiTags } from "@nestjs/swagger";
+import { ApiOperation, ApiTags } from "@nestjs/swagger";
 
 @ApiTags("Items")
 @Controller("api/items")
