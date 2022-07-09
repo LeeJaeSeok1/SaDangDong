@@ -4,6 +4,7 @@ import { ApiBody, ApiConsumes, ApiOperation, ApiTags } from "@nestjs/swagger";
 import * as multerS3 from "multer-s3";
 import * as AWS from "aws-sdk";
 import { ImagesService } from "./images.service";
+import { storage } from "src/config/multerS3.config";
 
 const bucketName = process.env.AWS_S3_BUCKET_NAME;
 
@@ -25,20 +26,7 @@ export class ImagesController {
     @ApiConsumes("multipart/form-data")
     @ApiBody({ description: "이미지 업로드" })
     @Post()
-    @UseInterceptors(
-        FilesInterceptor("files", 3, {
-            storage: multerS3({
-                s3: s3,
-                bucket: bucketName,
-                contentType: multerS3.AUTO_CONTENT_TYPE,
-                acl: "public-read",
-                key: function (req, file, cb) {
-                    const fileName: string = `${Date.now().toString()}-${file.originalname}`;
-                    cb(null, fileName);
-                },
-            }),
-        }),
-    )
+    @UseInterceptors(FilesInterceptor("files", 3, { storage: storage }))
     async uploadImage(@UploadedFiles() files: Express.Multer.File[]) {
         return await this.imagesService.uploadImage(files);
     }
