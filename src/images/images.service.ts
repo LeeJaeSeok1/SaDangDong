@@ -1,19 +1,8 @@
-import { Injectable } from "@nestjs/common";
-import * as AWS from "aws-sdk";
+// @Injectable()
+// export class ImagesService {
+//     constructor(
+//         @InjectRepository(Image)
+//         private readonly imagesReposiroty: Repository<Image>,
+//     ) {}
 
-console.log("awsKey", process.env.AWS_ACCESS_KEY_ID);
-
-AWS.config.update({
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-    region: process.env.AWS_REGION,
-});
-
-const s3 = new AWS.S3();
-
-@Injectable()
-export class ImagesService {
-    async uploadImage(files) {
-        return "SUCESS";
-    }
-}
+// }

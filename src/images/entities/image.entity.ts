@@ -1,7 +1,7 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity()
-export class UploadImage {
+export class Image {
     @PrimaryGeneratedColumn()
     id: number;
 
@@ -20,6 +20,6 @@ export class UploadImage {
     @CreateDateColumn()
     createdAt: Date;
 
-    // @UpdateDateColumn()
-    // updatedAt: Date;
+    @UpdateDateColumn()
+    updatedAt: Date;
 }
