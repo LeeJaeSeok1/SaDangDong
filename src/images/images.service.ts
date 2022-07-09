@@ -12,7 +12,8 @@ export class ImagesService {
 
     async uploadImage(files: Express.Multer.File[]) {
         const uploadeImages = [];
-        for (const element of files) {
+        let element;
+        for (element of files) {
             const file = new ImageUpload();
             file.originalName = element.originalname;
             file.mimeType = element.mimetype;
