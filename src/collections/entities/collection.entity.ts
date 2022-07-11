@@ -29,7 +29,7 @@ export class Collection {
     bennerImage: string;
 
     @Column()
-    logoImge: string;
+    logoImage: string;
 
     @Column()
     fearureImage: string;
