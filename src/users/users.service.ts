@@ -3,12 +3,15 @@ import { Repository } from "typeorm";
 import { User } from "./entities/user.entity";
 import { CreateUserDto } from "./dto/createUser.dto";
 import { InjectRepository } from "@nestjs/typeorm";
+import { Collection } from "src/collections/entities/collection.entity";
 
 @Injectable()
 export class UsersService {
     constructor(
         @InjectRepository(User)
         private userRepository: Repository<User>,
+        @InjectRepository(Collection)
+        private collectionRepository: Repository<Collection>,
     ) {}
 
     async signUp(createUserDto: CreateUserDto): Promise<void> {
@@ -17,6 +20,14 @@ export class UsersService {
 
     async findAll(): Promise<User[]> {
         return this.userRepository.find();
+    }
+
+    async updateCollectionById(id: number, collectionId: Collection) {
+        const collection = await this.collectionRepository.findOneBy(collectionId);
+        // const user = await this.userRepository.findOne({ where: { id } });
+        const user = await this.userRepository.createQueryBuilder();
+        // user.collection = collection;
+        // return this.userRepository.save(user);
     }
 
     // async create(user: User): Promise<void> {

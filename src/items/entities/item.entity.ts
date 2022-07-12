@@ -45,6 +45,6 @@ export class Item {
     @OneToOne((type) => Auction, (auction) => auction.item)
     auction: Auction;
 
-    @ManyToMany((type) => Collection, (collection) => collection.item)
+    @ManyToOne((type) => Collection, (collection) => collection.item)
     collection: Collection[];
 }

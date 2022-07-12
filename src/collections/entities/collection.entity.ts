@@ -4,19 +4,25 @@ import {
     Column,
     CreateDateColumn,
     Entity,
-    JoinColumn,
-    ManyToMany,
+    Index,
+    OneToMany,
     ManyToOne,
     PrimaryGeneratedColumn,
     UpdateDateColumn,
+    JoinColumn,
 } from "typeorm";
 
-@Entity()
+@Index("name", ["name"], { unique: true })
+@Index("bennerImage", { unique: true })
+@Index("logoImage", { unique: true })
+@Index("fearureImage", { unique: true })
+@Index("ownerId", ["ownerId"], {})
+@Entity({ schema: "sadangdong", name: "collection" })
 export class Collection {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column()
+    @Column({ name: "name", unique: true })
     name: string;
 
     @Column()
@@ -25,13 +31,13 @@ export class Collection {
     @Column()
     earning: number;
 
-    @Column()
+    @Column({ name: "bennerImage", unique: true, nullable: true })
     bennerImage: string;
 
-    @Column()
+    @Column({ name: "logoImage", unique: true, nullable: true })
     logoImage: string;
 
-    @Column()
+    @Column({ name: "fearureImage", unique: true, nullable: true })
     fearureImage: string;
 
     @CreateDateColumn()
@@ -40,9 +46,12 @@ export class Collection {
     @UpdateDateColumn()
     updatedAt: Date;
 
-    @ManyToOne((type) => User, (user) => user.collection)
-    user: User;
+    @Column("int", { name: "ownerId", nullable: true })
+    ownerId: number | null;
 
-    @ManyToMany((type) => Item, (item) => item.collection)
+    @ManyToOne((type) => User, (user) => user.collection)
+    owner: User;
+
+    @OneToMany((type) => Item, (item) => item.collection)
     item: Item[];
 }

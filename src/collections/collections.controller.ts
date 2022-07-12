@@ -4,6 +4,7 @@ import { CreateCollectionDto } from "./dto/createCollection.dto";
 import { UpdateCollectionDto } from "./dto/updateCollection.dto";
 import { ApiOperation, ApiTags } from "@nestjs/swagger";
 import { Collection } from "./entities/collection.entity";
+import { User } from "src/users/entities/user.entity";
 
 @ApiTags("Collections")
 @Controller("api/collections")
@@ -15,6 +16,10 @@ export class CollectionsController {
     createCollection(@Body() createCollectionDto: CreateCollectionDto) {
         return this.collectionsService.createCollection(createCollectionDto);
     }
+    // @Post()
+    // createColleciton(@User() userId: number, @Body() createCollectionDto: CreateCollectionDto) {
+    //     return this.collectionsService.createCollection(userId, createCollectionDto);
+    // }
 
     @ApiOperation({ summary: "컬렉션 보기" })
     @Get()
