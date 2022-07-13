@@ -1,4 +1,4 @@
-import { User } from "src/users/entities/user.entity";
+import { Users } from "src/users/entities/user.entity";
 import {
     Column,
     CreateDateColumn,
@@ -27,6 +27,6 @@ export class Chat {
     @OneToOne((type) => Auction, (auction) => auction.chat)
     auction: Auction;
 
-    @ManyToOne((type) => User, (user) => user.chat)
-    user: User;
+    @ManyToOne((type) => Users, (user) => user.chat)
+    user: Users;
 }

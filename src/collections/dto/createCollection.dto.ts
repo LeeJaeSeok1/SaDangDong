@@ -16,7 +16,7 @@ export class CreateCollectionDto {
     description: string;
 
     @ApiProperty({
-        example: "0.5 ETH",
+        example: "0.5",
         description: "아이템 판매 수수료",
     })
     earning: number;
@@ -26,12 +26,6 @@ export class CreateCollectionDto {
         description: "컬렉션 베너 사진",
     })
     bennerImage: string;
-
-    @ApiProperty({
-        example: "sadangdong.jpg",
-        description: "컬렉션 로고 사진",
-    })
-    logoImge: string;
 
     @ApiProperty({
         example: "sadangdong.jpg",

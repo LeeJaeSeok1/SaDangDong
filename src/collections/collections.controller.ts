@@ -4,21 +4,29 @@ import { CreateCollectionDto } from "./dto/createCollection.dto";
 import { UpdateCollectionDto } from "./dto/updateCollection.dto";
 import { ApiOperation, ApiTags } from "@nestjs/swagger";
 import { Collection } from "./entities/collection.entity";
-import { User } from "src/users/entities/user.entity";
 
 @ApiTags("Collections")
 @Controller("api/collections")
 export class CollectionsController {
     constructor(private readonly collectionsService: CollectionsService) {}
 
-    @ApiOperation({ summary: "컬렉션 생성", description: "컬렉션 생성 페이지" })
-    @Post()
-    createCollection(@Body() createCollectionDto: CreateCollectionDto) {
-        return this.collectionsService.createCollection(createCollectionDto);
-    }
+    // @ApiOperation({ summary: "컬렉션 생성", description: "컬렉션 생성 페이지" })
     // @Post()
-    // createColleciton(@User() userId: number, @Body() createCollectionDto: CreateCollectionDto) {
-    //     return this.collectionsService.createCollection(userId, createCollectionDto);
+    // createCollection(@Body() createCollectionDto: CreateCollectionDto) {
+    //     return this.collectionsService.createCollection(createCollectionDto);
+    // }
+
+    @ApiOperation({ summary: "컬렉션 생성", description: "컬렉션 생성 페이지" })
+    @Post(":id")
+    createdColleciton(@Param("id") id: number, @Body() createCollectionDto: CreateCollectionDto) {
+        return this.collectionsService.createdCollection(id, createCollectionDto);
+    }
+
+    // @ApiOperation({ summary: "컬렉션 생성", description: "컬렉션 생성 페이지" })
+    // @Patch(":userId")
+    // newCollection(@Param("userId") userId: number, @Body() createCollectionDto: CreateCollectionDto) {
+    //     console.log("id", userId);
+    //     return this.collectionsService.newCollection(userId, createCollectionDto);
     // }
 
     @ApiOperation({ summary: "컬렉션 보기" })

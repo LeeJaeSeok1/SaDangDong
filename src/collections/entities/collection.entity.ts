@@ -1,10 +1,9 @@
 import { Item } from "src/items/entities/item.entity";
-import { User } from "src/users/entities/user.entity";
+import { Users } from "src/users/entities/user.entity";
 import {
     Column,
     CreateDateColumn,
     Entity,
-    Index,
     OneToMany,
     ManyToOne,
     PrimaryGeneratedColumn,
@@ -12,32 +11,24 @@ import {
     JoinColumn,
 } from "typeorm";
 
-@Index("name", ["name"], { unique: true })
-@Index("bennerImage", { unique: true })
-@Index("logoImage", { unique: true })
-@Index("fearureImage", { unique: true })
-@Index("ownerId", ["ownerId"], {})
 @Entity({ schema: "sadangdong", name: "collection" })
 export class Collection {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({ name: "name", unique: true })
+    @Column({ name: "name", unique: true, nullable: true })
     name: string;
 
-    @Column()
+    @Column({ nullable: true })
     description: string;
 
-    @Column()
+    @Column({ nullable: true })
     earning: number;
 
-    @Column({ name: "bennerImage", unique: true, nullable: true })
+    @Column({ nullable: true })
     bennerImage: string;
 
-    @Column({ name: "logoImage", unique: true, nullable: true })
-    logoImage: string;
-
-    @Column({ name: "fearureImage", unique: true, nullable: true })
+    @Column({ nullable: true })
     fearureImage: string;
 
     @CreateDateColumn()
@@ -46,11 +37,15 @@ export class Collection {
     @UpdateDateColumn()
     updatedAt: Date;
 
-    @Column("int", { name: "ownerId", nullable: true })
-    ownerId: number | null;
+    // @Column("int", { name: "ownerId", nullable: true })
+    // ownerId: number | null;
 
-    @ManyToOne((type) => User, (user) => user.collection)
-    owner: User;
+    @Column({ nullable: true })
+    userId: number;
+
+    @ManyToOne((type) => Users, (user) => user.collection, { onDelete: "SET NULL", onUpdate: "CASCADE" })
+    @JoinColumn()
+    user: Users;
 
     @OneToMany((type) => Item, (item) => item.collection)
     item: Item[];
