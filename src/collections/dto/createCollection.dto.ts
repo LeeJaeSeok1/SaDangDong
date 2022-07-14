@@ -31,5 +31,5 @@ export class CreateCollectionDto {
         example: "sadangdong.jpg",
         description: "컬렉션 매인 사진",
     })
-    fearureImage: string;
+    featureImage: string;
 }

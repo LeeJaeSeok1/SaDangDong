@@ -6,10 +6,11 @@ import { Collection } from "./entities/collection.entity";
 import { Users } from "src/users/entities/user.entity";
 import { PassportModule } from "@nestjs/passport";
 import { JwtModule } from "@nestjs/jwt";
+import { ImageUpload } from "src/images/entities/image.entity";
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([Collection, Users]),
+        TypeOrmModule.forFeature([Collection, Users, ImageUpload]),
         PassportModule.register({ defaultStrategy: "jwt" }),
         JwtModule.register({
             secret: "test",
