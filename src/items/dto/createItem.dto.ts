@@ -23,14 +23,14 @@ export class CreateItemDto {
     description: string;
 
     @ApiProperty({
-        example: "sadangdong",
-        description: "아이템 설명",
-    })
-    owner: string;
-
-    @ApiProperty({
         example: "ETH",
         description: "블록체인 종류",
     })
     Blockchain: string;
+
+    @ApiProperty({
+        example: "1",
+        description: "컬렉션 아이디",
+    })
+    collection: number;
 }

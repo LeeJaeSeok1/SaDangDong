@@ -24,7 +24,7 @@ export class Item {
     name: string;
 
     @Column()
-    owner: string;
+    owner: number;
 
     @Column()
     description: string;
