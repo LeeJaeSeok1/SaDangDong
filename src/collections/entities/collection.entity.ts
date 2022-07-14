@@ -29,7 +29,7 @@ export class Collection {
     bennerImage: string;
 
     @Column({ nullable: true })
-    fearureImage: string;
+    featureImage: string;
 
     @CreateDateColumn()
     createdAt: Date;
