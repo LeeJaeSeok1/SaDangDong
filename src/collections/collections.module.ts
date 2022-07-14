@@ -4,9 +4,17 @@ import { CollectionsService } from "./collections.service";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { Collection } from "./entities/collection.entity";
 import { Users } from "src/users/entities/user.entity";
+import { PassportModule } from "@nestjs/passport";
+import { JwtModule } from "@nestjs/jwt";
 
 @Module({
-    imports: [TypeOrmModule.forFeature([Collection, Users])],
+    imports: [
+        TypeOrmModule.forFeature([Collection, Users]),
+        PassportModule.register({ defaultStrategy: "jwt" }),
+        JwtModule.register({
+            secret: "test",
+        }),
+    ],
     exports: [TypeOrmModule],
     controllers: [CollectionsController],
     providers: [CollectionsService],

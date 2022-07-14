@@ -1,9 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Put } from "@nestjs/common";
+import { Controller, Get, Post, Body, Patch, Param, Delete, Put, UseGuards, ValidationPipe } from "@nestjs/common";
 import { CollectionsService } from "./collections.service";
 import { CreateCollectionDto } from "./dto/createCollection.dto";
 import { UpdateCollectionDto } from "./dto/updateCollection.dto";
-import { ApiOperation, ApiTags } from "@nestjs/swagger";
+import { ApiHeader, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { Collection } from "./entities/collection.entity";
+import { User } from "src/users/user.decorator";
+import { Users } from "src/users/entities/user.entity";
+import { AuthGuard } from "@nestjs/passport";
 
 @ApiTags("Collections")
 @Controller("api/collections")
@@ -17,10 +20,18 @@ export class CollectionsController {
     // }
 
     @ApiOperation({ summary: "컬렉션 생성", description: "컬렉션 생성 페이지" })
-    @Post(":id")
-    createdColleciton(@Param("id") id: number, @Body() createCollectionDto: CreateCollectionDto) {
-        return this.collectionsService.createdCollection(id, createCollectionDto);
+    @ApiHeader({ name: "Authorization" })
+    @UseGuards(AuthGuard())
+    @Post()
+    createdColleciton(@User() user: Users, @Body() createCollectionDto: CreateCollectionDto) {
+        return this.collectionsService.createdCollection(user, createCollectionDto);
     }
+
+    // @Post()
+    // @UseGuards(ValidationPipe)
+    // newCollection(@Body() collectionData: CreateCollectionDto, @User() user: Users): Promise<Collection> {
+    //     return this.collectionsService.newCollection(collectionData, user);
+    // }
 
     // @ApiOperation({ summary: "컬렉션 생성", description: "컬렉션 생성 페이지" })
     // @Patch(":userId")

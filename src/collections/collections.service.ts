@@ -27,10 +27,10 @@ export class CollectionsService {
 
     // 컬렉션 생성
     // 컬렉션에 유저 아이디 등록 됨
-    async createdCollection(id: number, createCollectionDto: CreateCollectionDto) {
-        const user = await this.userRepository.findOne({ where: { id } });
+    async createdCollection(user: Users, createCollectionDto: CreateCollectionDto) {
+        const userId = user.id;
         const createCollection = new Collection();
-        createCollection.userId = user.id;
+        createCollection.userId = userId;
         createCollection.name = createCollectionDto.name;
         createCollection.description = createCollectionDto.description;
         createCollection.earning = createCollectionDto.earning;
@@ -39,13 +39,19 @@ export class CollectionsService {
         return await this.collectionRepository.save(createCollection);
     }
 
-    // async newCollection(id: number, collectionData: CreateCollectionDto) {
-    //     const user = await this.userRepository.findOne({ where: { id }, relations: ["collection"] });
-    //     const collection = await this.collectionRepository.save(collectionData);
-    //     console.log("user", user);
-    //     console.log("collection", collection);
-    //     user.collection.push(collection);
-    //     return await this.userRepository.save;
+    // async newCollection(user: Users, collectionData: CreateCollectionDto): Promise<Collection> {
+    //     const owner = user;
+    //     const { name, description, bennerImage, fearureImage, earning } = collectionData;
+
+    //     const collection = this.collectionRepository.create({
+    //         name,
+    //         description,
+    //         bennerImage,
+    //         fearureImage,
+    //         earning,
+    //     });
+    //     await this.collectionRepository.save(collection, owner);
+    //     return collection;
     // }
 
     // 업데이트 컬렉션

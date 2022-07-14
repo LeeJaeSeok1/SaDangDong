@@ -44,7 +44,7 @@ export class Collection {
     userId: number;
 
     @ManyToOne((type) => Users, (user) => user.collection, { onDelete: "SET NULL", onUpdate: "CASCADE" })
-    @JoinColumn()
+    // @JoinColumn()
     user: Users;
 
     @OneToMany((type) => Item, (item) => item.collection)
