@@ -30,10 +30,10 @@ export class Users {
     @UpdateDateColumn()
     updatedAt: Date;
 
-    @OneToMany((type) => Collection, (collection) => collection.user, { nullable: true })
+    @OneToMany((type) => Collection, (collection) => collection.user, { eager: true })
     collection: Collection[];
 
-    @OneToMany((type) => Item, (item) => item.user)
+    @OneToMany((type) => Item, (item) => item.user, { eager: true })
     item: Item[];
 
     @OneToMany((type) => Offer, (offer) => offer.user)
