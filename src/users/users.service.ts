@@ -1,11 +1,11 @@
-import { ConflictException, Injectable, InternalServerErrorException, UnauthorizedException } from "@nestjs/common";
+import { ConflictException, Injectable, InternalServerErrorException } from "@nestjs/common";
 import { Repository } from "typeorm";
 import { Users } from "./entities/user.entity";
 import { CreateUserDto } from "./dto/createUser.dto";
 import { InjectRepository } from "@nestjs/typeorm";
-import { JwtService } from "@nestjs/jwt";
 import { Collection } from "src/collections/entities/collection.entity";
 import { Item } from "src/items/entities/item.entity";
+import { ImageUpload } from "src/images/entities/image.entity";
 
 @Injectable()
 export class UsersService {
@@ -16,6 +16,8 @@ export class UsersService {
         private collectionRepository: Repository<Collection>,
         @InjectRepository(Item)
         private itemRepository: Repository<Item>,
+        @InjectRepository(ImageUpload)
+        private imageUploadRepository: Repository<ImageUpload>,
     ) {}
 
     // 테스트용 회원가입
@@ -46,10 +48,6 @@ export class UsersService {
 
     // sign 페이지
     async sign(createUserDto: CreateUserDto) {
-        const user = new Users();
-        const nickname = (user.walletId = createUserDto.walletId);
-        user.nickname = nickname;
-
         return this.userRepository.save(createUserDto);
     }
 

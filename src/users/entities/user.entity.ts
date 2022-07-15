@@ -1,3 +1,4 @@
+import { isNotEmpty } from "class-validator";
 import { Chat } from "src/auctions/entities/chat.entity";
 import { Offer } from "src/auctions/entities/offer.entity";
 import { Collection } from "src/collections/entities/collection.entity";
@@ -12,13 +13,13 @@ export class Users {
     @Column({ unique: true })
     walletId: string;
 
-    @Column({ unique: true, nullable: true })
+    @Column({ nullable: true, default: "unnamed" })
     nickname: string;
 
     @Column({ nullable: true })
     description: string;
 
-    @Column({ nullable: true })
+    @Column({ nullable: true, default: "https://sadangdong99.s3.ap-northeast-2.amazonaws.com/1657871846145-image.png" })
     profileImage: string;
 
     @Column({ nullable: true })

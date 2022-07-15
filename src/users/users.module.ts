@@ -8,6 +8,7 @@ import { JwtModule } from "@nestjs/jwt";
 import { PassportModule } from "@nestjs/passport";
 import { jwtStragtegy } from "./jwt.stratege";
 import { Item } from "src/items/entities/item.entity";
+import { ImageUpload } from "src/images/entities/image.entity";
 
 @Module({
     imports: [
@@ -15,7 +16,7 @@ import { Item } from "src/items/entities/item.entity";
         JwtModule.register({
             secret: "test",
         }),
-        TypeOrmModule.forFeature([Users, Collection, Item]),
+        TypeOrmModule.forFeature([Users, Collection, Item, ImageUpload]),
     ],
     exports: [TypeOrmModule, jwtStragtegy, PassportModule],
     controllers: [UsersController],

@@ -23,6 +23,9 @@ export class ImagesController {
                         format: "binary",
                     },
                 },
+                target: {
+                    example: "logoImage",
+                },
             },
         },
     })
