@@ -17,14 +17,17 @@ export class UsersController {
         return this.usersService.signUp(createUserDto);
     }
 
-    @ApiOperation({ summary: "로그인" })
-    @Post("signin")
-    async login(@Body() createUserDto: CreateUserDto): Promise<{ accessToken: string }> {
-        createUserDto.nickname;
-        createUserDto.password;
-        return this.usersService.logIn(createUserDto);
-    }
+    // @ApiOperation({ summary: "로그인" })
+    // @Post("signin")
+    // async login(@Body() createUserDto: CreateUserDto): Promise<{ accessToken: string }> {
+    //     return this.usersService.logIn(createUserDto);
+    // }
 
+    @ApiOperation({ summary: "사인페이지" })
+    @Post("auth")
+    async sign(@Body() createUserDto: CreateUserDto) {
+        return this.usersService.sign(createUserDto);
+    }
     // @ApiOperation({ summary: "특정 유저 가져오기"})
     // @Get(":id")
     // async getUser(@Param("id") id: number) {

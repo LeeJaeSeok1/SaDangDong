@@ -12,7 +12,6 @@ export class UsersService {
     constructor(
         @InjectRepository(Users)
         private userRepository: Repository<Users>,
-        private jwtService: JwtService,
         @InjectRepository(Collection)
         private collectionRepository: Repository<Collection>,
         @InjectRepository(Item)
@@ -33,23 +32,28 @@ export class UsersService {
     }
 
     // 테스트용 로그인
-    async logIn(createCollectionDto: CreateUserDto): Promise<{ accessToken: string }> {
-        const { nickname, password } = createCollectionDto;
-        const user = await this.userRepository.findOne({ where: { nickname } });
-        if (password === user.password) {
-            // 유저 토큰 생성
-            const payload = { nickname };
-            const accessToken = await this.jwtService.sign(payload);
-            return { accessToken: accessToken };
-        }
-        throw new UnauthorizedException("login failed");
+    // async logIn(createCollectionDto: CreateUserDto): Promise<{ accessToken: string }> {
+    //     const { nickname, password } = createCollectionDto;
+    //     const user = await this.userRepository.findOne({ where: { nickname } });
+    //     if (password === user.password) {
+    //         // 유저 토큰 생성
+    //         const payload = { nickname };
+    //         const accessToken = await this.jwtService.sign(payload);
+    //         return { accessToken: accessToken };
+    //     }
+    //     throw new UnauthorizedException("login failed");
+    // }
+
+    // sign 페이지
+    async sign(createUserDto: CreateUserDto) {
+        const user = new Users();
+        const nickname = (user.walletId = createUserDto.walletId);
+        user.nickname = nickname;
+
+        return this.userRepository.save(createUserDto);
     }
 
-    // 테스트용 유저 찾기
-    async findByNickname(nickname: string) {
-        return this.userRepository.findOne({ where: { nickname }, select: ["id", "nickname", "password"] });
-    }
-
+    // 마이페이지
     async userInfo(id: number, tab: string, user: Users) {
         const mycollections = await this.collectionRepository.find({ select: ["userId"] });
         const myItems = await this.itemRepository.find({ select: ["owner"] });
@@ -66,14 +70,8 @@ export class UsersService {
         return this.userRepository.findOne({ where: { id } });
     }
 
+    // 모든 유저 조회
     async findAll(): Promise<Users[]> {
         return this.userRepository.find();
-    }
-
-    async getUserCollection(id: number): Promise<Collection[]> {
-        const user = await this.userRepository.findOne({ where: { id } });
-        const collectionInfo = await this.collectionRepository.findOne({ where: { user } });
-
-        return;
     }
 }

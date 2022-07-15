@@ -3,32 +3,8 @@ import { IsNotEmpty } from "class-validator";
 export class CreateUserDto {
     @IsNotEmpty()
     @ApiProperty({
-        example: "sadangdong",
-        description: "유저 닉네임",
+        example: "0x49815781208098f0a9s78f0d09fa8934",
+        description: "유저 지갑주소",
     })
-    nickname: string;
-
-    @ApiProperty({
-        example: "1234",
-        description: "유저 비밀번호",
-    })
-    password: string;
-
-    @ApiProperty({
-        example: "저는 사당동 입니다.",
-        description: "유저 설명",
-    })
-    description: string;
-
-    @ApiProperty({
-        example: "sadangdong.jpg",
-        description: "유저 프로필 사진",
-    })
-    profileImage: string;
-
-    @ApiProperty({
-        example: "sadangdong.jpg",
-        description: "유저 배너 사진",
-    })
-    bannerImage: string;
+    walletId: string;
 }
