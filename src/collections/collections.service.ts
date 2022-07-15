@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { ImageUpload } from "src/images/entities/image.entity";
-import { Users } from "src/users/entities/user.entity";
+import { User } from "src/users/entities/user.entity";
 import { Repository } from "typeorm";
 import { CreateCollectionDto } from "./dto/createCollection.dto";
 import { UpdateCollectionDto } from "./dto/updateCollection.dto";
@@ -12,8 +12,8 @@ export class CollectionsService {
     constructor(
         @InjectRepository(Collection)
         private collectionRepository: Repository<Collection>,
-        @InjectRepository(Users)
-        private userRepository: Repository<Users>,
+        @InjectRepository(User)
+        private userRepository: Repository<User>,
         @InjectRepository(ImageUpload)
         private readonly imagesReposiroty: Repository<ImageUpload>,
     ) {}
@@ -29,40 +29,45 @@ export class CollectionsService {
     }
 
     // 컬렉션 생성
-    async createdCollection(user: Users, createCollectionDto: CreateCollectionDto) {
-        const userId = user.id;
-        const createCollection = new Collection();
-        createCollection.userId = userId;
-        createCollection.name = createCollectionDto.name;
-        createCollection.description = createCollectionDto.description;
-        createCollection.earning = createCollectionDto.earning;
-        createCollection.bennerImage = createCollectionDto.bennerImage;
-        createCollection.featureImage = createCollectionDto.featureImage;
-        return await this.collectionRepository.save(createCollection);
+    async createdCollection(createCollectionDto: CreateCollectionDto, address: string) {
+        try {
+            const userAddress = address;
+            const createCollection = new Collection();
+            createCollection.address = userAddress;
+            createCollection.name = createCollectionDto.name;
+            createCollection.description = createCollectionDto.description;
+            createCollection.commission = createCollectionDto.commission;
+            createCollection.benner_image = createCollectionDto.benner_image;
+            createCollection.feature_image = createCollectionDto.feature_image;
+            return await this.collectionRepository.save(createCollection);
+        } catch (error) {
+            throw new NotFoundException(error);
+        }
     }
 
     // 컬렉션 수정
-    async updateCollection(id: number, updateCollectionDto: UpdateCollectionDto, user: Users): Promise<Collection> {
-        const exisCollection = await this.findByOneCollection(id);
-
-        if (exisCollection.userId !== user.id) {
-            throw new NotFoundException(`본인만 수정 가능합니다.`);
+    async updateCollection(id: number, updateCollectionDto: UpdateCollectionDto, address: string) {
+        try {
+            const exisCollection = await this.findByOneCollection(id);
+            if (exisCollection.address !== address) {
+                throw new NotFoundException(`본인만 수정 가능합니다.`);
+            }
+            exisCollection.name = updateCollectionDto.name;
+            exisCollection.description = updateCollectionDto.description;
+            exisCollection.benner_image = updateCollectionDto.benner_image;
+            exisCollection.feature_image = updateCollectionDto.feature_image;
+            return this.collectionRepository.save(exisCollection);
+        } catch (error) {
+            throw new NotFoundException(error);
         }
-        exisCollection.name = updateCollectionDto.name;
-        exisCollection.description = updateCollectionDto.description;
-        exisCollection.bennerImage = updateCollectionDto.bennerImage;
-        exisCollection.featureImage = updateCollectionDto.featureImage;
-
-        return this.collectionRepository.save(exisCollection);
     }
 
     // 컬렉션 삭제
-    async deleteCollection(id: number, user: Users): Promise<void> {
+    async deleteCollection(id: number, address: string) {
         const exisCollection = await this.findByOneCollection(id);
-        if (exisCollection.userId !== user.id) {
+        if (exisCollection.address !== address) {
             throw new NotFoundException(`본인만 수정 가능합니다.`);
         }
-
         await this.collectionRepository.delete(exisCollection);
     }
 }

@@ -25,7 +25,7 @@ export class CreateCollectionDto {
         example: "sadangdong.jpg",
         description: "컬렉션 베너 사진",
     })
-    benbenner_image: string;
+    benner_image: string;
 
     @ApiProperty({
         example: "sadangdong.jpg",
