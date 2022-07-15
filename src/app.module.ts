@@ -8,7 +8,7 @@ import { AuctionsModule } from "./auctions/auctions.module";
 import { SearchModule } from "./search/search.module";
 import { ExploreModule } from "./explore/explore.module";
 import { SellModule } from "./sell/sell.module";
-import { FavoritesModule } from "./favorites/favorites.module";
+import { LikeModule } from "./like/like.module";
 import { EventsModule } from "./events/events.module";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { ChatModule } from "./chat/chat.module";
@@ -38,7 +38,7 @@ import { ImagesModule } from "./images/images.module";
         SearchModule,
         ExploreModule,
         SellModule,
-        FavoritesModule,
+        LikeModule,
         EventsModule,
         ImagesModule,
     ],

@@ -1,5 +1,5 @@
 import { Item } from "src/items/entities/item.entity";
-import { Users } from "src/users/entities/user.entity";
+import { User } from "src/users/entities/user.entity";
 import {
     Column,
     CreateDateColumn,
@@ -23,29 +23,26 @@ export class Collection {
     description: string;
 
     @Column({ nullable: true })
-    earning: number;
+    commission: number;
 
     @Column({ nullable: true })
-    bennerImage: string;
+    benner_image: string;
 
     @Column({ nullable: true })
-    featureImage: string;
+    feature_image: string;
 
     @CreateDateColumn()
-    createdAt: Date;
+    created_at: Date;
 
     @UpdateDateColumn()
-    updatedAt: Date;
-
-    // @Column("int", { name: "ownerId", nullable: true })
-    // ownerId: number | null;
+    updated_at: Date;
 
     @Column({ nullable: true })
-    userId: number;
+    address: string;
 
-    @ManyToOne((type) => Users, (user) => user.collection, { onDelete: "SET NULL", onUpdate: "CASCADE" })
-    // @JoinColumn()
-    user: Users;
+    @ManyToOne((type) => User, (user) => user.collection, { onDelete: "SET NULL", onUpdate: "CASCADE" })
+    @JoinColumn()
+    user: User;
 
     @OneToMany((type) => Item, (item) => item.collection)
     item: Item[];

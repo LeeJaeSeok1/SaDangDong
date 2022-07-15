@@ -1,14 +1,5 @@
-import { Users } from "src/users/entities/user.entity";
-import { UsersModule } from "src/users/users.module";
-import {
-    Column,
-    CreateDateColumn,
-    Entity,
-    ManyToOne,
-    OneToOne,
-    PrimaryGeneratedColumn,
-    UpdateDateColumn,
-} from "typeorm";
+import { User } from "src/users/entities/user.entity";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Auction } from "./auction.entity";
 
 @Entity()
@@ -17,17 +8,15 @@ export class Offer {
     id: number;
 
     @Column()
-    biddingPrice: number;
+    price: number;
 
     @CreateDateColumn()
-    createdAt: Date;
-
-    @UpdateDateColumn()
-    updatedAt: Date;
+    created_at: Date;
 
     @OneToOne((type) => Auction, (auction) => auction.offer)
+    @JoinColumn()
     auction: Auction;
 
-    @ManyToOne((type) => Users, (user) => user.offer)
-    user: UsersModule;
+    @ManyToMany((type) => User, (user) => user.offer)
+    user: User[];
 }
