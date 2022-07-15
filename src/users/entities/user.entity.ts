@@ -9,11 +9,11 @@ export class Users {
     @PrimaryGeneratedColumn()
     id: number;
 
+    @Column({ unique: true })
+    walletId: string;
+
     @Column({ unique: true, nullable: true })
     nickname: string;
-
-    @Column({ nullable: true })
-    password: string;
 
     @Column({ nullable: true })
     description: string;
