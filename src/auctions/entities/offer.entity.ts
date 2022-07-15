@@ -14,7 +14,7 @@ export class Offer {
     created_at: Date;
 
     @OneToOne((type) => Auction, (auction) => auction.offer)
-    @JoinColumn()
+    @JoinColumn({ name: "offer_id" })
     auction: Auction;
 
     @ManyToMany((type) => User, (user) => user.offer)

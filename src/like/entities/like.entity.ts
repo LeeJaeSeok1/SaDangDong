@@ -3,7 +3,7 @@ import { User } from "src/users/entities/user.entity";
 import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
-export class Like extends Item {
+export class Like {
     @PrimaryGeneratedColumn()
     id: number;
 
@@ -11,16 +11,16 @@ export class Like extends Item {
     isLike: boolean;
 
     @OneToOne((type) => Item, (item) => item.like)
-    @JoinColumn({ name: "like" })
+    // @JoinColumn({ name: "like_id" })
     item: Item;
 
     @ManyToOne((type) => User, (user) => user.like)
-    @JoinColumn({ name: "like" })
+    // @JoinColumn({ name: "like_id" })
     user: User;
 }
 
 @Entity()
-export class Like_relation extends Item {
+export class Like_relation {
     @PrimaryGeneratedColumn()
     id: number;
 
@@ -28,6 +28,6 @@ export class Like_relation extends Item {
     likeCount: number;
 
     @OneToOne((type) => Item, (item) => item.like_relation)
-    @JoinColumn({ name: "like_relation" })
+    // @JoinColumn({ name: "like_relation" })
     item: Item;
 }

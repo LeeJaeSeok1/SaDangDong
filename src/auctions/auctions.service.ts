@@ -3,7 +3,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { CreateAuctionDto } from "./dto/createAuction.dto";
 import { Item } from "src/items/entities/item.entity";
-import { Users } from "src/users/entities/user.entity";
+import { User } from "src/users/entities/user.entity";
 import { Auction } from "./entities/auction.entity";
 
 @Injectable()
@@ -13,21 +13,16 @@ export class AuctionsService {
         private auctionRepository: Repository<Auction>,
         @InjectRepository(Item)
         private itemRepository: Repository<Item>,
-        @InjectRepository(Users)
-        private userRepository: Repository<Users>,
+        @InjectRepository(User)
+        private userRepository: Repository<User>,
     ) {}
 
-    async createAuction(NFTtoken: string, createAuctionDto: CreateAuctionDto, user: Users) {
-        const item = await this.itemRepository.findOne({ where: { NFTtoken } });
-        const itemId = item.owner;
-        const userId = user.id;
+    async createAuction(token_id: string, createAuctionDto: CreateAuctionDto) {
+        const item = await this.itemRepository.findOne({ where: { token_id } });
 
-        if (itemId !== userId) {
-            throw new NotFoundException(`${NFTtoken}의 소유자가 당신이 아닙니다.`);
-        }
         const auction = new Auction();
-        auction.price = createAuctionDto.price;
-        auction.biddingPrice = createAuctionDto.biddingPrice;
+        // auction.price = createAuctionDto.price;
+        // auction.biddingPrice = createAuctionDto.biddingPrice;
 
         return await this.auctionRepository.save(auction);
     }

@@ -7,7 +7,6 @@ import {
     CreateDateColumn,
     DeleteDateColumn,
     Entity,
-    JoinColumn,
     ManyToOne,
     OneToOne,
     PrimaryColumn,
@@ -22,7 +21,7 @@ export class Item {
     @Column()
     name: string;
 
-    @Column()
+    @Column({ nullable: true })
     description: string;
 
     @Column()
@@ -31,8 +30,8 @@ export class Item {
     @Column()
     Blockchain: string;
 
-    @Column({ comment: "제작자" })
-    address: number;
+    @Column({ name: "producer", comment: "제작자" })
+    address: string;
 
     @Column()
     image: string;
@@ -52,18 +51,18 @@ export class Item {
     @Column()
     owner: string;
     @ManyToOne((type) => User, (user) => user.item)
-    @JoinColumn()
+    // @JoinColumn({ name: "owner" })
     user: User;
 
     @OneToOne((type) => Auction, (auction) => auction.item)
-    @JoinColumn()
+    // @JoinColumn({ name: "token_id" })
     auction: Auction;
 
     @Column()
     collection_id: number;
     @ManyToOne((type) => Collection, (collection) => collection.item)
-    @JoinColumn()
-    collection: Collection[];
+    // @JoinColumn({ name: "token_id" })
+    collection: Collection;
 
     @OneToOne((type) => Like, (like) => like.item)
     like: Like;

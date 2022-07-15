@@ -17,6 +17,6 @@ export class Sell extends Auction {
     end_at: Date;
 
     @OneToOne((type) => User, (user) => user.sell)
-    @JoinColumn()
+    // @JoinColumn({ name: "sell_id" })
     user: User;
 }
