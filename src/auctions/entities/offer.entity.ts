@@ -1,4 +1,5 @@
-import { User } from "src/users/entities/user.entity";
+import { Users } from "src/users/entities/user.entity";
+import { UsersModule } from "src/users/users.module";
 import {
     Column,
     CreateDateColumn,
@@ -27,6 +28,6 @@ export class Offer {
     @OneToOne((type) => Auction, (auction) => auction.offer)
     auction: Auction;
 
-    @ManyToOne((type) => User, (user) => user.offer)
-    user: User;
+    @ManyToOne((type) => Users, (user) => user.offer)
+    user: UsersModule;
 }

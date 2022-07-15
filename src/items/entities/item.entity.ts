@@ -1,14 +1,13 @@
 import { Auction } from "src/auctions/entities/auction.entity";
 import { Collection } from "src/collections/entities/collection.entity";
-import { User } from "src/users/entities/user.entity";
+import { Users } from "src/users/entities/user.entity";
 import {
     Column,
     CreateDateColumn,
     Entity,
-    ManyToMany,
+    JoinColumn,
     ManyToOne,
     OneToOne,
-    PrimaryColumn,
     PrimaryGeneratedColumn,
     UpdateDateColumn,
 } from "typeorm";
@@ -25,7 +24,7 @@ export class Item {
     name: string;
 
     @Column()
-    owner: string;
+    owner: number;
 
     @Column()
     description: string;
@@ -39,12 +38,18 @@ export class Item {
     @UpdateDateColumn()
     updatedAt: Date;
 
-    @ManyToOne((type) => User, (user) => user.item)
-    user: User;
+    @Column()
+    userId: number;
+    @ManyToOne((type) => Users, (user) => user.item)
+    @JoinColumn()
+    user: Users;
 
     @OneToOne((type) => Auction, (auction) => auction.item)
     auction: Auction;
 
-    @ManyToMany((type) => Collection, (collection) => collection.item)
+    @Column()
+    collectionId: number;
+    @ManyToOne((type) => Collection, (collection) => collection.item)
+    @JoinColumn()
     collection: Collection[];
 }

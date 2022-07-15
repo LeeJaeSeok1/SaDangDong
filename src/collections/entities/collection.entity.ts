@@ -1,38 +1,35 @@
 import { Item } from "src/items/entities/item.entity";
-import { User } from "src/users/entities/user.entity";
+import { Users } from "src/users/entities/user.entity";
 import {
     Column,
     CreateDateColumn,
     Entity,
-    JoinColumn,
-    ManyToMany,
+    OneToMany,
     ManyToOne,
     PrimaryGeneratedColumn,
     UpdateDateColumn,
+    JoinColumn,
 } from "typeorm";
 
-@Entity()
+@Entity({ schema: "sadangdong", name: "collection" })
 export class Collection {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column()
+    @Column({ name: "name", unique: true, nullable: true })
     name: string;
 
-    @Column()
+    @Column({ nullable: true })
     description: string;
 
-    @Column()
+    @Column({ nullable: true })
     earning: number;
 
-    @Column()
+    @Column({ nullable: true })
     bennerImage: string;
 
-    @Column()
-    logoImage: string;
-
-    @Column()
-    fearureImage: string;
+    @Column({ nullable: true })
+    featureImage: string;
 
     @CreateDateColumn()
     createdAt: Date;
@@ -40,9 +37,16 @@ export class Collection {
     @UpdateDateColumn()
     updatedAt: Date;
 
-    @ManyToOne((type) => User, (user) => user.collection)
-    user: User;
+    // @Column("int", { name: "ownerId", nullable: true })
+    // ownerId: number | null;
 
-    @ManyToMany((type) => Item, (item) => item.collection)
+    @Column({ nullable: true })
+    userId: number;
+
+    @ManyToOne((type) => Users, (user) => user.collection, { onDelete: "SET NULL", onUpdate: "CASCADE" })
+    // @JoinColumn()
+    user: Users;
+
+    @OneToMany((type) => Item, (item) => item.collection)
     item: Item[];
 }
