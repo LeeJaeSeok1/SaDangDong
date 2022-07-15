@@ -43,8 +43,6 @@ export class UsersController {
         summary: "USER 페이지",
         description: "유저 collection, item, favorites 페이지",
     })
-    @ApiBearerAuth("access-token")
-    @UseGuards(AuthGuard())
     @Get(":id?")
     getUserInfo(@User() user: Users, @Param("id") id: number, @Query("tab") tab: string): Promise<Users> {
         return this.usersService.userInfo(id, tab, user);

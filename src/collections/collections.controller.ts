@@ -9,11 +9,12 @@ import {
     UseGuards,
     UseInterceptors,
     UploadedFiles,
+    Header,
 } from "@nestjs/common";
 import { CollectionsService } from "./collections.service";
 import { CreateCollectionDto } from "./dto/createCollection.dto";
 import { UpdateCollectionDto } from "./dto/updateCollection.dto";
-import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiHeader, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { Collection } from "./entities/collection.entity";
 import { User } from "src/users/user.decorator";
 import { Users } from "src/users/entities/user.entity";
@@ -34,8 +35,8 @@ export class CollectionsController {
     }
 
     @ApiOperation({ summary: "컬렉션 생성", description: "컬렉션 생성 페이지" })
-    @ApiBearerAuth("access-token")
-    @UseGuards(AuthGuard())
+    @ApiHeader({ name: "WalletId" })
+    @Header("WalletId", "walletId")
     @Post()
     // @UseInterceptors(FilesInterceptor("files", 3, { storage: storage }))
     createdColleciton(
@@ -43,6 +44,8 @@ export class CollectionsController {
         @User() user: Users,
         @Body() createCollectionDto: CreateCollectionDto,
     ) {
+        console.log("user", user);
+        console.log();
         return this.collectionsService.createdCollection(user, createCollectionDto);
     }
 

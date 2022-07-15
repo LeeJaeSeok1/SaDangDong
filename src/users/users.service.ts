@@ -25,10 +25,6 @@ export class UsersService {
         try {
             await this.userRepository.save(createUserDto);
         } catch (error) {
-            // 서버에서 보내는 코드가 23505 면 'Existing nickname' 에러 발생
-            if (error.code === "23505") {
-                throw new ConflictException("Existing nickname");
-            }
             throw new InternalServerErrorException();
         }
     }

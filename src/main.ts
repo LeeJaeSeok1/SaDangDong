@@ -39,6 +39,7 @@ async function bootstrap() {
     //     }),
     // );
 
+    app.enableCors();
     await app.listen(port);
     Logger.log(`Application runnin on port ${port}`);
 }
