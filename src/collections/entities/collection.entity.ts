@@ -16,7 +16,7 @@ export class Collection {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({ name: "name", unique: true, nullable: true })
+    @Column({ name: "name", unique: true })
     name: string;
 
     @Column({ nullable: true })
@@ -41,7 +41,7 @@ export class Collection {
     address: string;
 
     @ManyToOne((type) => User, (user) => user.collection, { onDelete: "SET NULL", onUpdate: "CASCADE" })
-    @JoinColumn()
+    // @JoinColumn({ name: "collection_id" })
     user: User;
 
     @OneToMany((type) => Item, (item) => item.collection)
