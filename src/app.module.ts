@@ -1,4 +1,4 @@
-import { Module } from "@nestjs/common";
+import { Module, ValidationPipe } from "@nestjs/common";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import { UsersModule } from "./users/users.module";
@@ -17,6 +17,7 @@ import { ConfigModule } from "@nestjs/config";
 import { typeORMConfig } from "./config/typeorm.config";
 import config from "./config/config";
 import { ImagesModule } from "./images/images.module";
+import { APP_PIPE } from "@nestjs/core";
 
 @Module({
     imports: [
@@ -43,6 +44,6 @@ import { ImagesModule } from "./images/images.module";
         ImagesModule,
     ],
     controllers: [AppController],
-    providers: [AppService],
+    providers: [AppService, { provide: APP_PIPE, useClass: ValidationPipe }],
 })
 export class AppModule {}
