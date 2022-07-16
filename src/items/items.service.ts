@@ -1,26 +1,54 @@
-import { Injectable } from '@nestjs/common';
-import { CreateItemDto } from './dto/create-item.dto';
-import { UpdateItemDto } from './dto/update-item.dto';
+import { Injectable } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Collection } from "src/collections/entities/collection.entity";
+import { Repository } from "typeorm";
+import { CreateItemDto } from "./dto/createItem.dto";
+import { Item } from "./entities/item.entity";
 
 @Injectable()
 export class ItemsService {
-  create(createItemDto: CreateItemDto) {
-    return 'This action adds a new item';
-  }
+    constructor(
+        @InjectRepository(Item)
+        private itemRepository: Repository<Item>,
+        @InjectRepository(Collection)
+        private collectionRepository: Repository<Collection>,
+    ) {}
 
-  findAll() {
-    return `This action returns all items`;
-  }
+    // 모든 아이템 보기
+    findItem(): Promise<Item[]> {
+        return this.itemRepository.find();
+    }
 
-  findOne(id: number) {
-    return `This action returns a #${id} item`;
-  }
+    // 특정아이템 보기
+    findByIdItem(id: number) {
+        // return this.itemRepository.findOne({ where: { id } });
+    }
 
-  update(id: number, updateItemDto: UpdateItemDto) {
-    return `This action updates a #${id} item`;
-  }
+    // 아이템 생성
+    async createItem(createItemDto: CreateItemDto) {
+        // const userId = user.id;
+        // const createItem = new Item();
+        // createItem.name = createItemDto.name;
+        // createItem.description = createItemDto.description;
+        // createItem.NFTtoken = createItemDto.NFTtoken;
+        // createItem.Blockchain = createItemDto.Blockchain;
+        // createItem.collectionId = createItemDto.collection;
+        // createItem.userId = userId;
+        // createItem.owner = userId;
+        // return await this.itemRepository.save(createItem);
+    }
 
-  remove(id: number) {
-    return `This action removes a #${id} item`;
-  }
+    // 아이템 수정
+    // async updateItem(id: number, updateItemDto: UpdateItemDto): Promise<Item> {
+    //     const exisItem = await this.findByIdItem(id);
+
+    //     if (!exisItem) throw new NotFoundException(`collection not found with the id ${id}`);
+
+    //     return this.itemRepository.save(updateItemDto);
+    // }
+
+    // 아이템 삭제
+    async deleteItem(id: number): Promise<void> {
+        await this.itemRepository.delete(id);
+    }
 }

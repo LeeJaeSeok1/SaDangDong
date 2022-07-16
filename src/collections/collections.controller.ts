@@ -1,34 +1,52 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { CollectionsService } from './collections.service';
-import { CreateCollectionDto } from './dto/create-collection.dto';
-import { UpdateCollectionDto } from './dto/update-collection.dto';
+import { Controller, Get, Post, Body, Param, Delete, Put, UsePipes, ValidationPipe } from "@nestjs/common";
+import { CollectionsService } from "./collections.service";
+import { CreateCollectionDto } from "./dto/createCollection.dto";
+import { UpdateCollectionDto } from "./dto/updateCollection.dto";
+import { ApiOperation, ApiTags } from "@nestjs/swagger";
+import { Collection } from "./entities/collection.entity";
+import { AuthToken } from "src/config/auth.decorator";
+import { TransformInterceptor } from "src/config/transform.interceptor";
 
-@Controller('collections')
+@ApiTags("Collections")
+@Controller("api/collections")
 export class CollectionsController {
-  constructor(private readonly collectionsService: CollectionsService) {}
+    constructor(private readonly collectionsService: CollectionsService) {}
 
-  @Post()
-  create(@Body() createCollectionDto: CreateCollectionDto) {
-    return this.collectionsService.create(createCollectionDto);
-  }
+    @ApiOperation({ summary: "컬렉션 보기" })
+    @Get()
+    findCollections(): Promise<Collection[]> {
+        return this.collectionsService.findCollection();
+    }
 
-  @Get()
-  findAll() {
-    return this.collectionsService.findAll();
-  }
+    @ApiOperation({ summary: "컬렉션 생성", description: "컬렉션 생성 페이지" })
+    @Post()
+    @UsePipes(TransformInterceptor)
+    newColleciton(@Body(ValidationPipe) createCollectionDto: CreateCollectionDto, @AuthToken() address: string) {
+        return this.collectionsService.createdCollection(createCollectionDto, address);
+    }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.collectionsService.findOne(+id);
-  }
+    @ApiOperation({ summary: "컬렉션 생성", description: "컬렉션 생성 페이지" })
+    @Post("test")
+    @UsePipes(TransformInterceptor)
+    createdColleciton(@Body(ValidationPipe) createCollectionDto: CreateCollectionDto, @AuthToken() address: string) {
+        return this.collectionsService.newCollection(createCollectionDto, address);
+    }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCollectionDto: UpdateCollectionDto) {
-    return this.collectionsService.update(+id, updateCollectionDto);
-  }
+    @ApiOperation({ summary: "컬렉션 수정" })
+    @Put(":id")
+    @UsePipes(TransformInterceptor)
+    updateCollection(
+        @Param("id") id: number,
+        @Body(ValidationPipe) updateCollection: UpdateCollectionDto,
+        @AuthToken() address: string,
+    ) {
+        return this.collectionsService.updateCollection(id, updateCollection, address);
+    }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.collectionsService.remove(+id);
-  }
+    @ApiOperation({ summary: "컬렉션 삭제" })
+    @Delete(":id")
+    @UsePipes(ValidationPipe)
+    deleteCollection(@Param("id") id: number, @AuthToken() address: string) {
+        return this.collectionsService.deleteCollection(id, address);
+    }
 }
