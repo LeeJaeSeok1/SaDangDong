@@ -8,7 +8,7 @@ import { UpdateUserDto } from "./dto/updateUser.dto";
 import { AuthToken } from "src/config/auth.decorator";
 
 @ApiTags("Account")
-@Controller("account")
+@Controller("api/account")
 export class UsersController {
     constructor(private usersService: UsersService) {}
 
@@ -37,8 +37,8 @@ export class UsersController {
         summary: "USER 페이지",
         description: "유저 collection, item, favorites 페이지",
     })
-    @Get(":id?")
-    getUserInfo(@Param("id") id: string, @Query("tab") tab: string, @AuthToken() address: string): Promise<User> {
+    @Get(":id")
+    getUserInfo(@Param("id") id: string, @Query("tab") tab: string, @AuthToken() address: string) {
         return this.usersService.userInfo(id, tab, address);
     }
 
@@ -91,5 +91,7 @@ export class UsersController {
     // }
     @ApiOperation({ summary: "유저확인" })
     @Post("me")
-    async test() {}
+    async test(@AuthToken() user: string) {
+        return this.usersService.findByUser(user);
+    }
 }

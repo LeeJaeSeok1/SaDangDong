@@ -21,8 +21,15 @@ export class CollectionsController {
     @ApiOperation({ summary: "컬렉션 생성", description: "컬렉션 생성 페이지" })
     @Post()
     @UsePipes(TransformInterceptor)
-    createdColleciton(@Body(ValidationPipe) createCollectionDto: CreateCollectionDto, @AuthToken() address: string) {
+    newColleciton(@Body(ValidationPipe) createCollectionDto: CreateCollectionDto, @AuthToken() address: string) {
         return this.collectionsService.createdCollection(createCollectionDto, address);
+    }
+
+    @ApiOperation({ summary: "컬렉션 생성", description: "컬렉션 생성 페이지" })
+    @Post("test")
+    @UsePipes(TransformInterceptor)
+    createdColleciton(@Body(ValidationPipe) createCollectionDto: CreateCollectionDto, @AuthToken() address: string) {
+        return this.collectionsService.newCollection(createCollectionDto, address);
     }
 
     @ApiOperation({ summary: "컬렉션 수정" })

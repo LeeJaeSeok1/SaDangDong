@@ -1,5 +1,5 @@
-import { Injectable, NotFoundException, Req } from "@nestjs/common";
-import { Repository } from "typeorm";
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { RelationId, Repository } from "typeorm";
 import { User } from "./entities/user.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Collection } from "src/collections/entities/collection.entity";
@@ -55,21 +55,33 @@ export class UsersService {
 
     // 마이페이지;
     async userInfo(id: string, tab: string, address: string) {
-        const mycollections = await this.collectionRepository.find({ select: ["address"] });
-        const myItems = await this.itemRepository.find({ select: ["owner"] });
-        console.log("mycolleciton", mycollections);
-        console.log("myItem", myItems);
-        let tabName = tab;
-        if (tabName === "collection") {
-            await this.collectionRepository.find({ select: ["address"] });
-        }
-        if (tabName === "Item") {
-            await this.itemRepository.find({ select: ["owner"] });
-        }
+        try {
+            const mycollections = await this.collectionRepository
+                .createQueryBuilder("collection")
+                .innerJoin("collection.user", "user", "user.collection = :address", { address });
+            // const userCollection = await this.userRepository
+            //     .createQueryBuilder("user")
+            //     .innerJoin("user.collection", "colleciton", "collection.userAddress = :address", { address })
+            //     .getMany();
+            console.log(mycollections);
+            // console.log(userCollection);
 
-        return this.userRepository.findOne({ select: ["address"] });
+            const myItems = await this.itemRepository.find({ select: ["owner"] });
+
+            if (id !== address) {
+                throw new NotFoundException("로그인 후 이용해주세요.");
+            }
+            let tabName = tab;
+            if (tabName === "collection") {
+                return mycollections;
+            }
+            if (tabName === "Item") {
+                return myItems;
+            }
+        } catch (error) {
+            throw new NotFoundException(error);
+        }
     }
-
     // 모든 유저 조회
     async findAll(): Promise<User[]> {
         return this.userRepository.find();

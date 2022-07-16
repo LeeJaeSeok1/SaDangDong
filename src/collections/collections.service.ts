@@ -31,9 +31,8 @@ export class CollectionsService {
     // 컬렉션 생성
     async createdCollection(createCollectionDto: CreateCollectionDto, address: string) {
         try {
-            const userAddress = address;
             const createCollection = new Collection();
-            createCollection.address = userAddress;
+            createCollection.user.address = address;
             createCollection.name = createCollectionDto.name;
             createCollection.description = createCollectionDto.description;
             createCollection.commission = createCollectionDto.commission;
@@ -45,11 +44,28 @@ export class CollectionsService {
         }
     }
 
+    // 컬렉션 생성 테스트
+    async newCollection(createCollectionDto: CreateCollectionDto, address: string) {
+        const collection = new Collection();
+        collection.name = createCollectionDto.name;
+        collection.description = createCollectionDto.description;
+        collection.commission = createCollectionDto.commission;
+        collection.benner_image = createCollectionDto.benner_image;
+        collection.feature_image = createCollectionDto.feature_image;
+        await this.collectionRepository.save(collection);
+
+        const user = new User();
+        user.address = address;
+        user.collection = [collection];
+        await this.userRepository.save(user);
+        return collection;
+    }
+
     // 컬렉션 수정
     async updateCollection(id: number, updateCollectionDto: UpdateCollectionDto, address: string) {
         try {
             const exisCollection = await this.findByOneCollection(id);
-            if (exisCollection.address !== address) {
+            if (exisCollection.user.address !== address) {
                 throw new NotFoundException(`본인만 수정 가능합니다.`);
             }
             exisCollection.name = updateCollectionDto.name;
@@ -65,7 +81,7 @@ export class CollectionsService {
     // 컬렉션 삭제
     async deleteCollection(id: number, address: string) {
         const exisCollection = await this.findByOneCollection(id);
-        if (exisCollection.address !== address) {
+        if (exisCollection.user.address !== address) {
             throw new NotFoundException(`본인만 수정 가능합니다.`);
         }
         await this.collectionRepository.delete(exisCollection);
