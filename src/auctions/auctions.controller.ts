@@ -1,8 +1,5 @@
-import { Controller, Get, Post, Body, Param, UseGuards } from "@nestjs/common";
-import { AuthGuard } from "@nestjs/passport";
-import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger";
-import { Users } from "src/users/entities/user.entity";
-import { User } from "src/users/user.decorator";
+import { Controller, Get, Post, Body, Param } from "@nestjs/common";
+import { ApiOperation, ApiTags } from "@nestjs/swagger";
 import { AuctionsService } from "./auctions.service";
 import { CreateAuctionDto } from "./dto/createAuction.dto";
 import { Auction } from "./entities/auction.entity";
@@ -16,11 +13,9 @@ export class AuctionsController {
         summary: "경매 등록",
         description: "경매에 아이템 등록하기",
     })
-    @ApiBearerAuth("access-token")
-    @UseGuards(AuthGuard())
     @Post(":NFTtoken")
-    create(@Param("NFTtoken") NFTtoken: string, @Body() createAuctionDto: CreateAuctionDto, @User() user: Users) {
-        return this.auctionsService.createAuction(NFTtoken, createAuctionDto, user);
+    create(@Param("NFTtoken") NFTtoken: string, @Body() createAuctionDto: CreateAuctionDto) {
+        return this.auctionsService.createAuction(NFTtoken, createAuctionDto);
     }
 
     @ApiOperation({ summary: "경매중인 아이템 전체보기" })

@@ -31,8 +31,13 @@ export class ImagesController {
     })
     @Post()
     @UseInterceptors(FilesInterceptor("files", 3, { storage: storage }))
-    async uploadImage(@UploadedFiles() files: Express.Multer.File[], @Body() createImageDto: CreateImageDto) {
-        return await this.imagesService.uploadImage(files, createImageDto);
+    async uploadImage(@UploadedFiles() files: Express.Multer.File[]) {
+        console.log("여긴 뜨나?");
+        try {
+            return await this.imagesService.uploadImage(files);
+        } catch (error) {
+            console.log("컨트롤러 에러", error);
+        }
     }
 
     //     @ApiOperation({ summary: "이미지 업로드", description: "이미지 업로드 페이지" })

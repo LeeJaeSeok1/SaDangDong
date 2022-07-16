@@ -18,27 +18,19 @@ async function bootstrap() {
         .setTitle("SaDangDong API")
         .setDescription("사당동(NFT Auction 프로젝트)를 위한 API 문서입니다.")
         .setVersion("1.0")
-        .addBearerAuth(
-            {
-                type: "http",
-                scheme: "bearer",
-                name: "JWT",
-                in: "header",
-            },
-            "access-token",
-        )
         .build();
     const document = SwaggerModule.createDocument(app, swagger);
     SwaggerModule.setup("api", app, document);
 
-    // app.useGlobalPipes(
-    //     new ValidationPipe({
-    //         transform: true,
-    //         whitelist: true,
-    //         forbidNonWhitelisted: true,
-    //     }),
-    // );
+    app.useGlobalPipes(
+        new ValidationPipe({
+            // transform: true,
+            // whitelist: true,
+            // forbidNonWhitelisted: true,
+        }),
+    );
 
+    app.enableCors();
     await app.listen(port);
     Logger.log(`Application runnin on port ${port}`);
 }

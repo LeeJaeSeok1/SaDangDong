@@ -1,13 +1,5 @@
 import { Item } from "src/items/entities/item.entity";
-import {
-    Column,
-    CreateDateColumn,
-    Entity,
-    JoinColumn,
-    OneToOne,
-    PrimaryGeneratedColumn,
-    UpdateDateColumn,
-} from "typeorm";
+import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Chat } from "./chat.entity";
 import { Offer } from "./offer.entity";
 
@@ -20,16 +12,12 @@ export class Auction {
     price: number;
 
     @Column()
-    biddingPrice: number;
+    start_at: Date;
 
-    @CreateDateColumn()
-    createdAt: Date;
-
-    @UpdateDateColumn()
-    updatedAt: Date;
+    @Column()
+    end_at: Date;
 
     @OneToOne((type) => Item, (item) => item.auction)
-    @JoinColumn()
     item: Item;
 
     @OneToOne((type) => Offer, (offer) => offer.auction)

@@ -8,10 +8,4 @@ export class CreateAuctionDto {
         description: "경매 시작가",
     })
     price: number;
-
-    @ApiProperty({
-        example: 1.5,
-        description: "입찰가 제안 = 현제 입찰가 + n%",
-    })
-    biddingPrice: number;
 }

@@ -2,28 +2,36 @@ import { isNotEmpty } from "class-validator";
 import { Chat } from "src/auctions/entities/chat.entity";
 import { Offer } from "src/auctions/entities/offer.entity";
 import { Collection } from "src/collections/entities/collection.entity";
+import { Like } from "src/like/entities/like.entity";
 import { Item } from "src/items/entities/item.entity";
-import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Sell } from "src/sell/entities/sell.entity";
+import {
+    Column,
+    CreateDateColumn,
+    Entity,
+    ManyToMany,
+    OneToMany,
+    OneToOne,
+    PrimaryColumn,
+    UpdateDateColumn,
+} from "typeorm";
 
 @Entity()
-export class Users {
-    @PrimaryGeneratedColumn()
-    id: number;
-
-    @Column({ unique: true })
-    walletId: string;
+export class User {
+    @PrimaryColumn({ unique: true })
+    address: string;
 
     @Column({ nullable: true, default: "unnamed" })
-    nickname: string;
+    name: string;
+
+    @Column({
+        nullable: true,
+        default: "https://sadangdong99.s3.ap-northeast-2.amazonaws.com/1657871846145-image.png",
+    })
+    profile_image: string;
 
     @Column({ nullable: true })
-    description: string;
-
-    @Column({ nullable: true, default: "https://sadangdong99.s3.ap-northeast-2.amazonaws.com/1657871846145-image.png" })
-    profileImage: string;
-
-    @Column({ nullable: true })
-    bannerImage: string;
+    banner_image: string;
 
     @CreateDateColumn()
     createdAt: Date;
@@ -31,15 +39,21 @@ export class Users {
     @UpdateDateColumn()
     updatedAt: Date;
 
+    @OneToOne((type) => Sell, (sell) => sell.user)
+    sell: Sell;
+
     @OneToMany((type) => Collection, (collection) => collection.user, { eager: true })
     collection: Collection[];
 
     @OneToMany((type) => Item, (item) => item.user, { eager: true })
     item: Item[];
 
-    @OneToMany((type) => Offer, (offer) => offer.user)
-    offer: Offer;
+    @OneToMany((type) => Like, (like) => like.user)
+    like: Like;
 
-    @OneToMany((type) => Chat, (chat) => chat.user)
-    chat: Chat;
+    @ManyToMany((type) => Offer, (offer) => offer.user)
+    offer: Offer[];
+
+    @ManyToMany((type) => Chat, (chat) => chat.user)
+    chat: Chat[];
 }

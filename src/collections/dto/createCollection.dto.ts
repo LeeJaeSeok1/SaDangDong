@@ -19,17 +19,17 @@ export class CreateCollectionDto {
         example: "0.5",
         description: "아이템 판매 수수료",
     })
-    earning: number;
+    commission: number;
 
     @ApiProperty({
         example: "sadangdong.jpg",
         description: "컬렉션 베너 사진",
     })
-    bennerImage: string;
+    benner_image: string;
 
     @ApiProperty({
         example: "sadangdong.jpg",
         description: "컬렉션 매인 사진",
     })
-    featureImage: string;
+    feature_image: string;
 }

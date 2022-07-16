@@ -11,17 +11,24 @@ export class ImagesService {
         private readonly imagesReposiroty: Repository<ImageUpload>,
     ) {}
 
-    async uploadImage(files: Express.Multer.File[], createImageDto: CreateImageDto) {
-        const uploadeImages = [];
-        let element;
-        for (element of files) {
-            const file = new ImageUpload();
-            file.originalName = element.originalname;
-            file.mimeType = element.mimetype;
-            file.url = element.location;
-            file.target = createImageDto.target;
-            uploadeImages.push(file);
+    async uploadImage(files: Express.Multer.File[]) {
+        try {
+            const uploadeImages = [];
+            let element;
+            for (element of files) {
+                const file = new ImageUpload();
+                file.originalName = element.originalname;
+                file.mimeType = element.mimetype;
+                file.url = element.location;
+                uploadeImages.push(file);
+            }
+            console.log("여긴 이미지 서비스");
+            console.log("originalname", element.originalName);
+            console.log("mimetype", element.mimetype);
+            console.log("location", element.location);
+            return await this.imagesReposiroty.save(uploadeImages);
+        } catch (error) {
+            console.log("error", error);
         }
-        return await this.imagesReposiroty.save(uploadeImages);
     }
 }

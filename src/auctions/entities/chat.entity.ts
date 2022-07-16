@@ -1,13 +1,5 @@
-import { Users } from "src/users/entities/user.entity";
-import {
-    Column,
-    CreateDateColumn,
-    Entity,
-    ManyToOne,
-    OneToOne,
-    PrimaryGeneratedColumn,
-    UpdateDateColumn,
-} from "typeorm";
+import { User } from "src/users/entities/user.entity";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Auction } from "./auction.entity";
 
 @Entity()
@@ -21,12 +13,10 @@ export class Chat {
     @CreateDateColumn()
     createdAt: Date;
 
-    @UpdateDateColumn()
-    updatedAt: Date;
-
     @OneToOne((type) => Auction, (auction) => auction.chat)
+    @JoinColumn({ name: "Chat_id" })
     auction: Auction;
 
-    @ManyToOne((type) => Users, (user) => user.chat)
-    user: Users;
+    @ManyToMany((type) => User, (user) => user.chat)
+    user: User[];
 }

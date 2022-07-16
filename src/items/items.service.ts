@@ -1,10 +1,8 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Collection } from "src/collections/entities/collection.entity";
-import { Users } from "src/users/entities/user.entity";
 import { Repository } from "typeorm";
 import { CreateItemDto } from "./dto/createItem.dto";
-import { UpdateItemDto } from "./dto/updateItem.dto";
 import { Item } from "./entities/item.entity";
 
 @Injectable()
@@ -22,22 +20,22 @@ export class ItemsService {
     }
 
     // 특정아이템 보기
-    findByIdItem(id: number): Promise<Item> {
-        return this.itemRepository.findOne({ where: { id } });
+    findByIdItem(id: number) {
+        // return this.itemRepository.findOne({ where: { id } });
     }
 
     // 아이템 생성
-    async createItem(user: Users, createItemDto: CreateItemDto): Promise<Item> {
-        const userId = user.id;
-        const createItem = new Item();
-        createItem.name = createItemDto.name;
-        createItem.description = createItemDto.description;
-        createItem.NFTtoken = createItemDto.NFTtoken;
-        createItem.Blockchain = createItemDto.Blockchain;
-        createItem.collectionId = createItemDto.collection;
-        createItem.userId = userId;
-        createItem.owner = userId;
-        return await this.itemRepository.save(createItem);
+    async createItem(createItemDto: CreateItemDto) {
+        // const userId = user.id;
+        // const createItem = new Item();
+        // createItem.name = createItemDto.name;
+        // createItem.description = createItemDto.description;
+        // createItem.NFTtoken = createItemDto.NFTtoken;
+        // createItem.Blockchain = createItemDto.Blockchain;
+        // createItem.collectionId = createItemDto.collection;
+        // createItem.userId = userId;
+        // createItem.owner = userId;
+        // return await this.itemRepository.save(createItem);
     }
 
     // 아이템 수정

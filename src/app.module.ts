@@ -1,4 +1,4 @@
-import { Module } from "@nestjs/common";
+import { Module, ValidationPipe } from "@nestjs/common";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import { UsersModule } from "./users/users.module";
@@ -8,7 +8,7 @@ import { AuctionsModule } from "./auctions/auctions.module";
 import { SearchModule } from "./search/search.module";
 import { ExploreModule } from "./explore/explore.module";
 import { SellModule } from "./sell/sell.module";
-import { FavoritesModule } from "./favorites/favorites.module";
+import { LikeModule } from "./like/like.module";
 import { EventsModule } from "./events/events.module";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { ChatModule } from "./chat/chat.module";
@@ -17,6 +17,7 @@ import { ConfigModule } from "@nestjs/config";
 import { typeORMConfig } from "./config/typeorm.config";
 import config from "./config/config";
 import { ImagesModule } from "./images/images.module";
+import { APP_PIPE } from "@nestjs/core";
 
 @Module({
     imports: [
@@ -38,11 +39,11 @@ import { ImagesModule } from "./images/images.module";
         SearchModule,
         ExploreModule,
         SellModule,
-        FavoritesModule,
+        LikeModule,
         EventsModule,
         ImagesModule,
     ],
     controllers: [AppController],
-    providers: [AppService],
+    providers: [AppService, { provide: APP_PIPE, useClass: ValidationPipe }],
 })
 export class AppModule {}

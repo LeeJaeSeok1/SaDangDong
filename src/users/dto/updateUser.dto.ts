@@ -7,23 +7,17 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
         example: "https://sadangdong.com",
         description: "로고 이미지 URL",
     })
-    logoImage: string;
+    profile_image: string;
 
     @ApiProperty({
         example: "https://sadangdong.com",
         description: "베너 이미지 RUL",
     })
-    bennerImage: string;
+    benner_image: string;
 
     @ApiProperty({
         example: "sadangdong",
         description: "닉네임",
     })
-    nickname: string;
-
-    @ApiProperty({
-        example: "나는 사당동이다",
-        description: "유저 소개",
-    })
-    description: string;
+    name: string;
 }

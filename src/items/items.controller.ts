@@ -1,11 +1,7 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Put, UseGuards } from "@nestjs/common";
+import { Controller, Get, Post, Body, Patch, Param, Delete, Put } from "@nestjs/common";
 import { ItemsService } from "./items.service";
 import { CreateItemDto } from "./dto/createItem.dto";
-import { UpdateItemDto } from "./dto/updateItem.dto";
-import { ApiBearerAuth, ApiHeader, ApiOperation, ApiTags } from "@nestjs/swagger";
-import { User } from "src/users/user.decorator";
-import { Users } from "src/users/entities/user.entity";
-import { AuthGuard } from "@nestjs/passport";
+import { ApiOperation, ApiTags } from "@nestjs/swagger";
 
 @ApiTags("Items")
 @Controller("api/items")
@@ -13,11 +9,9 @@ export class ItemsController {
     constructor(private readonly itemsService: ItemsService) {}
 
     @ApiOperation({ summary: "아이템 민팅", description: "아이템 민팅 페이지" })
-    @ApiBearerAuth("access-token")
-    @UseGuards(AuthGuard())
     @Post("minting")
-    createItem(@User() user: Users, @Body() createItemDto: CreateItemDto) {
-        return this.itemsService.createItem(user, createItemDto);
+    createItem(@Body() createItemDto: CreateItemDto) {
+        return this.itemsService.createItem(createItemDto);
     }
 
     @ApiOperation({ summary: "아이템 상세보기", description: "아이템 상세보기 페이지" })

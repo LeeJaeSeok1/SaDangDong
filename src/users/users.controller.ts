@@ -1,38 +1,32 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query, Put, UseGuards } from "@nestjs/common";
+import { Controller, Get, Post, Body, Param, Query, Put, UsePipes, ValidationPipe } from "@nestjs/common";
 import { UsersService } from "./users.service";
+import { ApiBody, ApiHeader, ApiOperation, ApiQuery, ApiTags } from "@nestjs/swagger";
+import { User } from "./entities/user.entity";
 import { CreateUserDto } from "./dto/createUser.dto";
-import { ApiBearerAuth, ApiHeader, ApiOperation, ApiQuery, ApiTags } from "@nestjs/swagger";
-import { Users } from "./entities/user.entity";
-import { User } from "./user.decorator";
-import { AuthGuard } from "@nestjs/passport";
+import { TransformInterceptor } from "src/config/transform.interceptor";
+import { UpdateUserDto } from "./dto/updateUser.dto";
+import { AuthToken } from "src/config/auth.decorator";
 
 @ApiTags("Account")
 @Controller("api/account")
 export class UsersController {
     constructor(private usersService: UsersService) {}
 
-    @ApiOperation({ summary: "회원가입" })
-    @Post("sign")
-    async signUp(@Body() createUserDto: CreateUserDto) {
-        return this.usersService.signUp(createUserDto);
-    }
-
-    // @ApiOperation({ summary: "로그인" })
-    // @Post("signin")
-    // async login(@Body() createUserDto: CreateUserDto): Promise<{ accessToken: string }> {
-    //     return this.usersService.logIn(createUserDto);
-    // }
-
     @ApiOperation({ summary: "사인페이지" })
+    @ApiBody({ type: CreateUserDto })
     @Post("auth")
-    async sign(@Body() createUserDto: CreateUserDto) {
-        return this.usersService.sign(createUserDto);
+    @UsePipes(ValidationPipe)
+    async sign(@Body() address: CreateUserDto) {
+        return this.usersService.sign(address);
     }
-    // @ApiOperation({ summary: "특정 유저 가져오기"})
-    // @Get(":id")
-    // async getUser(@Param("id") id: number) {
-    //     return this.usersService.findById(id);
-    // }
+
+    @ApiOperation({ summary: "회원수정 페이지" })
+    @ApiHeader({ name: "address" })
+    @Put("setting")
+    @UsePipes(TransformInterceptor)
+    async setting(@Body(ValidationPipe) editUser: UpdateUserDto, @AuthToken() address: string) {
+        return this.usersService.settingUser(editUser, address);
+    }
 
     @ApiQuery({
         name: "tab",
@@ -43,11 +37,9 @@ export class UsersController {
         summary: "USER 페이지",
         description: "유저 collection, item, favorites 페이지",
     })
-    @ApiBearerAuth("access-token")
-    @UseGuards(AuthGuard())
-    @Get(":id?")
-    getUserInfo(@User() user: Users, @Param("id") id: number, @Query("tab") tab: string): Promise<Users> {
-        return this.usersService.userInfo(id, tab, user);
+    @Get(":id")
+    getUserInfo(@Param("id") id: string, @Query("tab") tab: string, @AuthToken() address: string) {
+        return this.usersService.userInfo(id, tab, address);
     }
 
     // 쿼리 스트링 예제
@@ -98,10 +90,8 @@ export class UsersController {
     //     return `This action removes a #${nickname} user`;
     // }
     @ApiOperation({ summary: "유저확인" })
-    @ApiBearerAuth("access-token")
-    @UseGuards(AuthGuard())
     @Post("me")
-    async test(@User() user: Users) {
-        console.log("user", user);
+    async test(@AuthToken() user: string) {
+        return this.usersService.findByUser(user);
     }
 }
