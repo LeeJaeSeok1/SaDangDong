@@ -46,18 +46,18 @@ export class CollectionsService {
 
     // 컬렉션 생성 테스트
     async newCollection(createCollectionDto: CreateCollectionDto, address: string) {
+        const user = new User();
+        user.address = address;
+
         const collection = new Collection();
         collection.name = createCollectionDto.name;
         collection.description = createCollectionDto.description;
         collection.commission = createCollectionDto.commission;
         collection.benner_image = createCollectionDto.benner_image;
         collection.feature_image = createCollectionDto.feature_image;
+        collection.user = user;
         await this.collectionRepository.save(collection);
 
-        const user = new User();
-        user.address = address;
-        user.collection = [collection];
-        await this.userRepository.save(user);
         return collection;
     }
 

@@ -54,32 +54,35 @@ export class UsersService {
     }
 
     // 마이페이지;
-    async userInfo(id: string, tab: string, address: string) {
+    async userInfo(id: string, address: string) {
         try {
-            const mycollections = await this.collectionRepository
-                .createQueryBuilder("collection")
-                .innerJoin("collection.user", "user", "user.collection = :address", { address });
-            // const userCollection = await this.userRepository
-            //     .createQueryBuilder("user")
-            //     .innerJoin("user.collection", "colleciton", "collection.userAddress = :address", { address })
+            // const mycollections = await this.collectionRepository
+            //     .createQueryBuilder("collection")
+            //     .innerJoin("collection.user", "user", "user.collection = :address", { address })
             //     .getMany();
+
+            // const mycollections = await this.userRepository
+            const mycollections = await this.userRepository
+                .createQueryBuilder("user")
+                .innerJoin("user.collection", "collection", "collection.user = :address", { address })
+                .getMany();
             console.log(mycollections);
             // console.log(userCollection);
 
             const myItems = await this.itemRepository.find({ select: ["owner"] });
 
-            if (id !== address) {
-                throw new NotFoundException("로그인 후 이용해주세요.");
-            }
-            let tabName = tab;
-            if (tabName === "collection") {
-                return mycollections;
-            }
-            if (tabName === "Item") {
-                return myItems;
-            }
+            // if (id !== address) {
+            //     throw new NotFoundException("로그인 후 이용해주세요.");
+            // }
+            // let tabName = tab;
+            // if (tabName === "collection") {
+            //     return mycollections;
+            // }
+            // if (tabName === "Item") {
+            //     return myItems;
+            // }
         } catch (error) {
-            throw new NotFoundException(error);
+            throw new NotFoundException();
         }
     }
     // 모든 유저 조회

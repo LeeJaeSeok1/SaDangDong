@@ -22,15 +22,18 @@ async function bootstrap() {
     const document = SwaggerModule.createDocument(app, swagger);
     SwaggerModule.setup("api", app, document);
 
-    app.useGlobalPipes(
-        new ValidationPipe({
-            // transform: true,
-            // whitelist: true,
-            // forbidNonWhitelisted: true,
-        }),
-    );
+    // app.useGlobalPipes(
+    //     new ValidationPipe({
+    //         transform: true,
+    //         forbidNonWhitelisted: true,
+    //     }),
+    // );
 
-    app.enableCors();
+    app.enableCors({
+        origin: "*",
+        methods: "GET, HEAD, PUT, PATCH, POST, DELETE, OPTIONS",
+        credentials: true,
+    });
     await app.listen(port);
     Logger.log(`Application runnin on port ${port}`);
 }
