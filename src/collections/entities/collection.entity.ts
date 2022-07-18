@@ -37,13 +37,12 @@ export class Collection {
     @UpdateDateColumn()
     updated_at: Date;
 
-    // @Column({ nullable: true })
-    // address: string;
+    @Column({ nullable: true })
+    address: string;
 
-    //     @ManyToOne((type) => User, (user) => user.collection, { onDelete: "SET NULL", onUpdate: "CASCADE" })
-    //     @JoinColumn()
-    //     user: User;
+    @ManyToOne((type) => User, (user) => user.collection, { onDelete: "SET NULL", onUpdate: "CASCADE" })
+    user: User;
 
-    //     @OneToMany((type) => Item, (item) => item.collection)
-    //     item: Item[];
+    @OneToMany((type) => Item, (item) => item.collection)
+    item: Item[];
 }

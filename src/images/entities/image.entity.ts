@@ -15,7 +15,10 @@ export class ImageUpload {
     url: string;
 
     @Column({ nullable: true })
-    target: string;
+    name: string;
+
+    @Column({ nullable: true })
+    description: string;
 
     @CreateDateColumn()
     createdAt: Date;
