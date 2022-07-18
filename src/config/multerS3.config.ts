@@ -3,6 +3,7 @@ import * as AWS from "aws-sdk";
 
 const bucketName = process.env.AWS_S3_BUCKET_NAME;
 
+console.log("bucketTest", bucketName);
 const s3 = new AWS.S3();
 AWS.config.update({
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -21,3 +22,4 @@ export const storage = multerS3({
         cb(null, fileName);
     },
 });
+console.log("스토리지 통과");

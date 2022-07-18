@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { BadRequestException, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { CreateImageDto } from "./dto/createImage.dto";
@@ -28,7 +28,7 @@ export class ImagesService {
             console.log("location", element.location);
             return await this.imagesReposiroty.save(uploadeImages);
         } catch (error) {
-            console.log("error", error);
+            throw new BadRequestException(error.message);
         }
     }
 }

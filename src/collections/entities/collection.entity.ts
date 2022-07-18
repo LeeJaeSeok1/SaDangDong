@@ -11,7 +11,7 @@ import {
     JoinColumn,
 } from "typeorm";
 
-@Entity({ schema: "sadangdong", name: "collection" })
+@Entity()
 export class Collection {
     @PrimaryGeneratedColumn()
     id: number;
@@ -40,10 +40,10 @@ export class Collection {
     // @Column({ nullable: true })
     // address: string;
 
-    @ManyToOne((type) => User, (user) => user.collection, { onDelete: "SET NULL", onUpdate: "CASCADE" })
-    @JoinColumn()
-    user: User;
+    //     @ManyToOne((type) => User, (user) => user.collection, { onDelete: "SET NULL", onUpdate: "CASCADE" })
+    //     @JoinColumn()
+    //     user: User;
 
-    @OneToMany((type) => Item, (item) => item.collection)
-    item: Item[];
+    //     @OneToMany((type) => Item, (item) => item.collection)
+    //     item: Item[];
 }

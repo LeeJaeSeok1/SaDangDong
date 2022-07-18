@@ -1,5 +1,5 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
-import { RelationId, Repository } from "typeorm";
+import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
+import { Repository } from "typeorm";
 import { User } from "./entities/user.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Collection } from "src/collections/entities/collection.entity";
@@ -49,7 +49,7 @@ export class UsersService {
             existUser.profile_image = editUser.profile_image;
             return this.userRepository.save(existUser);
         } catch (error) {
-            throw new NotFoundException(`본인만 수정 가능합니다.`);
+            throw new BadRequestException(error.message);
         }
     }
 
@@ -69,7 +69,7 @@ export class UsersService {
             console.log(mycollections);
             // console.log(userCollection);
 
-            const myItems = await this.itemRepository.find({ select: ["owner"] });
+            // const myItems = await this.itemRepository.find({ select: ["owner"] });
 
             // if (id !== address) {
             //     throw new NotFoundException("로그인 후 이용해주세요.");
@@ -82,7 +82,7 @@ export class UsersService {
             //     return myItems;
             // }
         } catch (error) {
-            throw new NotFoundException();
+            throw new BadRequestException(error.message);
         }
     }
     // 모든 유저 조회

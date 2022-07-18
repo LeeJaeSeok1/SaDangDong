@@ -13,10 +13,10 @@ export class Offer {
     @CreateDateColumn()
     created_at: Date;
 
-    @OneToOne((type) => Auction, (auction) => auction.offer)
-    @JoinColumn({ name: "offer_id" })
-    auction: Auction;
+    // @OneToOne((type) => Auction, (auction) => auction.offer)
+    // @JoinColumn({ name: "offer_id" })
+    // auction: Auction;
 
-    @ManyToMany((type) => User, (user) => user.offer)
-    user: User[];
+    // @ManyToMany((type) => User, (user) => user.offer)
+    // user: User[];
 }
