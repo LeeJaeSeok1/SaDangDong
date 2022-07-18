@@ -24,13 +24,16 @@ async function bootstrap() {
 
     app.useGlobalPipes(
         new ValidationPipe({
-            // transform: true,
-            // whitelist: true,
-            // forbidNonWhitelisted: true,
+            transform: true,
+            forbidNonWhitelisted: true,
         }),
     );
 
-    app.enableCors();
+    app.enableCors({
+        origin: "*",
+        methods: "GET, HEAD, PUT, PATCH, POST, DELETE, OPTIONS",
+        credentials: true,
+    });
     await app.listen(port);
     Logger.log(`Application runnin on port ${port}`);
 }

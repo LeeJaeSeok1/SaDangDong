@@ -48,25 +48,25 @@ export class Item {
     @DeleteDateColumn()
     archived_at: Date;
 
-    @Column()
-    owner: string;
-    @ManyToOne((type) => User, (user) => user.item)
-    // @JoinColumn({ name: "owner" })
-    user: User;
+    // @Column()
+    // owner: string;
+    // @ManyToOne((type) => User, (user) => user.item)
+    // // @JoinColumn({ name: "owner" })
+    // user: User;
 
-    @OneToOne((type) => Auction, (auction) => auction.item)
-    // @JoinColumn({ name: "token_id" })
-    auction: Auction;
+    // @OneToOne((type) => Auction, (auction) => auction.item)
+    // // @JoinColumn({ name: "token_id" })
+    // auction: Auction;
 
-    @Column()
-    collection_id: number;
-    @ManyToOne((type) => Collection, (collection) => collection.item)
-    // @JoinColumn({ name: "token_id" })
-    collection: Collection;
+    // @Column()
+    // collection_id: number;
+    // @ManyToOne((type) => Collection, (collection) => collection.item)
+    // // @JoinColumn({ name: "token_id" })
+    // collection: Collection;
 
-    @OneToOne((type) => Like, (like) => like.item)
-    like: Like;
+    // @OneToOne((type) => Like, (like) => like.item)
+    // like: Like;
 
-    @OneToOne((type) => Like_relation, (like_relation) => like_relation.item)
-    like_relation: Like_relation;
+    // @OneToOne((type) => Like_relation, (like_relation) => like_relation.item)
+    // like_relation: Like_relation;
 }

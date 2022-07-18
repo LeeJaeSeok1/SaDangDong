@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { ImageUpload } from "src/images/entities/image.entity";
 import { User } from "src/users/entities/user.entity";
@@ -32,7 +32,7 @@ export class CollectionsService {
     async createdCollection(createCollectionDto: CreateCollectionDto, address: string) {
         try {
             const createCollection = new Collection();
-            createCollection.user.address = address;
+            // createCollection.user.address = address;
             createCollection.name = createCollectionDto.name;
             createCollection.description = createCollectionDto.description;
             createCollection.commission = createCollectionDto.commission;
@@ -40,24 +40,24 @@ export class CollectionsService {
             createCollection.feature_image = createCollectionDto.feature_image;
             return await this.collectionRepository.save(createCollection);
         } catch (error) {
-            throw new NotFoundException(error);
+            throw new BadRequestException(error.message);
         }
     }
 
     // 컬렉션 생성 테스트
     async newCollection(createCollectionDto: CreateCollectionDto, address: string) {
+        const user = new User();
+        user.address = address;
+
         const collection = new Collection();
         collection.name = createCollectionDto.name;
         collection.description = createCollectionDto.description;
         collection.commission = createCollectionDto.commission;
         collection.benner_image = createCollectionDto.benner_image;
         collection.feature_image = createCollectionDto.feature_image;
+        // collection.user = user;
         await this.collectionRepository.save(collection);
 
-        const user = new User();
-        user.address = address;
-        user.collection = [collection];
-        await this.userRepository.save(user);
         return collection;
     }
 
@@ -65,25 +65,25 @@ export class CollectionsService {
     async updateCollection(id: number, updateCollectionDto: UpdateCollectionDto, address: string) {
         try {
             const exisCollection = await this.findByOneCollection(id);
-            if (exisCollection.user.address !== address) {
-                throw new NotFoundException(`본인만 수정 가능합니다.`);
-            }
+            // if (exisCollection.user.address !== address) {
+            //     throw new NotFoundException(`본인만 수정 가능합니다.`);
+            // }
             exisCollection.name = updateCollectionDto.name;
             exisCollection.description = updateCollectionDto.description;
             exisCollection.benner_image = updateCollectionDto.benner_image;
             exisCollection.feature_image = updateCollectionDto.feature_image;
             return this.collectionRepository.save(exisCollection);
         } catch (error) {
-            throw new NotFoundException(error);
+            throw new BadRequestException(error.message);
         }
     }
 
     // 컬렉션 삭제
     async deleteCollection(id: number, address: string) {
         const exisCollection = await this.findByOneCollection(id);
-        if (exisCollection.user.address !== address) {
-            throw new NotFoundException(`본인만 수정 가능합니다.`);
-        }
+        // if (exisCollection.user.address !== address) {
+        //     throw new NotFoundException(`본인만 수정 가능합니다.`);
+        // }
         await this.collectionRepository.delete(exisCollection);
     }
 }

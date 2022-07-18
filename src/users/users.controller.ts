@@ -38,8 +38,8 @@ export class UsersController {
         description: "유저 collection, item, favorites 페이지",
     })
     @Get(":id")
-    getUserInfo(@Param("id") id: string, @Query("tab") tab: string, @AuthToken() address: string) {
-        return this.usersService.userInfo(id, tab, address);
+    getUserInfo(@Param("id") id: string, @AuthToken() address: string) {
+        return this.usersService.userInfo(id, address);
     }
 
     // 쿼리 스트링 예제
