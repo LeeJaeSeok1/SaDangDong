@@ -9,6 +9,8 @@ import {
     UsePipes,
     ValidationPipe,
     BadRequestException,
+    UseInterceptors,
+    UploadedFiles,
 } from "@nestjs/common";
 import { CollectionsService } from "./collections.service";
 import { CreateCollectionDto } from "./dto/createCollection.dto";
@@ -17,6 +19,8 @@ import { ApiOperation, ApiTags } from "@nestjs/swagger";
 import { Collection } from "./entities/collection.entity";
 import { AuthToken } from "src/config/auth.decorator";
 import { TransformInterceptor } from "src/config/transform.interceptor";
+import { storage } from "src/config/multerS3.config";
+import { FilesInterceptor } from "@nestjs/platform-express";
 
 @ApiTags("Collections")
 @Controller("api/collections")
@@ -40,12 +44,16 @@ export class CollectionsController {
         }
     }
 
-    @ApiOperation({ summary: "컬렉션 생성", description: "컬렉션 생성 페이지" })
+    @ApiOperation({ summary: "컬렉셩 생성" })
     @Post("test")
     @UsePipes(TransformInterceptor)
-    createdColleciton(@Body(ValidationPipe) createCollectionDto: CreateCollectionDto, @AuthToken() address: string) {
+    @UseInterceptors(FilesInterceptor("files", 3, { storage: storage }))
+    createdColleciton(
+        @UploadedFiles() files: Express.Multer.File[],
+        @Body(ValidationPipe) collectionData: CreateCollectionDto,
+    ) {
         try {
-            return this.collectionsService.newCollection(createCollectionDto, address);
+            return this.collectionsService.newCollection(collectionData, files);
         } catch (error) {
             throw new BadRequestException(error.message);
         }

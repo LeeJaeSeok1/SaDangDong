@@ -45,20 +45,32 @@ export class CollectionsService {
     }
 
     // 컬렉션 생성 테스트
-    async newCollection(createCollectionDto: CreateCollectionDto, address: string) {
-        const user = new User();
-        user.address = address;
+    async newCollection(collectionData: CreateCollectionDto, files: Express.Multer.File[]) {
+        const uploadeImages = [];
+        let featureImage;
+        let bennerImage;
+        let element;
+        for (element of files) {
+            const file = new ImageUpload();
+            file.originalName = element.originalname;
+            file.mimeType = element.mimetype;
+            file.url = element.location;
+            uploadeImages.push(file);
 
+            if (file.originalName === "bannerImg") {
+                bennerImage = file.url;
+            }
+            if (file.originalName === "featureImg") {
+                featureImage = file.url;
+            }
+        }
         const collection = new Collection();
-        collection.name = createCollectionDto.name;
-        collection.description = createCollectionDto.description;
-        collection.commission = createCollectionDto.commission;
-        collection.benner_image = createCollectionDto.benner_image;
-        collection.feature_image = createCollectionDto.feature_image;
-        // collection.user = user;
-        await this.collectionRepository.save(collection);
-
-        return collection;
+        collection.benner_image = bennerImage;
+        collection.feature_image = featureImage;
+        collection.name = collectionData.name;
+        collection.description = collectionData.description;
+        collection.commission = collectionData.commission;
+        return await this.collectionRepository.save(collection);
     }
 
     // 컬렉션 수정

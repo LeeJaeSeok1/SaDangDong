@@ -31,11 +31,12 @@ export class ImagesController {
     })
     @Post()
     @UseInterceptors(FilesInterceptor("files", 3, { storage: storage }))
-    async uploadImage(@UploadedFiles() files: Express.Multer.File[]) {
+    async uploadImage(@UploadedFiles() files: Express.Multer.File[], @Body() fileInfo: CreateImageDto) {
         console.log("여긴 뜨나?");
         try {
             console.log("이미지 콘솔", files);
-            return await this.imagesService.uploadImage(files);
+            console.log("파일정보", fileInfo);
+            return await this.imagesService.uploadImage(files, fileInfo);
         } catch (error) {
             throw new BadRequestException(error.message);
         }

@@ -5,5 +5,7 @@ export class CreateImageDto {
         example: "logoImage",
         description: "이미지 타겟(logoImage, bennerImage, featureImage)",
     })
-    target: string;
+    name: string;
+
+    description: string;
 }
