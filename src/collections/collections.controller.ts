@@ -1,4 +1,15 @@
-import { Controller, Get, Post, Body, Param, Delete, Put, UsePipes, ValidationPipe } from "@nestjs/common";
+import {
+    Controller,
+    Get,
+    Post,
+    Body,
+    Param,
+    Delete,
+    Put,
+    UsePipes,
+    ValidationPipe,
+    BadRequestException,
+} from "@nestjs/common";
 import { CollectionsService } from "./collections.service";
 import { CreateCollectionDto } from "./dto/createCollection.dto";
 import { UpdateCollectionDto } from "./dto/updateCollection.dto";
@@ -22,14 +33,22 @@ export class CollectionsController {
     @Post()
     @UsePipes(TransformInterceptor)
     newColleciton(@Body(ValidationPipe) createCollectionDto: CreateCollectionDto, @AuthToken() address: string) {
-        return this.collectionsService.createdCollection(createCollectionDto, address);
+        try {
+            return this.collectionsService.createdCollection(createCollectionDto, address);
+        } catch (error) {
+            throw new BadRequestException(error.message);
+        }
     }
 
     @ApiOperation({ summary: "컬렉션 생성", description: "컬렉션 생성 페이지" })
     @Post("test")
     @UsePipes(TransformInterceptor)
     createdColleciton(@Body(ValidationPipe) createCollectionDto: CreateCollectionDto, @AuthToken() address: string) {
-        return this.collectionsService.newCollection(createCollectionDto, address);
+        try {
+            return this.collectionsService.newCollection(createCollectionDto, address);
+        } catch (error) {
+            throw new BadRequestException(error.message);
+        }
     }
 
     @ApiOperation({ summary: "컬렉션 수정" })
@@ -40,7 +59,11 @@ export class CollectionsController {
         @Body(ValidationPipe) updateCollection: UpdateCollectionDto,
         @AuthToken() address: string,
     ) {
-        return this.collectionsService.updateCollection(id, updateCollection, address);
+        try {
+            return this.collectionsService.updateCollection(id, updateCollection, address);
+        } catch (error) {
+            throw new BadRequestException(error.message);
+        }
     }
 
     @ApiOperation({ summary: "컬렉션 삭제" })

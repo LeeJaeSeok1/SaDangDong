@@ -22,12 +22,12 @@ async function bootstrap() {
     const document = SwaggerModule.createDocument(app, swagger);
     SwaggerModule.setup("api", app, document);
 
-    // app.useGlobalPipes(
-    //     new ValidationPipe({
-    //         transform: true,
-    //         forbidNonWhitelisted: true,
-    //     }),
-    // );
+    app.useGlobalPipes(
+        new ValidationPipe({
+            transform: true,
+            forbidNonWhitelisted: true,
+        }),
+    );
 
     app.enableCors({
         origin: "*",

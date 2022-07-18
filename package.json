@@ -8,7 +8,7 @@
     "scripts": {
         "copy-files": "cpx \"src/config/*.yaml\" dist/config/",
         "prebuild": "rimraf dist",
-        "build": "nest build",
+        "build": "npm run copy-files && nest build",
         "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
         "start": "npm run copy-files && nest start",
         "start:dev": "npm run copy-files && nest start --watch",
