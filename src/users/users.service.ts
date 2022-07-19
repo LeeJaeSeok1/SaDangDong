@@ -6,6 +6,8 @@ import { Collection } from "src/collections/entities/collection.entity";
 import { Item } from "src/items/entities/item.entity";
 import { CreateUserDto } from "./dto/createUser.dto";
 import { UpdateUserDto } from "./dto/updateUser.dto";
+import { ImageUpload } from "src/images/entities/image.entity";
+import { ForeignKeyMetadata } from "typeorm/metadata/ForeignKeyMetadata";
 
 @Injectable()
 export class UsersService {
@@ -19,8 +21,7 @@ export class UsersService {
     ) {}
 
     // sign 페이지
-    async sign(addressId: CreateUserDto) {
-        const { address } = addressId;
+    async sign(address: string) {
         const existUser = await this.userRepository.findOne({ where: { address } });
         if (!existUser) {
             const user = new User();
@@ -34,27 +35,49 @@ export class UsersService {
         return this.userRepository.findOne({ where: { address } });
     }
 
-    async settingUser(editUser: UpdateUserDto, address: string) {
+    // 유저 수정 페이지
+    async settingUser(userData, address: string, files: Express.Multer.File[]) {
         try {
             const existUser = await this.findByUser(address);
-            console.log("address", address);
             console.log("existUser", existUser);
-
+            console.log("유저데이터", userData.name);
+            console.log("유저데이터", userData.address);
             if (existUser === null) throw new NotFoundException(`본인만 수정 가능합니다.`);
             if (existUser.address !== address) {
                 throw new NotFoundException(`본인만 수정 가능합니다.`);
             }
-            existUser.name = editUser.name;
-            existUser.banner_image = editUser.benner_image;
-            existUser.profile_image = editUser.profile_image;
-            return this.userRepository.save(existUser);
+
+            const uploadeImages = [];
+            let profileImage;
+            let bennerImage;
+            let element;
+            for (element of files) {
+                const file = new ImageUpload();
+                file.originalName = element.originalname;
+                file.mimeType = element.mimetype;
+                file.url = element.location;
+                uploadeImages.push(file);
+
+                if (file.originalName === "profileImg") {
+                    profileImage = file.url;
+                }
+
+                if (file.originalName === "bennerImg") {
+                    bennerImage = file.url;
+                }
+            }
+
+            existUser.name = userData.name;
+            existUser.banner_image = bennerImage;
+            existUser.profile_image = profileImage;
+            return await this.userRepository.save(existUser);
         } catch (error) {
             throw new BadRequestException(error.message);
         }
     }
 
     // 마이페이지;
-    async userInfo(id: string, address: string) {
+    async userInfo(id: string, address: string, tab: string) {
         try {
             // const mycollections = await this.collectionRepository
             //     .createQueryBuilder("collection")
