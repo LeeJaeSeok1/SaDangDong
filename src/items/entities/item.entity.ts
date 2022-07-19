@@ -51,22 +51,22 @@ export class Item {
 
     @Column()
     owner: string;
-    @ManyToOne((type) => User, (user) => user.item)
-    // @JoinColumn({ name: "owner" })
-    user: User;
+    // @ManyToOne((type) => User, (user) => user.item)
+    // // @JoinColumn({ name: "owner" })
+    // user: User;
 
     @Column()
     collection_id: number;
-    @ManyToOne((type) => Collection, (collection) => collection.item)
-    // @JoinColumn({ name: "token_id" })
-    collection: Collection;
+    // @ManyToOne((type) => Collection, (collection) => collection.item)
+    // // @JoinColumn({ name: "token_id" })
+    // collection: Collection;
 
-    @OneToOne((type) => Auction, (auction) => auction.item)
-    auction: Auction;
+    // @OneToOne((type) => Auction, (auction) => auction.item)
+    // auction: Auction;
 
-    @OneToOne((type) => Like, (like) => like.item)
-    like: Like;
+    // @OneToOne((type) => Like, (like) => like.item)
+    // like: Like;
 
-    @OneToOne((type) => Like_relation, (like_relation) => like_relation.item)
-    like_relation: Like_relation;
+    // @OneToOne((type) => Like_relation, (like_relation) => like_relation.item)
+    // like_relation: Like_relation;
 }

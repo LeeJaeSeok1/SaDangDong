@@ -101,7 +101,7 @@ export class CollectionsService {
     // 컬렉션 삭제
     async deleteCollection(id: number, address: string) {
         const exisCollection = await this.findByOneCollection(id);
-        if (exisCollection.user.address !== address) {
+        if (exisCollection.address !== address) {
             throw new NotFoundException(`본인만 수정 가능합니다.`);
         }
         await this.collectionRepository.delete(exisCollection);

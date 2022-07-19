@@ -17,13 +17,13 @@ export class Auction {
     @Column()
     end_at: Date;
 
-    @OneToOne((type) => Item, (item) => item.auction)
-    @JoinColumn()
-    item: Item;
+    // @OneToOne((type) => Item, (item) => item.auction)
+    // @JoinColumn()
+    // item: Item;
 
-    @OneToOne((type) => Offer, (offer) => offer.auction)
-    offer: Offer;
+    // @OneToOne((type) => Offer, (offer) => offer.auction)
+    // offer: Offer;
 
-    @OneToOne((type) => Chat, (chat) => chat.auction)
-    chat: Chat;
+    // @OneToOne((type) => Chat, (chat) => chat.auction)
+    // chat: Chat;
 }

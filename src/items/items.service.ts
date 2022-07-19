@@ -2,6 +2,7 @@ import { BadRequestException, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Collection } from "src/collections/entities/collection.entity";
 import { ImageUpload } from "src/images/entities/image.entity";
+import { User } from "src/users/entities/user.entity";
 import { Repository } from "typeorm";
 import { CreateItemDto } from "./dto/createItem.dto";
 import { Item } from "./entities/item.entity";
@@ -13,6 +14,8 @@ export class ItemsService {
         private itemRepository: Repository<Item>,
         @InjectRepository(Collection)
         private collectionRepository: Repository<Collection>,
+        @InjectRepository(User)
+        private userRepository: Repository<User>,
     ) {}
 
     // 모든 아이템 보기
@@ -23,6 +26,15 @@ export class ItemsService {
     // 특정아이템 보기
     findByIdItem(id: number) {
         // return this.itemRepository.findOne({ where: { id } });
+    }
+
+    // 유저 컬렉션 불러오기
+    findColleciton(address: string) {
+        try {
+            return this.userRepository.find({ where: { address } });
+        } catch (error) {
+            throw new BadRequestException(error.message);
+        }
     }
 
     // 아이템 생성

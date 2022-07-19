@@ -39,21 +39,21 @@ export class User {
     @UpdateDateColumn()
     updatedAt: Date;
 
-    @OneToMany((type) => Collection, (collection) => collection.user, { eager: true })
-    collection: Collection[];
+    // @OneToMany((type) => Collection, (collection) => collection.user, { eager: true })
+    // collection: Collection[];
 
-    @OneToMany((type) => Item, (item) => item.user, { eager: true })
-    item: Item[];
+    // @OneToMany((type) => Item, (item) => item.user, { eager: true })
+    // item: Item[];
 
-    @OneToOne((type) => Sell, (sell) => sell.user)
-    sell: Sell;
+    // @OneToOne((type) => Sell, (sell) => sell.user)
+    // sell: Sell;
 
-    @OneToMany((type) => Like, (like) => like.user)
-    like: Like;
+    // @OneToMany((type) => Like, (like) => like.user)
+    // like: Like;
 
-    @ManyToMany((type) => Offer, (offer) => offer.user)
-    offer: Offer[];
+    // @ManyToMany((type) => Offer, (offer) => offer.user)
+    // offer: Offer[];
 
-    @ManyToMany((type) => Chat, (chat) => chat.user)
-    chat: Chat[];
+    // @ManyToMany((type) => Chat, (chat) => chat.user)
+    // chat: Chat[];
 }

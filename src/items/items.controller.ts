@@ -43,6 +43,13 @@ export class ItemsController {
         }
     }
 
+    @ApiOperation({ summary: "아이템 민팅", description: "아이템 민팅 페이지" })
+    @Get("minting")
+    @UsePipes(TransformInterceptor)
+    getCollection(@AuthToken() address: string) {
+        return this.itemsService.findColleciton(address);
+    }
+
     @ApiOperation({ summary: "아이템 상세보기", description: "아이템 상세보기 페이지" })
     @Get(":id")
     findByIdItem(@Param("id") id: number) {

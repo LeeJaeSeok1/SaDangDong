@@ -8,6 +8,7 @@ import { CreateUserDto } from "./dto/createUser.dto";
 import { UpdateUserDto } from "./dto/updateUser.dto";
 import { ImageUpload } from "src/images/entities/image.entity";
 import { ForeignKeyMetadata } from "typeorm/metadata/ForeignKeyMetadata";
+import { runInThisContext } from "vm";
 
 @Injectable()
 export class UsersService {
@@ -22,13 +23,17 @@ export class UsersService {
 
     // sign 페이지
     async sign(address: string) {
-        const existUser = await this.userRepository.findOne({ where: { address } });
-        if (!existUser) {
-            const user = new User();
-            user.address = address;
-            return await this.userRepository.save(user);
+        try {
+            const existUser = await this.userRepository.findOne({ where: { address } });
+            if (!existUser) {
+                const user = new User();
+                user.address = address;
+                return await this.userRepository.save(user);
+            }
+            return existUser;
+        } catch (error) {
+            throw new BadRequestException(error.message);
         }
-        return existUser;
     }
 
     findByUser(address: string) {
@@ -76,34 +81,49 @@ export class UsersService {
         }
     }
 
-    // 마이페이지;
+    // 마이페이지
     async userInfo(id: string, address: string, tab: string) {
         try {
-            // const mycollections = await this.collectionRepository
-            //     .createQueryBuilder("collection")
-            //     .innerJoin("collection.user", "user", "user.collection = :address", { address })
-            //     .getMany();
+            if (id !== address) {
+                throw new NotFoundException("유저를 찾을 수 없습니다");
+            }
 
-            // const mycollections = await this.userRepository
-            const mycollections = await this.userRepository
-                .createQueryBuilder("user")
-                .innerJoin("user.collection", "collection", "collection.user = :address", { address })
-                .getMany();
-            console.log(mycollections);
-            // console.log(userCollection);
+            let items;
+            console.log("items", items);
 
-            // const myItems = await this.itemRepository.find({ select: ["owner"] });
+            if (tab === "collection") {
+                items = await this.userRepository.query(`
+                SELECT *
+                FROM  (
+                SELECT collection.*
+                FROM collection, user
+                WHERE collection.address = user.address
+                ) as g 
+                WHERE g.address = ${id}
+                `);
 
-            // if (id !== address) {
-            //     throw new NotFoundException("로그인 후 이용해주세요.");
-            // }
-            // let tabName = tab;
-            // if (tabName === "collection") {
-            //     return mycollections;
-            // }
-            // if (tabName === "Item") {
-            //     return myItems;
-            // }
+                if (!items) {
+                    items = [];
+                }
+            }
+            if (tab === "item") {
+                items = await this.userRepository.query(`
+                SELECT *
+                FROM  (
+                SELECT item.*
+                FROM item, user
+                WHERE item.address = user.address
+                ) as g 
+                WHERE g.address = ${id}
+             
+            `);
+
+                if (!items) {
+                    items = [];
+                }
+            }
+
+            return items;
         } catch (error) {
             throw new BadRequestException(error.message);
         }
