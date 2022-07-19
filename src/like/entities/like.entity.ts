@@ -10,13 +10,13 @@ export class Like {
     @Column()
     isLike: boolean;
 
-    // @OneToOne((type) => Item, (item) => item.like)
-    // // @JoinColumn({ name: "like_id" })
-    // item: Item;
+    @OneToOne((type) => Item, (item) => item.like)
+    // @JoinColumn({ name: "like_id" })
+    item: Item;
 
-    // @ManyToOne((type) => User, (user) => user.like)
-    // // @JoinColumn({ name: "like_id" })
-    // user: User;
+    @ManyToOne((type) => User, (user) => user.like)
+    // @JoinColumn({ name: "like_id" })
+    user: User;
 }
 
 @Entity()
@@ -27,7 +27,7 @@ export class Like_relation {
     @Column()
     likeCount: number;
 
-    // @OneToOne((type) => Item, (item) => item.like_relation)
-    // // @JoinColumn({ name: "like_relation" })
-    // item: Item;
+    @OneToOne((type) => Item, (item) => item.like_relation)
+    // @JoinColumn({ name: "like_relation" })
+    item: Item;
 }

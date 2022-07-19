@@ -13,10 +13,10 @@ export class Chat {
     @CreateDateColumn()
     createdAt: Date;
 
-    // @OneToOne((type) => Auction, (auction) => auction.chat)
-    // @JoinColumn({ name: "Chat_id" })
-    // auction: Auction;
+    @OneToOne((type) => Auction, (auction) => auction.chat)
+    @JoinColumn({ name: "Chat_id" })
+    auction: Auction;
 
-    // @ManyToMany((type) => User, (user) => user.chat)
-    // user: User[];
+    @ManyToMany((type) => User, (user) => user.chat)
+    user: User[];
 }

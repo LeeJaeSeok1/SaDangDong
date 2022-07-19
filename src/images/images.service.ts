@@ -11,7 +11,7 @@ export class ImagesService {
         private readonly imagesReposiroty: Repository<ImageUpload>,
     ) {}
 
-    async uploadImage(files: Express.Multer.File[]) {
+    async uploadImage(files: Express.Multer.File[], fileInfo: CreateImageDto) {
         try {
             const uploadeImages = [];
             let element;
@@ -20,6 +20,8 @@ export class ImagesService {
                 file.originalName = element.originalname;
                 file.mimeType = element.mimetype;
                 file.url = element.location;
+                file.name = fileInfo.name;
+                file.description = fileInfo.description;
                 uploadeImages.push(file);
             }
             console.log("여긴 이미지 서비스");
