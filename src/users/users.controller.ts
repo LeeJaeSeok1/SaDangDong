@@ -36,7 +36,7 @@ export class UsersController {
         return this.usersService.sign(address);
     }
 
-    // 유저 정보 받아오기
+    // 마이페이지
     @ApiQuery({
         name: "tab",
         required: true,
@@ -48,6 +48,7 @@ export class UsersController {
     })
     @Get(":id")
     getUserInfo(@Param("id") id: string, @AuthToken() address: string, @Query() tab: string) {
+        console.log("address", address, "tab", tab);
         return this.usersService.userInfo(id, address, tab);
     }
 

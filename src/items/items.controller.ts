@@ -1,7 +1,23 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Put } from "@nestjs/common";
+import {
+    Controller,
+    Get,
+    Post,
+    Body,
+    Param,
+    Delete,
+    UsePipes,
+    UseInterceptors,
+    BadRequestException,
+    ValidationPipe,
+    UploadedFiles,
+} from "@nestjs/common";
 import { ItemsService } from "./items.service";
 import { CreateItemDto } from "./dto/createItem.dto";
 import { ApiOperation, ApiTags } from "@nestjs/swagger";
+import { TransformInterceptor } from "src/config/transform.interceptor";
+import { FilesInterceptor } from "@nestjs/platform-express";
+import { storage } from "src/config/multerS3.config";
+import { AuthToken } from "src/config/auth.decorator";
 
 @ApiTags("Items")
 @Controller("api/items")
@@ -10,8 +26,28 @@ export class ItemsController {
 
     @ApiOperation({ summary: "아이템 민팅", description: "아이템 민팅 페이지" })
     @Post("minting")
-    createItem(@Body() createItemDto: CreateItemDto) {
-        return this.itemsService.createItem(createItemDto);
+    @UsePipes(TransformInterceptor)
+    @UseInterceptors(FilesInterceptor("files", 2, { storage: storage }))
+    createItem(
+        @UploadedFiles() files: Express.Multer.File[],
+        @Body(ValidationPipe) itemData: CreateItemDto,
+        @AuthToken() address: string,
+    ) {
+        try {
+            console.log("files", files);
+            console.log("body", itemData);
+            console.log("user", address);
+            return this.itemsService.createItem(files, itemData, address);
+        } catch (error) {
+            throw new BadRequestException(error.message);
+        }
+    }
+
+    @ApiOperation({ summary: "아이템 민팅", description: "아이템 민팅 페이지" })
+    @Get("minting")
+    @UsePipes(TransformInterceptor)
+    getCollection(@AuthToken() address: string) {
+        return this.itemsService.findColleciton(address);
     }
 
     @ApiOperation({ summary: "아이템 상세보기", description: "아이템 상세보기 페이지" })
