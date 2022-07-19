@@ -22,7 +22,7 @@ export class Collection {
     @Column({ nullable: true })
     description: string;
 
-    @Column({ nullable: true })
+    @Column({ type: "decimal", precision: 7, scale: 4, default: 0 })
     commission: number;
 
     @Column({ nullable: true })
