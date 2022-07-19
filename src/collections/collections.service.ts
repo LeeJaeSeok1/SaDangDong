@@ -29,8 +29,16 @@ export class CollectionsService {
     }
 
     // 컬렉션 생성
-    async newCollection(collectionData: CreateCollectionDto, files: Express.Multer.File[], address: string) {
+    async newCollection(collectionData, files: Express.Multer.File[], address: string) {
         try {
+            console.log("서비스 컬렉션 데이터", collectionData);
+            console.log("files", files);
+            console.log("서비스 address", address);
+            const json = collectionData.fileInfo;
+            console.log(1);
+            console.log(json, "json");
+            const obj = JSON.parse(json);
+            console.log(obj, "obj");
             const uploadeImages = [];
             let featureImage;
             let bennerImage;
@@ -53,11 +61,12 @@ export class CollectionsService {
             collection.address = address;
             collection.benner_image = bennerImage;
             collection.feature_image = featureImage;
-            collection.name = collectionData.name;
-            collection.description = collectionData.description;
-            collection.commission = collectionData.commission;
+            collection.name = obj.name;
+            collection.description = obj.desc;
+            collection.commission = obj.commission;
             return await this.collectionRepository.save(collection);
         } catch (error) {
+            console.log("서비스", error.message);
             throw new BadRequestException(error.message);
         }
     }

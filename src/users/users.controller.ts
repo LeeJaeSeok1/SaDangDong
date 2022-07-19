@@ -14,10 +14,8 @@ import {
 } from "@nestjs/common";
 import { UsersService } from "./users.service";
 import { ApiBody, ApiHeader, ApiOperation, ApiQuery, ApiTags } from "@nestjs/swagger";
-import { User } from "./entities/user.entity";
 import { CreateUserDto } from "./dto/createUser.dto";
 import { TransformInterceptor } from "src/config/transform.interceptor";
-import { UpdateUserDto } from "./dto/updateUser.dto";
 import { AuthToken } from "src/config/auth.decorator";
 import { FilesInterceptor } from "@nestjs/platform-express";
 import { storage } from "src/config/multerS3.config";
@@ -33,6 +31,7 @@ export class UsersController {
     @Post("auth")
     @UsePipes(ValidationPipe)
     async sign(@AuthToken() address: string) {
+        console.log("address", address);
         return this.usersService.sign(address);
     }
 
@@ -47,8 +46,7 @@ export class UsersController {
         description: "유저 collection, item, favorites 페이지",
     })
     @Get(":id")
-    getUserInfo(@Param("id") id: string, @AuthToken() address: string, @Query() tab: string) {
-        console.log("address", address, "tab", tab);
+    getUserInfo(@Param("id") id: string, @AuthToken() address: string, @Query("tab") tab: string) {
         return this.usersService.userInfo(id, address, tab);
     }
 

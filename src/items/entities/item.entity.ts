@@ -25,9 +25,6 @@ export class Item {
     @Column({ nullable: true })
     description: string;
 
-    @Column({ default: 1 })
-    supply: number;
-
     @Column({ nullable: true })
     Blockchain: string;
 

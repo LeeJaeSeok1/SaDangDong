@@ -88,42 +88,12 @@ export class UsersService {
                 throw new NotFoundException("유저를 찾을 수 없습니다");
             }
 
-            let items;
-            console.log("items", items);
-
             if (tab === "collection") {
-                items = await this.userRepository.query(`
-                SELECT *
-                FROM  (
-                SELECT collection.*
-                FROM collection, user
-                WHERE collection.address = user.address
-                ) as g 
-                WHERE g.address = ${id}
-                `);
-
-                if (!items) {
-                    items = [];
-                }
+                return await this.collectionRepository.find({ where: { address: address } });
             }
             if (tab === "item") {
-                items = await this.userRepository.query(`
-                SELECT *
-                FROM  (
-                SELECT item.*
-                FROM item, user
-                WHERE item.address = user.address
-                ) as g 
-                WHERE g.address = ${id}
-             
-            `);
-
-                if (!items) {
-                    items = [];
-                }
+                return await this.itemRepository.find({ where: { address: address } });
             }
-
-            return items;
         } catch (error) {
             throw new BadRequestException(error.message);
         }
