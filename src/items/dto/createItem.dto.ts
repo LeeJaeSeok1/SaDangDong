@@ -35,12 +35,6 @@ export class CreateItemDto {
     Blockchain: string;
 
     @ApiProperty({
-        example: "https://sadangdong99.s3.ap-northeast-2.amazonaws.com/1657871846145-image.png",
-        description: "이미지 URL",
-    })
-    image: string;
-
-    @ApiProperty({
         example: "1",
         description: "컬렉션 아이디",
     })

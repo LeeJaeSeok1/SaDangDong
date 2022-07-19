@@ -1,6 +1,7 @@
-import { Injectable } from "@nestjs/common";
+import { BadRequestException, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Collection } from "src/collections/entities/collection.entity";
+import { ImageUpload } from "src/images/entities/image.entity";
 import { Repository } from "typeorm";
 import { CreateItemDto } from "./dto/createItem.dto";
 import { Item } from "./entities/item.entity";
@@ -25,17 +26,35 @@ export class ItemsService {
     }
 
     // 아이템 생성
-    async createItem(createItemDto: CreateItemDto) {
-        // const userId = user.id;
-        // const createItem = new Item();
-        // createItem.name = createItemDto.name;
-        // createItem.description = createItemDto.description;
-        // createItem.NFTtoken = createItemDto.NFTtoken;
-        // createItem.Blockchain = createItemDto.Blockchain;
-        // createItem.collectionId = createItemDto.collection;
-        // createItem.userId = userId;
-        // createItem.owner = userId;
-        // return await this.itemRepository.save(createItem);
+    async createItem(files: Express.Multer.File[], itemData: CreateItemDto, address: string) {
+        try {
+            const uploadeImages = [];
+            let itemImage;
+            let element;
+            for (element of files) {
+                const file = new ImageUpload();
+                file.originalName = element.originalname;
+                file.mimeType = element.mimetype;
+                file.url = element.location;
+                uploadeImages.push(file);
+
+                if (file.originalName === "itemImg") {
+                    itemImage = file.url;
+                }
+            }
+            const createItem = new Item();
+            createItem.token_id = itemData.token_id;
+            createItem.name = itemData.name;
+            createItem.description = itemData.description;
+            createItem.Blockchain = itemData.Blockchain;
+            createItem.collection_id = itemData.collection_id;
+            createItem.image = itemImage;
+            createItem.address = address;
+            createItem.owner = address;
+            return await this.itemRepository.save(createItem);
+        } catch (error) {
+            throw new BadRequestException(error.message);
+        }
     }
 
     // 아이템 수정

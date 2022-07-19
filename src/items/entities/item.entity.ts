@@ -16,25 +16,25 @@ import {
 
 @Entity()
 export class Item {
-    @PrimaryColumn()
+    @PrimaryColumn({ unique: true })
     token_id: string;
 
-    @Column()
+    @Column({ unique: true })
     name: string;
 
     @Column({ nullable: true })
     description: string;
 
-    @Column()
+    @Column({ default: 1 })
     supply: number;
 
-    @Column()
+    @Column({ nullable: true })
     Blockchain: string;
 
     @Column({ name: "producer", comment: "제작자" })
     address: string;
 
-    @Column()
+    @Column({ nullable: true })
     image: string;
 
     @CreateDateColumn()
@@ -43,23 +43,22 @@ export class Item {
     @UpdateDateColumn()
     updated_at: Date;
 
-    @Column({ comment: "삭제여부 0 or 1" })
+    @Column({ comment: "삭제여부 0 or 1", default: 0 })
     archived: number;
 
     @DeleteDateColumn()
     archived_at: Date;
 
-    // @Column()
-    // owner: string;
-
+    @Column()
+    owner: string;
     @ManyToOne((type) => User, (user) => user.item)
-    @JoinColumn({ name: "owner" })
+    // @JoinColumn({ name: "owner" })
     user: User;
 
-    // @Column()
-    // collection_id: number;
+    @Column()
+    collection_id: number;
     @ManyToOne((type) => Collection, (collection) => collection.item)
-    @JoinColumn({ name: "token_id" })
+    // @JoinColumn({ name: "token_id" })
     collection: Collection;
 
     @OneToOne((type) => Auction, (auction) => auction.item)
