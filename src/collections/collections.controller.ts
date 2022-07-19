@@ -33,27 +33,28 @@ export class CollectionsController {
         return this.collectionsService.findCollection();
     }
 
-    @ApiOperation({ summary: "컬렉션 생성", description: "컬렉션 생성 페이지" })
-    @Post()
-    @UsePipes(TransformInterceptor)
-    newColleciton(@Body(ValidationPipe) createCollectionDto: CreateCollectionDto, @AuthToken() address: string) {
-        try {
-            return this.collectionsService.createdCollection(createCollectionDto, address);
-        } catch (error) {
-            throw new BadRequestException(error.message);
-        }
-    }
+    // @ApiOperation({ summary: "컬렉션 생성", description: "컬렉션 생성 페이지" })
+    // @Post()
+    // @UsePipes(TransformInterceptor)
+    // newColleciton(@Body(ValidationPipe) createCollectionDto: CreateCollectionDto, @AuthToken() address: string) {
+    //     try {
+    //         return this.collectionsService.createdCollection(createCollectionDto, address);
+    //     } catch (error) {
+    //         throw new BadRequestException(error.message);
+    //     }
+    // }
 
     @ApiOperation({ summary: "컬렉셩 생성" })
-    @Post("test")
+    @Post()
     @UsePipes(TransformInterceptor)
     @UseInterceptors(FilesInterceptor("files", 3, { storage: storage }))
     createdColleciton(
         @UploadedFiles() files: Express.Multer.File[],
         @Body(ValidationPipe) collectionData: CreateCollectionDto,
+        @AuthToken() address: string,
     ) {
         try {
-            return this.collectionsService.newCollection(collectionData, files);
+            return this.collectionsService.newCollection(collectionData, files, address);
         } catch (error) {
             throw new BadRequestException(error.message);
         }
@@ -62,13 +63,15 @@ export class CollectionsController {
     @ApiOperation({ summary: "컬렉션 수정" })
     @Put(":id")
     @UsePipes(TransformInterceptor)
+    @UseInterceptors(FilesInterceptor("files", 3, { storage: storage }))
     updateCollection(
         @Param("id") id: number,
-        @Body(ValidationPipe) updateCollection: UpdateCollectionDto,
+        @UploadedFiles() files: Express.Multer.File[],
+        @Body(ValidationPipe) updateData,
         @AuthToken() address: string,
     ) {
         try {
-            return this.collectionsService.updateCollection(id, updateCollection, address);
+            return this.collectionsService.updateCollection(id, updateData, address, files);
         } catch (error) {
             throw new BadRequestException(error.message);
         }

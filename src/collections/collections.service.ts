@@ -29,62 +29,70 @@ export class CollectionsService {
     }
 
     // 컬렉션 생성
-    async createdCollection(createCollectionDto: CreateCollectionDto, address: string) {
+    async newCollection(collectionData: CreateCollectionDto, files: Express.Multer.File[], address: string) {
         try {
-            const createCollection = new Collection();
-            // createCollection.user.address = address;
-            createCollection.name = createCollectionDto.name;
-            createCollection.description = createCollectionDto.description;
-            createCollection.commission = createCollectionDto.commission;
-            createCollection.benner_image = createCollectionDto.benner_image;
-            createCollection.feature_image = createCollectionDto.feature_image;
-            return await this.collectionRepository.save(createCollection);
+            const uploadeImages = [];
+            let featureImage;
+            let bennerImage;
+            let element;
+            for (element of files) {
+                const file = new ImageUpload();
+                file.originalName = element.originalname;
+                file.mimeType = element.mimetype;
+                file.url = element.location;
+                uploadeImages.push(file);
+
+                if (file.originalName === "bannerImg") {
+                    bennerImage = file.url;
+                }
+                if (file.originalName === "featureImg") {
+                    featureImage = file.url;
+                }
+            }
+            const collection = new Collection();
+            collection.address = address;
+            collection.benner_image = bennerImage;
+            collection.feature_image = featureImage;
+            collection.name = collectionData.name;
+            collection.description = collectionData.description;
+            collection.commission = collectionData.commission;
+            return await this.collectionRepository.save(collection);
         } catch (error) {
             throw new BadRequestException(error.message);
         }
     }
 
-    // 컬렉션 생성 테스트
-    async newCollection(collectionData: CreateCollectionDto, files: Express.Multer.File[]) {
-        const uploadeImages = [];
-        let featureImage;
-        let bennerImage;
-        let element;
-        for (element of files) {
-            const file = new ImageUpload();
-            file.originalName = element.originalname;
-            file.mimeType = element.mimetype;
-            file.url = element.location;
-            uploadeImages.push(file);
-
-            if (file.originalName === "bannerImg") {
-                bennerImage = file.url;
-            }
-            if (file.originalName === "featureImg") {
-                featureImage = file.url;
-            }
-        }
-        const collection = new Collection();
-        collection.benner_image = bennerImage;
-        collection.feature_image = featureImage;
-        collection.name = collectionData.name;
-        collection.description = collectionData.description;
-        collection.commission = collectionData.commission;
-        return await this.collectionRepository.save(collection);
-    }
-
     // 컬렉션 수정
-    async updateCollection(id: number, updateCollectionDto: UpdateCollectionDto, address: string) {
+    async updateCollection(id: number, updateData, address: string, files: Express.Multer.File[]) {
         try {
             const exisCollection = await this.findByOneCollection(id);
-            // if (exisCollection.user.address !== address) {
-            //     throw new NotFoundException(`본인만 수정 가능합니다.`);
-            // }
-            exisCollection.name = updateCollectionDto.name;
-            exisCollection.description = updateCollectionDto.description;
-            exisCollection.benner_image = updateCollectionDto.benner_image;
-            exisCollection.feature_image = updateCollectionDto.feature_image;
-            return this.collectionRepository.save(exisCollection);
+            if (exisCollection.address !== address) {
+                throw new NotFoundException(`본인만 수정 가능합니다.`);
+            }
+            const uploadeImages = [];
+            let featureImage;
+            let bennerImage;
+            let element;
+            for (element of files) {
+                const file = new ImageUpload();
+                file.originalName = element.originalname;
+                file.mimeType = element.mimetype;
+                file.url = element.location;
+                uploadeImages.push(file);
+
+                if (file.originalName === "bannerImg") {
+                    bennerImage = file.url;
+                }
+                if (file.originalName === "featureImg") {
+                    featureImage = file.url;
+                }
+            }
+            exisCollection.benner_image = bennerImage;
+            exisCollection.feature_image = featureImage;
+            exisCollection.name = updateData.name;
+            exisCollection.description = updateData.description;
+            exisCollection.commission = updateData.commission;
+            return await this.collectionRepository.save(exisCollection);
         } catch (error) {
             throw new BadRequestException(error.message);
         }
