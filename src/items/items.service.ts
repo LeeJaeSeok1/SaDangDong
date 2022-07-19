@@ -29,9 +29,10 @@ export class ItemsService {
     }
 
     // 유저 컬렉션 불러오기
-    findColleciton(address: string) {
+    async findColleciton(address: string) {
         try {
-            return this.userRepository.find({ where: { address } });
+            let collection = await this.collectionRepository.find({ where: { address: address } });
+            return collection;
         } catch (error) {
             throw new BadRequestException(error.message);
         }
@@ -58,7 +59,6 @@ export class ItemsService {
             createItem.token_id = itemData.token_id;
             createItem.name = itemData.name;
             createItem.description = itemData.description;
-            createItem.Blockchain = itemData.Blockchain;
             createItem.collection_id = itemData.collection_id;
             createItem.image = itemImage;
             createItem.address = address;

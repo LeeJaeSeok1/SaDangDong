@@ -16,7 +16,7 @@ export class Collection {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({ name: "name", unique: true })
+    @Column({ unique: true })
     name: string;
 
     @Column({ nullable: true })

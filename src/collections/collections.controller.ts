@@ -50,12 +50,16 @@ export class CollectionsController {
     @UseInterceptors(FilesInterceptor("files", 3, { storage: storage }))
     createdColleciton(
         @UploadedFiles() files: Express.Multer.File[],
-        @Body(ValidationPipe) collectionData: CreateCollectionDto,
+        @Body(ValidationPipe) collectionData,
         @AuthToken() address: string,
     ) {
         try {
+            console.log("collectionData", collectionData);
+            console.log("files", files);
+            console.log("address", address);
             return this.collectionsService.newCollection(collectionData, files, address);
         } catch (error) {
+            console.log("컨트롤러", error.message);
             throw new BadRequestException(error.message);
         }
     }
