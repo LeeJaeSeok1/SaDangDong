@@ -53,13 +53,13 @@ export class CollectionsService {
                 if (file.originalName === "bannerImg") {
                     bennerImage = file.url;
                 }
-                if (file.originalName === "featureImg") {
+                if (file.originalName === "featuredImg") {
                     featureImage = file.url;
                 }
             }
             const collection = new Collection();
             collection.address = address;
-            collection.benner_image = bennerImage;
+            collection.banner_image = bennerImage;
             collection.feature_image = featureImage;
             collection.name = obj.name;
             collection.description = obj.desc;
@@ -80,7 +80,7 @@ export class CollectionsService {
             }
             const uploadeImages = [];
             let featureImage;
-            let bennerImage;
+            let bannerImage;
             let element;
             for (element of files) {
                 const file = new ImageUpload();
@@ -90,13 +90,13 @@ export class CollectionsService {
                 uploadeImages.push(file);
 
                 if (file.originalName === "bannerImg") {
-                    bennerImage = file.url;
+                    bannerImage = file.url;
                 }
                 if (file.originalName === "featureImg") {
                     featureImage = file.url;
                 }
             }
-            exisCollection.benner_image = bennerImage;
+            exisCollection.banner_image = bannerImage;
             exisCollection.feature_image = featureImage;
             exisCollection.name = updateData.name;
             exisCollection.description = updateData.description;
