@@ -28,7 +28,7 @@ export class Item {
     @Column({ nullable: true })
     Blockchain: string;
 
-    @Column({ name: "producer", comment: "제작자" })
+    @Column({ comment: "제작자" })
     address: string;
 
     @Column({ nullable: true })

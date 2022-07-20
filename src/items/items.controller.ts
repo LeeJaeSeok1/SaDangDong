@@ -56,6 +56,7 @@ export class ItemsController {
         return this.itemsService.findColleciton(addressId);
     }
 
+    // 아이템 상세보기
     @ApiOperation({ summary: "아이템 상세보기", description: "아이템 상세보기 페이지" })
     @Get(":id")
     findByIdItem(@Param("id") id: string) {
