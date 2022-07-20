@@ -26,7 +26,7 @@ export class Collection {
     commission: number;
 
     @Column({ nullable: true })
-    benner_image: string;
+    banner_image: string;
 
     @Column({ nullable: true })
     feature_image: string;

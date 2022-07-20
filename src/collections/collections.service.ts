@@ -53,13 +53,13 @@ export class CollectionsService {
                 if (file.originalName === "bannerImg") {
                     bennerImage = file.url;
                 }
-                if (file.originalName === "featureImg") {
+                if (file.originalName === "featuredImg") {
                     featureImage = file.url;
                 }
             }
             const collection = new Collection();
             collection.address = address;
-            collection.benner_image = bennerImage;
+            collection.banner_image = bennerImage;
             collection.feature_image = featureImage;
             collection.name = obj.name;
             collection.description = obj.desc;
@@ -78,9 +78,13 @@ export class CollectionsService {
             if (exisCollection.address !== address) {
                 throw new NotFoundException(`본인만 수정 가능합니다.`);
             }
+            const json = updateData.fileInfo;
+            console.log(1);
+            console.log(json, "json");
+            const obj = JSON.parse(json);
             const uploadeImages = [];
             let featureImage;
-            let bennerImage;
+            let bannerImage;
             let element;
             for (element of files) {
                 const file = new ImageUpload();
@@ -90,17 +94,17 @@ export class CollectionsService {
                 uploadeImages.push(file);
 
                 if (file.originalName === "bannerImg") {
-                    bennerImage = file.url;
+                    bannerImage = file.url;
                 }
                 if (file.originalName === "featureImg") {
                     featureImage = file.url;
                 }
             }
-            exisCollection.benner_image = bennerImage;
+            exisCollection.banner_image = bannerImage;
             exisCollection.feature_image = featureImage;
-            exisCollection.name = updateData.name;
-            exisCollection.description = updateData.description;
-            exisCollection.commission = updateData.commission;
+            exisCollection.name = obj.name;
+            exisCollection.description = obj.description;
+            exisCollection.commission = obj.commission;
             return await this.collectionRepository.save(exisCollection);
         } catch (error) {
             throw new BadRequestException(error.message);

@@ -24,13 +24,14 @@ import { AuthToken } from "src/config/auth.decorator";
 export class ItemsController {
     constructor(private readonly itemsService: ItemsService) {}
 
+    // 컬렉션 생성
     @ApiOperation({ summary: "아이템 민팅", description: "아이템 민팅 페이지" })
     @Post("minting")
     @UsePipes(TransformInterceptor)
     @UseInterceptors(FilesInterceptor("files", 2, { storage: storage }))
     createItem(
         @UploadedFiles() files: Express.Multer.File[],
-        @Body(ValidationPipe) itemData: CreateItemDto,
+        @Body(ValidationPipe) itemData,
         @AuthToken() address: string,
     ) {
         try {
@@ -39,10 +40,12 @@ export class ItemsController {
             console.log("user", address);
             return this.itemsService.createItem(files, itemData, address);
         } catch (error) {
+            console.log("컨트롤러", error.message);
             throw new BadRequestException(error.message);
         }
     }
 
+    // 유저의 컬렉션 가져오기
     @ApiOperation({ summary: "아이템 민팅", description: "아이템 민팅 페이지" })
     @Get("minting")
     @UsePipes(TransformInterceptor)
@@ -52,7 +55,7 @@ export class ItemsController {
 
     @ApiOperation({ summary: "아이템 상세보기", description: "아이템 상세보기 페이지" })
     @Get(":id")
-    findByIdItem(@Param("id") id: number) {
+    findByIdItem(@Param("id") id: string) {
         return this.itemsService.findByIdItem(id);
     }
 
@@ -70,7 +73,7 @@ export class ItemsController {
 
     @ApiOperation({ summary: "아이템 삭제", description: "아이템 삭제 페이지" })
     @Delete(":id")
-    deleteItem(@Param("id") id: number) {
-        return this.itemsService.deleteItem(id);
+    deleteItem(@Param("id") id: string, @AuthToken() address: string) {
+        return this.itemsService.deleteItem(id, address);
     }
 }

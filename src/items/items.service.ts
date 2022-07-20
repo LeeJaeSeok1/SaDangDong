@@ -1,10 +1,10 @@
-import { BadRequestException, Injectable } from "@nestjs/common";
+import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
+import { String } from "aws-sdk/clients/apigateway";
 import { Collection } from "src/collections/entities/collection.entity";
 import { ImageUpload } from "src/images/entities/image.entity";
 import { User } from "src/users/entities/user.entity";
 import { Repository } from "typeorm";
-import { CreateItemDto } from "./dto/createItem.dto";
 import { Item } from "./entities/item.entity";
 
 @Injectable()
@@ -24,8 +24,8 @@ export class ItemsService {
     }
 
     // 특정아이템 보기
-    findByIdItem(id: number) {
-        // return this.itemRepository.findOne({ where: { id } });
+    findByIdItem(token_id: String) {
+        return this.itemRepository.findOne({ where: { token_id } });
     }
 
     // 유저 컬렉션 불러오기
@@ -39,8 +39,15 @@ export class ItemsService {
     }
 
     // 아이템 생성
-    async createItem(files: Express.Multer.File[], itemData: CreateItemDto, address: string) {
+    async createItem(files: Express.Multer.File[], itemData, address: string) {
         try {
+            console.log("서비스 아이템 데이터", itemData);
+            console.log("files", files);
+            console.log("서비스 address", address);
+            const json = itemData.fileInfo;
+            console.log(json, "json");
+            const obj = JSON.parse(json);
+            console.log(obj, "obj");
             const uploadeImages = [];
             let itemImage;
             let element;
@@ -56,10 +63,10 @@ export class ItemsService {
                 }
             }
             const createItem = new Item();
-            createItem.token_id = itemData.token_id;
-            createItem.name = itemData.name;
-            createItem.description = itemData.description;
-            createItem.collection_id = itemData.collection_id;
+            createItem.token_id = obj.token_id;
+            createItem.name = obj.name;
+            createItem.description = obj.description;
+            createItem.collection_id = obj.collection_id;
             createItem.image = itemImage;
             createItem.address = address;
             createItem.owner = address;
@@ -79,7 +86,11 @@ export class ItemsService {
     // }
 
     // 아이템 삭제
-    async deleteItem(id: number): Promise<void> {
+    async deleteItem(id: string, address: string) {
+        const exisItem = await this.findByIdItem(id);
+        if (exisItem.owner !== address) {
+            throw new NotFoundException(`본인만 수정 가능합니다.`);
+        }
         await this.itemRepository.delete(id);
     }
 }
