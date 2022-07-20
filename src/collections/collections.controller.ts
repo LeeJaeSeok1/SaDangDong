@@ -13,8 +13,6 @@ import {
     UploadedFiles,
 } from "@nestjs/common";
 import { CollectionsService } from "./collections.service";
-import { CreateCollectionDto } from "./dto/createCollection.dto";
-import { UpdateCollectionDto } from "./dto/updateCollection.dto";
 import { ApiOperation, ApiTags } from "@nestjs/swagger";
 import { Collection } from "./entities/collection.entity";
 import { AuthToken } from "src/config/auth.decorator";
@@ -33,16 +31,11 @@ export class CollectionsController {
         return this.collectionsService.findCollection();
     }
 
-    // @ApiOperation({ summary: "컬렉션 생성", description: "컬렉션 생성 페이지" })
-    // @Post()
-    // @UsePipes(TransformInterceptor)
-    // newColleciton(@Body(ValidationPipe) createCollectionDto: CreateCollectionDto, @AuthToken() address: string) {
-    //     try {
-    //         return this.collectionsService.createdCollection(createCollectionDto, address);
-    //     } catch (error) {
-    //         throw new BadRequestException(error.message);
-    //     }
-    // }
+    @ApiOperation({ summary: "컬렉션 상세보기" })
+    @Get(":id")
+    findOneColleciton(@Param("id") id: string) {
+        return this.collectionsService.findOneCollection(id);
+    }
 
     @ApiOperation({ summary: "컬렉셩 생성" })
     @Post()
@@ -57,7 +50,8 @@ export class CollectionsController {
             console.log("collectionData", collectionData);
             console.log("files", files);
             console.log("address", address);
-            return this.collectionsService.newCollection(collectionData, files, address);
+            const addressId = address.toLowerCase();
+            return this.collectionsService.newCollection(collectionData, files, addressId);
         } catch (error) {
             console.log("컨트롤러", error.message);
             throw new BadRequestException(error.message);
@@ -69,13 +63,14 @@ export class CollectionsController {
     @UsePipes(TransformInterceptor)
     @UseInterceptors(FilesInterceptor("files", 3, { storage: storage }))
     updateCollection(
-        @Param("id") id: number,
+        @Param("id") id: string,
         @UploadedFiles() files: Express.Multer.File[],
         @Body(ValidationPipe) updateData,
         @AuthToken() address: string,
     ) {
         try {
-            return this.collectionsService.updateCollection(id, updateData, address, files);
+            const addressId = address.toLowerCase();
+            return this.collectionsService.updateCollection(id, updateData, addressId, files);
         } catch (error) {
             throw new BadRequestException(error.message);
         }
@@ -84,7 +79,8 @@ export class CollectionsController {
     @ApiOperation({ summary: "컬렉션 삭제" })
     @Delete(":id")
     @UsePipes(ValidationPipe)
-    deleteCollection(@Param("id") id: number, @AuthToken() address: string) {
-        return this.collectionsService.deleteCollection(id, address);
+    deleteCollection(@Param("id") id: string, @AuthToken() address: string) {
+        const addressId = address.toLowerCase();
+        return this.collectionsService.deleteCollection(id, addressId);
     }
 }

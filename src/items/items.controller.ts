@@ -24,7 +24,7 @@ import { AuthToken } from "src/config/auth.decorator";
 export class ItemsController {
     constructor(private readonly itemsService: ItemsService) {}
 
-    // 컬렉션 생성
+    // 아이템 생성
     @ApiOperation({ summary: "아이템 민팅", description: "아이템 민팅 페이지" })
     @Post("minting")
     @UsePipes(TransformInterceptor)
@@ -35,10 +35,11 @@ export class ItemsController {
         @AuthToken() address: string,
     ) {
         try {
+            const addressId = address.toLowerCase();
             console.log("files", files);
             console.log("body", itemData);
-            console.log("user", address);
-            return this.itemsService.createItem(files, itemData, address);
+            console.log("user", addressId);
+            return this.itemsService.createItem(files, itemData, addressId);
         } catch (error) {
             console.log("컨트롤러", error.message);
             throw new BadRequestException(error.message);
@@ -50,7 +51,9 @@ export class ItemsController {
     @Get("minting")
     @UsePipes(TransformInterceptor)
     getCollection(@AuthToken() address: string) {
-        return this.itemsService.findColleciton(address);
+        console.log("아이템민팅컬렉션", address);
+        const addressId = address.toLowerCase();
+        return this.itemsService.findColleciton(addressId);
     }
 
     @ApiOperation({ summary: "아이템 상세보기", description: "아이템 상세보기 페이지" })
@@ -74,6 +77,7 @@ export class ItemsController {
     @ApiOperation({ summary: "아이템 삭제", description: "아이템 삭제 페이지" })
     @Delete(":id")
     deleteItem(@Param("id") id: string, @AuthToken() address: string) {
-        return this.itemsService.deleteItem(id, address);
+        const addressId = address.toLowerCase();
+        return this.itemsService.deleteItem(id, addressId);
     }
 }

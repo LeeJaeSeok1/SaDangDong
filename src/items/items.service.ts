@@ -31,7 +31,11 @@ export class ItemsService {
     // 유저 컬렉션 불러오기
     async findColleciton(address: string) {
         try {
-            let collection = await this.collectionRepository.find({ where: { address: address } });
+            let collection = await this.collectionRepository.find({
+                where: { address: address },
+                select: ["name"],
+            });
+            console.log(collection);
             return collection;
         } catch (error) {
             throw new BadRequestException(error.message);
@@ -51,15 +55,17 @@ export class ItemsService {
             const uploadeImages = [];
             let itemImage;
             let element;
-            for (element of files) {
-                const file = new ImageUpload();
-                file.originalName = element.originalname;
-                file.mimeType = element.mimetype;
-                file.url = element.location;
-                uploadeImages.push(file);
+            if (files) {
+                for (element of files) {
+                    const file = new ImageUpload();
+                    file.originalName = element.originalname;
+                    file.mimeType = element.mimetype;
+                    file.url = element.location;
+                    uploadeImages.push(file);
 
-                if (file.originalName === "itemImg") {
-                    itemImage = file.url;
+                    if (file.originalName === "itemImg") {
+                        itemImage = file.url;
+                    }
                 }
             }
             const createItem = new Item();
@@ -72,6 +78,7 @@ export class ItemsService {
             createItem.owner = address;
             return await this.itemRepository.save(createItem);
         } catch (error) {
+            console.log("아이템 생성 서비스 에러", error.message);
             throw new BadRequestException(error.message);
         }
     }
