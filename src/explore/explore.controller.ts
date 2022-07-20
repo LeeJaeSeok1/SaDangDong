@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from "@nestjs/common";
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from "@nestjs/common";
 import { ExploreService } from "./explore.service";
 import { CreateExploreDto } from "./dto/create-explore.dto";
 import { UpdateExploreDto } from "./dto/update-explore.dto";
@@ -14,9 +14,10 @@ export class ExploreController {
         description: "메인 패이지",
     })
     @Get("main")
-    findMain() {
-        return this.exploreService.findAll();
+    getMainInfo() {
+        return this.exploreService.mainInfo();
     }
+
     @ApiQuery({
         name: "tab",
         required: true,
@@ -27,7 +28,8 @@ export class ExploreController {
         description: "전체보기 패이지",
     })
     @Get("explore")
-    findAll() {
-        return this.exploreService.findAll();
+    getExploreInfo(@Query("tab") tab: string) {
+        console.log(tab);
+        return this.exploreService.exploreInfo(tab);
     }
 }
