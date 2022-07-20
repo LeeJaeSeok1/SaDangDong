@@ -22,18 +22,18 @@ export class SearchService {
             let information;
             if (tab === "collection") {
                 information = await this.collectionRepository.query(`
-                SELECT *
-                FROM collection
-                WHERE collection.name like '%${name}%'
+                SELECT collection.description, collection.name, collection.feature_image, user.name AS user_name, user.profile_image
+                FROM collection, user
+                WHERE collection.name like '%${name}%' AND collection.address = user.address
                 `);
             }
             console.log(information);
 
             if (tab === "item") {
                 information = await this.itemRepository.query(`
-                SELECT *
+                SELECT item.name, item.address
                 FROM item
-                WHERE item.name like '%${name}%'
+                WHERE item.name like '${name}'
                 `);
             }
 
