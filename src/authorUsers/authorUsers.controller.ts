@@ -1,8 +1,9 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from "@nestjs/common";
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from "@nestjs/common";
 import { AuthorUsersService } from "./authorUsers.service";
 import { CreateAuthorUserDto } from "./dto/createAuthorUser.dto";
 import { UpdateAuthorUserDto } from "./dto/updateAuthorUser.dto";
 import { ApiOperation, ApiTags, ApiQuery } from "@nestjs/swagger";
+import { query } from "express";
 
 @ApiTags("AuthotUsers")
 @Controller("api/:walletId")
@@ -18,8 +19,8 @@ export class AuthorUsersController {
         summary: "다른 유저 컬렉션 보기",
         description: "다른 유저 컬렉션 보기 페이지",
     })
-    @Get()
-    findAll() {
-        return this.authorUsersService.findAll();
+    @Get(":address")
+    getAuthorInfo(@Param("address") address: string, @Query("tab") tab: string) {
+        return this.authorUsersService.authorInfo(tab, address);
     }
 }
