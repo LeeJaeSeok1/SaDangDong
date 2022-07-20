@@ -1,26 +1,59 @@
-import { Injectable } from "@nestjs/common";
-import { CreateExploreDto } from "./dto/create-explore.dto";
-import { UpdateExploreDto } from "./dto/update-explore.dto";
+import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
+import { Repository } from "typeorm";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Collection } from "src/collections/entities/collection.entity";
+import { Item } from "src/items/entities/item.entity";
+import { Auction } from "src/auctions/entities/auction.entity";
+import { User } from "src/users/entities/user.entity";
 
 @Injectable()
 export class ExploreService {
-    create(createExploreDto: CreateExploreDto) {
-        return "This action adds a new explore";
+    constructor(
+        @InjectRepository(Collection)
+        private collectionRepository: Repository<Collection>,
+        @InjectRepository(Item)
+        private itemRepository: Repository<Item>,
+        @InjectRepository(Auction)
+        private auctionRepository: Repository<Auction>,
+        @InjectRepository(User)
+        private userRepository: Repository<User>,
+    ) {}
+
+    async mainInfo() {
+        try {
+        } catch (error) {
+            console.log(error.message);
+        }
     }
 
-    findAll() {
-        return `This action returns all explore`;
-    }
+    async exploreInfo(tab: string) {
+        try {
+            console.log(tab);
+            let information;
+            if (tab === "collection") {
+                information = await this.collectionRepository.query(`
+                SELECT collection.description, collection.name, collection.feature_image, user.name AS user_name, user.profile_image
+                FROM collection, user
+                WHERE collection.address = user.address
+                `);
+            }
+            console.log(information);
 
-    findOne(id: number) {
-        return `This action returns a #${id} explore`;
-    }
+            if (tab === "item") {
+                information = await this.itemRepository.query(`
+                SELECT item.name, item.address, item.image, user.name AS user_name
+                FROM item, user
+                WHERE item.address = user.address
+                `);
+            }
 
-    update(id: number, updateExploreDto: UpdateExploreDto) {
-        return `This action updates a #${id} explore`;
-    }
+            // if (tab === "auction") {
+            //     information = ?
+            // }
 
-    remove(id: number) {
-        return `This action removes a #${id} explore`;
+            return information;
+        } catch (error) {
+            console.log(error.message);
+        }
     }
 }
