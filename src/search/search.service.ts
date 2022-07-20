@@ -34,9 +34,9 @@ export class SearchService {
 
             if (tab === "item") {
                 information = await this.itemRepository.query(`
-                SELECT item.name, item.address
-                FROM item
-                WHERE item.name like '${name}'
+                SELECT item.name, item.address, item.image, user.name AS user_name
+                FROM item, user
+                WHERE item.name like '${name}' AND item.address = user.address
                 `);
             }
 
