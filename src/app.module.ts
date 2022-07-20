@@ -1,23 +1,24 @@
 import { Module, ValidationPipe } from "@nestjs/common";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
-import { UsersModule } from "./users/users.module";
-import { CollectionsModule } from "./collections/collections.module";
-import { ItemsModule } from "./items/items.module";
-import { AuctionsModule } from "./auctions/auctions.module";
-import { SearchModule } from "./search/search.module";
-import { ExploreModule } from "./explore/explore.module";
-import { SellModule } from "./sell/sell.module";
-import { LikeModule } from "./like/like.module";
-import { EventsModule } from "./events/events.module";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { ChatModule } from "./chat/chat.module";
 import * as Joi from "joi";
 import { ConfigModule } from "@nestjs/config";
 import { typeORMConfig } from "./config/typeorm.config";
 import config from "./config/config";
-import { ImagesModule } from "./images/images.module";
 import { APP_PIPE } from "@nestjs/core";
+import { CollectionsModule } from "./collections/collections.module";
+import { EventsModule } from "./events/events.module";
+import { ImagesModule } from "./images/images.module";
+import { AuctionsModule } from "./auctions/auctions.module";
+import { SearchModule } from "./search/search.module";
+import { ExploreModule } from "./explore/explore.module";
+import { UsersModule } from "./users/users.module";
+import { ItemsModule } from "./items/items.module";
+import { SellModule } from "./sell/sell.module";
+import { LikeModule } from "./like/like.module";
+import { ChatModule } from "./chat/chat.module";
+import { AuthorUsersModule } from "./authorUsers/authorUsers.module";
 
 @Module({
     imports: [
@@ -42,6 +43,7 @@ import { APP_PIPE } from "@nestjs/core";
         LikeModule,
         EventsModule,
         ImagesModule,
+        AuthorUsersModule,
     ],
     controllers: [AppController],
     providers: [AppService, { provide: APP_PIPE, useClass: ValidationPipe }],

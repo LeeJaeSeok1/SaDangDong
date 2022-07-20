@@ -1,19 +1,16 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from "@nestjs/common";
+import { Controller, Get, Param, Query } from "@nestjs/common";
 import { AuthorUsersService } from "./authorUsers.service";
-import { CreateAuthorUserDto } from "./dto/createAuthorUser.dto";
-import { UpdateAuthorUserDto } from "./dto/updateAuthorUser.dto";
 import { ApiOperation, ApiTags, ApiQuery } from "@nestjs/swagger";
-import { query } from "express";
 
 @ApiTags("AuthotUsers")
-@Controller("api/:walletId")
+@Controller("api")
 export class AuthorUsersController {
     constructor(private readonly authorUsersService: AuthorUsersService) {}
 
     @ApiQuery({
         name: "tab",
         required: true,
-        description: "tab= collection, item, favorites",
+        description: "tab = collection, item, favorites",
     })
     @ApiOperation({
         summary: "다른 유저 컬렉션 보기",

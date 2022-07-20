@@ -22,34 +22,36 @@ export class AuthorUsersService {
     async authorInfo(tab: string, address: string) {
         try {
             console.log(tab, address);
-            let information;
             const userInfo = await this.userRepository.query(`
             SELECT name, profile_image, banner_image
             FROM user
-            WHERE user.address = ${address} 
+            WHERE user.address = "${address}"
             `);
+            let information;
+            console.log(userInfo);
             if (tab === "collection") {
                 information = await this.collectionRepository.query(`
                 SELECT *
                 FROM (
-                    SELECT collection.description, collection.name, collection.feature_image,collection.address , user.name AS user_name, user.profile_image
-                    FROM test.collection, test.user
+                    SELECT collection.description, collection.name, collection.feature_image, collection.address, user.name AS user_name, user.profile_image
+                    FROM collection, user
                     WHERE collection.address = user.address)
                 as g
-                WHERE g.address = ${address};
+                WHERE g.address = "${address}";
                 `);
             }
-            if (tab === " item") {
-                information = await this.collectionRepository.query(`
+            if (tab === "item") {
+                information = await this.itemRepository.query(`
                 SELECT *
                 FROM  (
                 SELECT item.*, user.name AS user_name
                 FROM item, user
                 WHERE item.owner = user.address
                 ) as g 
-                WHERE g.owner = ${address}
+                WHERE g.owner = "${address}"
                 `);
             }
+            console.log(information);
             // if (tab === "auction") {
             // }
             const data = { information, userInfo };
