@@ -4,6 +4,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Collection } from "src/collections/entities/collection.entity";
 import { Item } from "src/items/entities/item.entity";
 import { Auction } from "src/auctions/entities/auction.entity";
+import { User } from "src/users/entities/user.entity";
 
 @Injectable()
 export class SearchService {
@@ -13,7 +14,9 @@ export class SearchService {
         @InjectRepository(Item)
         private itemRepository: Repository<Item>,
         @InjectRepository(Auction)
-        private auctionRepository: Repository<Item>,
+        private auctionRepository: Repository<Auction>,
+        @InjectRepository(User)
+        private userRepository: Repository<User>,
     ) {}
 
     async searchInfo(tab: string, name: string) {
@@ -22,18 +25,18 @@ export class SearchService {
             let information;
             if (tab === "collection") {
                 information = await this.collectionRepository.query(`
-                SELECT *
-                FROM collection
-                WHERE collection.name like '%${name}%'
+                SELECT collection.description, collection.name, collection.feature_image, user.name AS user_name, user.profile_image
+                FROM collection, user
+                WHERE collection.name like '%${name}%' AND collection.address = user.address
                 `);
             }
             console.log(information);
 
             if (tab === "item") {
                 information = await this.itemRepository.query(`
-                SELECT *
+                SELECT item.name, item.address
                 FROM item
-                WHERE item.name like '%${name}%'
+                WHERE item.name like '${name}'
                 `);
             }
 
