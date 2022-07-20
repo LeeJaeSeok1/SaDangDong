@@ -4,6 +4,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Collection } from "src/collections/entities/collection.entity";
 import { Item } from "src/items/entities/item.entity";
 import { Auction } from "src/auctions/entities/auction.entity";
+import { User } from "src/users/entities/user.entity";
 
 @Injectable()
 export class SearchService {
@@ -13,7 +14,9 @@ export class SearchService {
         @InjectRepository(Item)
         private itemRepository: Repository<Item>,
         @InjectRepository(Auction)
-        private auctionRepository: Repository<Item>,
+        private auctionRepository: Repository<Auction>,
+        @InjectRepository(User)
+        private userRepository: Repository<User>,
     ) {}
 
     async searchInfo(tab: string, name: string) {
