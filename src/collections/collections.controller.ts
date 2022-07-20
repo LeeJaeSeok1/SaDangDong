@@ -34,6 +34,7 @@ export class CollectionsController {
     @ApiOperation({ summary: "컬렉션 상세보기" })
     @Get(":id")
     findOneColleciton(@Param("id") id: string) {
+        console.log("컨트롤러 컬렉션 아이디", id);
         return this.collectionsService.findOneCollection(id);
     }
 

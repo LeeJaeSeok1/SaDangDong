@@ -1,6 +1,7 @@
 import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { ImageUpload } from "src/images/entities/image.entity";
+import { Item } from "src/items/entities/item.entity";
 import { User } from "src/users/entities/user.entity";
 import { Repository } from "typeorm";
 import { CreateCollectionDto } from "./dto/createCollection.dto";
@@ -14,8 +15,8 @@ export class CollectionsService {
         private collectionRepository: Repository<Collection>,
         @InjectRepository(User)
         private userRepository: Repository<User>,
-        @InjectRepository(ImageUpload)
-        private readonly imagesReposiroty: Repository<ImageUpload>,
+        @InjectRepository(Item)
+        private itemRepository: Repository<Item>,
     ) {}
 
     // 모든 컬렉션 보기
@@ -30,7 +31,8 @@ export class CollectionsService {
 
     // 컬렉션 상새보기
     async findOneCollection(id: string) {
-        return await this.imagesReposiroty.find();
+        console.log("컬렉션 서비스 아이디", id);
+        return await this.itemRepository.find({ where: { collection_id: id } });
     }
 
     // 컬렉션 생성
