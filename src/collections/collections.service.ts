@@ -78,6 +78,10 @@ export class CollectionsService {
             if (exisCollection.address !== address) {
                 throw new NotFoundException(`본인만 수정 가능합니다.`);
             }
+            const json = updateData.fileInfo;
+            console.log(1);
+            console.log(json, "json");
+            const obj = JSON.parse(json);
             const uploadeImages = [];
             let featureImage;
             let bannerImage;
@@ -98,9 +102,9 @@ export class CollectionsService {
             }
             exisCollection.banner_image = bannerImage;
             exisCollection.feature_image = featureImage;
-            exisCollection.name = updateData.name;
-            exisCollection.description = updateData.description;
-            exisCollection.commission = updateData.commission;
+            exisCollection.name = obj.name;
+            exisCollection.description = obj.description;
+            exisCollection.commission = obj.commission;
             return await this.collectionRepository.save(exisCollection);
         } catch (error) {
             throw new BadRequestException(error.message);
