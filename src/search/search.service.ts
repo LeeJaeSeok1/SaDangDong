@@ -1,26 +1,48 @@
-import { Injectable } from "@nestjs/common";
-import { CreateSearchDto } from "./dto/create-search.dto";
-import { UpdateSearchDto } from "./dto/update-search.dto";
+import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
+import { Repository } from "typeorm";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Collection } from "src/collections/entities/collection.entity";
+import { Item } from "src/items/entities/item.entity";
+import { Auction } from "src/auctions/entities/auction.entity";
 
 @Injectable()
 export class SearchService {
-    create(createSearchDto: CreateSearchDto) {
-        return "This action adds a new search";
-    }
+    constructor(
+        @InjectRepository(Collection)
+        private collectionRepository: Repository<Collection>,
+        @InjectRepository(Item)
+        private itemRepository: Repository<Item>,
+        @InjectRepository(Auction)
+        private auctionRepository: Repository<Item>,
+    ) {}
 
-    findAll() {
-        return `This action returns all search`;
-    }
+    async searchInfo(tab: string, name: string) {
+        try {
+            console.log(name, tab);
+            let information;
+            if (tab === "collection") {
+                information = await this.collectionRepository.query(`
+                SELECT *
+                FROM collection
+                WHERE collection.name like '%${name}%'
+                `);
+            }
+            console.log(information);
 
-    findOne(id: number) {
-        return `This action returns a #${id} search`;
-    }
+            if (tab === "item") {
+                information = await this.itemRepository.query(`
+                SELECT *
+                FROM item
+                WHERE item.name like '%${name}%'
+                `);
+            }
 
-    update(id: number, updateSearchDto: UpdateSearchDto) {
-        return `This action updates a #${id} search`;
-    }
-
-    remove(id: number) {
-        return `This action removes a #${id} search`;
+            // if (tab === "auction") {
+            //     const auctions = [];
+            // }
+            return information;
+        } catch (error) {
+            throw new BadRequestException(error.message);
+        }
     }
 }
