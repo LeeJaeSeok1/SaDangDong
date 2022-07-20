@@ -36,7 +36,7 @@ export class SearchService {
                 information = await this.itemRepository.query(`
                 SELECT item.name, item.address, item.image, user.name AS user_name
                 FROM item, user
-                WHERE item.name like '${name}' AND item.address = user.address
+                WHERE item.name like '%${name}%' AND item.address = user.address
                 `);
             }
 
