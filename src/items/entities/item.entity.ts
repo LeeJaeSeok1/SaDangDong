@@ -53,7 +53,7 @@ export class Item {
     // user: User;
 
     @Column()
-    collection_id: number;
+    collection_id: string;
     // @ManyToOne((type) => Collection, (collection) => collection.item)
     // // @JoinColumn({ name: "token_id" })
     // collection: Collection;

@@ -31,8 +31,9 @@ export class UsersController {
     @Post("auth")
     @UsePipes(ValidationPipe)
     async sign(@AuthToken() address: string) {
-        console.log("address", address);
-        return this.usersService.sign(address);
+        let addressId = address.toLowerCase();
+        console.log("컨트롤러 address", addressId);
+        return this.usersService.sign(addressId);
     }
 
     // 마이페이지
@@ -47,7 +48,8 @@ export class UsersController {
     })
     @Get(":id")
     getUserInfo(@Param("id") id: string, @AuthToken() address: string, @Query("tab") tab: string) {
-        return this.usersService.userInfo(id, address, tab);
+        const addressId = address.toLowerCase();
+        return this.usersService.userInfo(id, addressId, tab);
     }
 
     @ApiOperation({ summary: "회원수정 페이지" })
@@ -58,7 +60,8 @@ export class UsersController {
     async setting(@Body() userData, @AuthToken() address: string, @UploadedFiles() files: Express.Multer.File[]) {
         try {
             console.log(userData);
-            return this.usersService.settingUser(userData, address, files);
+            const addressId = address.toLowerCase();
+            return this.usersService.settingUser(userData, addressId, files);
         } catch (error) {
             throw new BadRequestException(error.message);
         }
@@ -66,7 +69,8 @@ export class UsersController {
 
     @ApiOperation({ summary: "유저확인" })
     @Post("me")
-    async test(@AuthToken() user: string) {
-        return this.usersService.findByUser(user);
+    async test(@AuthToken() address: string) {
+        const addressId = address.toLowerCase();
+        return this.usersService.findByUser(addressId);
     }
 }

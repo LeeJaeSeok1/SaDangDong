@@ -7,8 +7,6 @@ import { Item } from "src/items/entities/item.entity";
 import { CreateUserDto } from "./dto/createUser.dto";
 import { UpdateUserDto } from "./dto/updateUser.dto";
 import { ImageUpload } from "src/images/entities/image.entity";
-import { ForeignKeyMetadata } from "typeorm/metadata/ForeignKeyMetadata";
-import { runInThisContext } from "vm";
 
 @Injectable()
 export class UsersService {
@@ -24,7 +22,9 @@ export class UsersService {
     // sign 페이지
     async sign(address: string) {
         try {
+            console.log("서비스 어드레스", address);
             const existUser = await this.userRepository.findOne({ where: { address } });
+            console.log("existUser", existUser);
             if (!existUser) {
                 const user = new User();
                 user.address = address;
@@ -56,19 +56,21 @@ export class UsersService {
             let profileImage;
             let bennerImage;
             let element;
-            for (element of files) {
-                const file = new ImageUpload();
-                file.originalName = element.originalname;
-                file.mimeType = element.mimetype;
-                file.url = element.location;
-                uploadeImages.push(file);
+            if (files) {
+                for (element of files) {
+                    const file = new ImageUpload();
+                    file.originalName = element.originalname;
+                    file.mimeType = element.mimetype;
+                    file.url = element.location;
+                    uploadeImages.push(file);
 
-                if (file.originalName === "profileImg") {
-                    profileImage = file.url;
-                }
+                    if (file.originalName === "profileImg") {
+                        profileImage = file.url;
+                    }
 
-                if (file.originalName === "bennerImg") {
-                    bennerImage = file.url;
+                    if (file.originalName === "bennerImg") {
+                        bennerImage = file.url;
+                    }
                 }
             }
 

@@ -9,14 +9,12 @@ import {
     PrimaryGeneratedColumn,
     UpdateDateColumn,
     JoinColumn,
+    PrimaryColumn,
 } from "typeorm";
 
 @Entity()
 export class Collection {
-    @PrimaryGeneratedColumn()
-    id: number;
-
-    @Column({ unique: true })
+    @PrimaryColumn({ unique: true })
     name: string;
 
     @Column({ nullable: true })
