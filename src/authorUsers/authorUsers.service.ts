@@ -1,26 +1,62 @@
-import { Injectable } from "@nestjs/common";
-import { CreateAuthorUserDto } from "./dto/createAuthorUser.dto";
-import { UpdateAuthorUserDto } from "./dto/updateAuthorUser.dto";
+import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
+import { Repository } from "typeorm";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Collection } from "src/collections/entities/collection.entity";
+import { Item } from "src/items/entities/item.entity";
+import { Auction } from "src/auctions/entities/auction.entity";
+import { User } from "src/users/entities/user.entity";
 
 @Injectable()
 export class AuthorUsersService {
-    create(createAuthorUserDto: CreateAuthorUserDto) {
-        return "This action adds a new authorUser";
-    }
+    constructor(
+        @InjectRepository(Collection)
+        private collectionRepository: Repository<Collection>,
+        @InjectRepository(Item)
+        private itemRepository: Repository<Item>,
+        @InjectRepository(Auction)
+        private auctionRepository: Repository<Auction>,
+        @InjectRepository(User)
+        private userRepository: Repository<User>,
+    ) {}
 
-    findAll() {
-        return `This action returns all authorUsers`;
-    }
+    async authorInfo(tab: string, address: string) {
+        try {
+            console.log(tab, address);
+            let information;
+            const userInfo = await this.userRepository.query(`
+            SELECT name, profile_image, banner_image
+            FROM user
+            WHERE user.address = ${address} 
+            `);
+            if (tab === "collection") {
+                information = await this.collectionRepository.query(`
+                SELECT *
+                FROM (
+                    SELECT collection.description, collection.name, collection.feature_image,collection.address , user.name AS user_name, user.profile_image
+                    FROM test.collection, test.user
+                    WHERE collection.address = user.address)
+                as g
+                WHERE g.address = ${address};
+                `);
+            }
+            if (tab === " item") {
+                information = await this.collectionRepository.query(`
+                SELECT *
+                FROM  (
+                SELECT item.*, user.name AS user_name
+                FROM item, user
+                WHERE item.owner = user.address
+                ) as g 
+                WHERE g.owner = ${address}
+                `);
+            }
+            // if (tab === "auction") {
+            // }
+            const data = { information, userInfo };
 
-    findOne(id: number) {
-        return `This action returns a #${id} authorUser`;
-    }
-
-    update(id: number, updateAuthorUserDto: UpdateAuthorUserDto) {
-        return `This action updates a #${id} authorUser`;
-    }
-
-    remove(id: number) {
-        return `This action removes a #${id} authorUser`;
+            return data;
+        } catch (error) {
+            console.log(error.message);
+        }
     }
 }
