@@ -1,6 +1,6 @@
 import { Auction } from "src/auctions/entities/auction.entity";
 import { Collection } from "src/collections/entities/collection.entity";
-import { Like, LikeCount } from "src/like/entities/like.entity";
+import { Like } from "src/like/entities/like.entity";
 import { User } from "src/users/entities/user.entity";
 import {
     Column,
@@ -34,11 +34,11 @@ export class Item {
     @Column({ nullable: true })
     image: string;
 
-    @Column()
+    @Column({ nullable: true })
     ipfsImage: string;
 
-    @Column()
-    ipfsjson: string;
+    @Column({ nullable: true })
+    ipfsJson: string;
 
     @CreateDateColumn()
     created_at: Date;
