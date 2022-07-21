@@ -1,14 +1,14 @@
 import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { Like } from "./entities/like.entity";
+import { IsLike } from "./entities/like.entity";
 import { LikeCount } from "./entities/likeCount.entity";
 
 @Injectable()
 export class LikeService {
     constructor(
-        @InjectRepository(Like)
-        private likeRepository: Repository<Like>,
+        @InjectRepository(IsLike)
+        private likeRepository: Repository<IsLike>,
         @InjectRepository(LikeCount)
         private likeCountRepository: Repository<LikeCount>,
     ) {}
@@ -22,7 +22,7 @@ export class LikeService {
 
             if (!findCount) throw new NotFoundException("아이템이 없습니다.");
             if (!findUser) {
-                const user = new Like();
+                const user = new IsLike();
                 user.address = address;
                 await this.likeRepository.save(user);
             }
@@ -33,7 +33,7 @@ export class LikeService {
 
                 if (findUser.isLike === false) {
                     await this.likeRepository.findOne({ where: { item_id: id, address: address } });
-                    const updateLike = new Like();
+                    const updateLike = new IsLike();
                     updateLike.isLike = true;
                     await this.likeRepository.save(updateLike);
                     const likeCount = await this.likeCountRepository.findOne({ where: { item_id: id } });

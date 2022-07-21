@@ -12,7 +12,7 @@ import {
 } from "typeorm";
 
 @Entity()
-export class Like {
+export class IsLike {
     @PrimaryGeneratedColumn()
     id: number;
 
