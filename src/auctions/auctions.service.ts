@@ -68,7 +68,6 @@ export class AuctionsService {
             WHERE auction.token_id = ${token_id} 
             AND auction.token_id = item.token_id
             AND auction.progress = true
-            LIMIT 1
         `);
 
         if (!auction) {
