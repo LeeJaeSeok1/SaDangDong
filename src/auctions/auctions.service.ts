@@ -63,7 +63,7 @@ export class AuctionsService {
         const auction = await this.auctionRepository.query(`
             SELECT auction.price, auction.token_id, auction.ended_at,
             item.collection_name, item.owner, item.name, item.description,
-            item.address
+            item.address, item.image
             FROM auction, item
             WHERE auction.token_id = ${token_id} 
             AND auction.token_id = item.token_id
