@@ -51,8 +51,16 @@ export class CollectionsController {
             console.log("collectionData", collectionData);
             console.log("files", files);
             console.log("address", address);
+
             const addressId = address.toLowerCase();
-            return this.collectionsService.newCollection(collectionData, files, addressId);
+            return Object.assign({
+                statusCode: 201,
+                statusMsg: "컬렉션을 생성했습니다.",
+                data: collectionData,
+                addressId,
+                files,
+            });
+            // return this.collectionsService.newCollection(collectionData, files, addressId);
         } catch (error) {
             console.log("컨트롤러", error.message);
             throw new BadRequestException(error.message);

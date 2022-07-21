@@ -43,15 +43,12 @@ export class ItemsService {
     }
 
     // 아이템 생성
-    async createItem(files: Express.Multer.File[], itemData, address: string) {
+    async createItem(files: Express.Multer.File[], obj, address: string) {
         try {
-            console.log("서비스 아이템 데이터", itemData);
+            // console.log("서비스 아이템 데이터", itemData);
             console.log("files", files);
             console.log("서비스 address", address);
-            const json = itemData.fileInfo;
-            console.log(json, "json");
-            const obj = JSON.parse(json);
-            console.log(obj, "obj");
+
             const uploadeImages = [];
             let itemImage;
             let element;
@@ -76,7 +73,7 @@ export class ItemsService {
             createItem.image = itemImage;
             createItem.address = address;
             createItem.owner = address;
-            return await this.itemRepository.save(createItem);
+            await this.itemRepository.save(createItem);
         } catch (error) {
             console.log("아이템 생성 서비스 에러", error.message);
             throw new BadRequestException(error.message);
