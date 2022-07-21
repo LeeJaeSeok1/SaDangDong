@@ -131,7 +131,7 @@ export class CollectionsService {
                     if (file.originalName === "bannerImg") {
                         bannerImage = file.url;
                     }
-                    if (file.originalName === "featureImg") {
+                    if (file.originalName === "featuredImg") {
                         featureImage = file.url;
                     }
                 }
@@ -140,7 +140,7 @@ export class CollectionsService {
             exisCollection.banner_image = bannerImage;
             exisCollection.feature_image = featureImage;
             exisCollection.name = obj.name;
-            exisCollection.description = obj.description;
+            exisCollection.description = obj.desc;
             exisCollection.commission = obj.commission;
             await this.collectionRepository.update(id, exisCollection);
 
