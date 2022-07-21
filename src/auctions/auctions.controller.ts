@@ -1,5 +1,6 @@
 import { Controller, Get, Post, Body, Param } from "@nestjs/common";
 import { ApiOperation, ApiTags } from "@nestjs/swagger";
+import { AuthToken } from "src/config/auth.decorator";
 import { AuctionsService } from "./auctions.service";
 import { CreateAuctionDto } from "./dto/createAuction.dto";
 import { Auction } from "./entities/auction.entity";
@@ -13,9 +14,13 @@ export class AuctionsController {
         summary: "경매 등록",
         description: "경매에 아이템 등록하기",
     })
-    @Post(":NFTtoken")
-    create(@Param("NFTtoken") NFTtoken: string, @Body() createAuctionDto: CreateAuctionDto) {
-        return this.auctionsService.createAuction(NFTtoken, createAuctionDto);
+    @Post(":token_id")
+    createAuction(
+        @Param("token_id") token_id: string,
+        @AuthToken() address: string,
+        @Body() createAuctionDto: CreateAuctionDto,
+    ) {
+        return this.auctionsService.startAuction(token_id, createAuctionDto, address);
     }
 
     @ApiOperation({ summary: "경매중인 아이템 전체보기" })
@@ -28,9 +33,9 @@ export class AuctionsController {
         summary: "경매 참여",
         description: "경매중인 아이템에 경매 참여",
     })
-    @Get(":id")
-    findAll(@Param("id") id: number): Promise<Auction> {
-        return this.auctionsService.getOneAuction(id);
+    @Get(":token_id")
+    Auction_detail(@Param("token_id") token_id: string) {
+        return this.auctionsService.getOneAuction(token_id);
     }
 
     // @ApiOperation({
