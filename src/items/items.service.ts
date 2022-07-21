@@ -32,7 +32,7 @@ export class ItemsService {
     // 유저 컬렉션 불러오기
     async findColleciton(address: string) {
         try {
-            let collection = await this.collectionRepository.find({
+            const collection = await this.collectionRepository.find({
                 where: { address: address },
                 select: ["name"],
             });
@@ -65,7 +65,7 @@ export class ItemsService {
             createItem.token_id = obj.token_id;
             createItem.name = obj.name;
             createItem.description = obj.description;
-            createItem.collection_id = obj.collection_id;
+            createItem.collection_name = obj.collection_id;
             createItem.ipfsJson = obj.ipfsJson;
             createItem.ipfsImage = obj.ipfsImage;
             createItem.image = element.location;

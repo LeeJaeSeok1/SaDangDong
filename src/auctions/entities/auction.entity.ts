@@ -12,10 +12,16 @@ export class Auction {
     price: number;
 
     @Column()
-    start_at: Date;
+    token_id: string;
 
     @Column()
-    end_at: Date;
+    started_at: Date;
+
+    @Column()
+    ended_at: Date;
+
+    @Column()
+    progress: boolean;
 
     // @OneToOne((type) => Item, (item) => item.auction)
     // @JoinColumn()
