@@ -1,6 +1,6 @@
 import { Auction } from "src/auctions/entities/auction.entity";
 import { Collection } from "src/collections/entities/collection.entity";
-import { Like, Like_relation } from "src/like/entities/like.entity";
+import { Like, LikeCount } from "src/like/entities/like.entity";
 import { User } from "src/users/entities/user.entity";
 import {
     Column,
@@ -33,6 +33,12 @@ export class Item {
 
     @Column({ nullable: true })
     image: string;
+
+    @Column()
+    ipfsImage: string;
+
+    @Column()
+    ipfsjson: string;
 
     @CreateDateColumn()
     created_at: Date;

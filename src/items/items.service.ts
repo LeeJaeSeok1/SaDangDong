@@ -3,7 +3,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { String } from "aws-sdk/clients/apigateway";
 import { Collection } from "src/collections/entities/collection.entity";
 import { ImageUpload } from "src/images/entities/image.entity";
-import { User } from "src/users/entities/user.entity";
+import { LikeCount } from "src/like/entities/like.entity";
 import { Repository } from "typeorm";
 import { Item } from "./entities/item.entity";
 
@@ -14,8 +14,8 @@ export class ItemsService {
         private itemRepository: Repository<Item>,
         @InjectRepository(Collection)
         private collectionRepository: Repository<Collection>,
-        @InjectRepository(User)
-        private userRepository: Repository<User>,
+        @InjectRepository(LikeCount)
+        private likeCountRepository: Repository<LikeCount>,
     ) {}
 
     // 모든 아이템 보기
@@ -74,6 +74,12 @@ export class ItemsService {
             createItem.address = address;
             createItem.owner = address;
             await this.itemRepository.save(createItem);
+
+            const likeCount = new LikeCount();
+            likeCount.item_id = createItem.token_id;
+            likeCount.likeCount = 0;
+            await this.likeCountRepository.save(likeCount);
+            return createItem;
         } catch (error) {
             console.log("아이템 생성 서비스 에러", error.message);
             throw new BadRequestException(error.message);

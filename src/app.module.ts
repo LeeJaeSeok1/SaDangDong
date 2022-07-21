@@ -2,11 +2,11 @@ import { Module, ValidationPipe } from "@nestjs/common";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import * as Joi from "joi";
 import { ConfigModule } from "@nestjs/config";
 import { typeORMConfig } from "./config/typeorm.config";
 import config from "./config/config";
 import { APP_PIPE } from "@nestjs/core";
+import * as Joi from "joi";
 import { CollectionsModule } from "./collections/collections.module";
 import { EventsModule } from "./events/events.module";
 import { ImagesModule } from "./images/images.module";
@@ -19,6 +19,7 @@ import { SellModule } from "./sell/sell.module";
 import { LikeModule } from "./like/like.module";
 import { ChatModule } from "./chat/chat.module";
 import { AuthorUsersModule } from "./authorUsers/authorUsers.module";
+import { JsonRpcModule } from './json-rpc/json-rpc.module';
 
 @Module({
     imports: [
@@ -44,6 +45,8 @@ import { AuthorUsersModule } from "./authorUsers/authorUsers.module";
         EventsModule,
         ImagesModule,
         AuthorUsersModule,
+        LikeModule,
+        JsonRpcModule,
     ],
     controllers: [AppController],
     providers: [AppService, { provide: APP_PIPE, useClass: ValidationPipe }],
