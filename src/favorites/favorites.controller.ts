@@ -1,26 +1,25 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Put, UsePipes } from "@nestjs/common";
-import { LikeService } from "./like.service";
-import { CreateLikeDto } from "./dto/createLike.dto";
-import { UpdateLikeDto } from "./dto/updateLike.dto";
+import { FavoritesService } from "./favorites.service";
 import { ApiOperation } from "@nestjs/swagger";
 import { TransformInterceptor } from "src/config/transform.interceptor";
 import { AuthToken } from "src/config/auth.decorator";
 
-@Controller("/api/like")
-export class LikeController {
-    constructor(private likeService: LikeService) {}
+@Controller("/api/favorites")
+export class FavoritesController {
+    constructor(private favoritesService: FavoritesService) {}
 
     @ApiOperation({ summary: "좋아요" })
-    @Put(":id/like")
+    @Put(":id/true")
     @UsePipes(TransformInterceptor)
+    // id 는 아이템의 token_id
     async likeItem(@Param("id") id: string, @AuthToken() address: string) {
-        return await this.likeService.likeItem(id, address);
+        return await this.favoritesService.likeItem(id, address);
     }
 
     @ApiOperation({ summary: "좋아요 취소" })
-    @Put(":id/dislike")
+    @Put(":id/false")
     @UsePipes(TransformInterceptor)
     async dislikeItem(@Param("id") id: string, @AuthToken() address: string) {
-        return await this.likeService.disLikeItem(id, address);
+        return await this.favoritesService.disLikeItem(id, address);
     }
 }

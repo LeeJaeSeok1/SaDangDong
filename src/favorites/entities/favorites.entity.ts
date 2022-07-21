@@ -12,17 +12,17 @@ import {
 } from "typeorm";
 
 @Entity()
-export class Like {
+export class Favolites {
     @PrimaryGeneratedColumn()
     id: number;
 
     @Column({ default: false })
-    isLike: boolean;
+    isFavorites: boolean;
 
     @Column({ comment: "유저 아이디" })
     address: string;
 
-    @Column({ comment: "아이템 토큰 값" })
+    @Column({ nullable: true, comment: "아이템 토큰 값" })
     item_id: string;
 
     @CreateDateColumn()
