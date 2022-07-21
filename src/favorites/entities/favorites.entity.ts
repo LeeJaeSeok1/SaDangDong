@@ -22,7 +22,7 @@ export class Favolites {
     @Column({ comment: "유저 아이디" })
     address: string;
 
-    @Column({ comment: "아이템 토큰 값" })
+    @Column({ nullable: true, comment: "아이템 토큰 값" })
     item_id: string;
 
     @CreateDateColumn()

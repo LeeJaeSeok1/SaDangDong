@@ -31,7 +31,7 @@ export class CollectionsService {
     async findOneCollection(id: string) {
         // console.log("컬렉션 서비스 아이디", id);
         const collectionInfo = await this.collectionRepository.findOne({ where: { name: id } });
-        const items = await this.itemRepository.find({ where: { collection_id: id } });
+        const items = await this.itemRepository.find({ where: { collection_name: id } });
 
         // return { collectionInfo, items };
         return Object.assign({
