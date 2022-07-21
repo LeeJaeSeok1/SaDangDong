@@ -4,8 +4,6 @@ import { ImageUpload } from "src/images/entities/image.entity";
 import { Item } from "src/items/entities/item.entity";
 import { User } from "src/users/entities/user.entity";
 import { Repository } from "typeorm";
-import { CreateCollectionDto } from "./dto/createCollection.dto";
-import { UpdateCollectionDto } from "./dto/updateCollection.dto";
 import { Collection } from "./entities/collection.entity";
 
 @Injectable()

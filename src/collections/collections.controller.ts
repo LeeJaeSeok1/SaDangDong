@@ -42,7 +42,7 @@ export class CollectionsController {
     @Post()
     @UsePipes(TransformInterceptor)
     @UseInterceptors(FilesInterceptor("files", 3, { storage: storage }))
-    createdColleciton(
+    async createdColleciton(
         @UploadedFiles() files: Express.Multer.File[],
         @Body(ValidationPipe) collectionData,
         @AuthToken() address: string,
@@ -51,8 +51,17 @@ export class CollectionsController {
             console.log("collectionData", collectionData);
             console.log("files", files);
             console.log("address", address);
+
             const addressId = address.toLowerCase();
-            return this.collectionsService.newCollection(collectionData, files, addressId);
+            return await this.collectionsService.newCollection(addressId, files, collectionData);
+            // return Object.assign({
+            //     statusCode: 201,
+            //     statusMsg: "컬렉션을 생성했습니다.",
+            //     data: collectionData,
+            //     addressId,
+            //     files,
+            // });
+            // return this.collectionsService.newCollection(collectionData, files, addressId);
         } catch (error) {
             console.log("컨트롤러", error.message);
             throw new BadRequestException(error.message);

@@ -39,7 +39,15 @@ export class ItemsController {
             console.log("files", files);
             console.log("body", itemData);
             console.log("user", addressId);
-            return this.itemsService.createItem(files, itemData, addressId);
+            const json = itemData.fileInfo;
+            console.log(json, "json");
+            const obj = JSON.parse(json);
+            return Object.assign({
+                statusCode: 201,
+                statusMsg: "민팅을 성공 했습니다.",
+                data: obj,
+                files,
+            });
         } catch (error) {
             console.log("컨트롤러", error.message);
             throw new BadRequestException(error.message);

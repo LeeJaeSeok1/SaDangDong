@@ -27,6 +27,8 @@ export class SearchController {
     @Get()
     getSearchInfo(@Query("tab") tab: string, @Query("name") name: string) {
         console.log(name, tab);
-        return this.searchService.searchInfo(tab, name);
+        const stringTab = decodeURIComponent(tab);
+        const stringName = decodeURIComponent(name);
+        return this.searchService.searchInfo(stringTab, stringName);
     }
 }
