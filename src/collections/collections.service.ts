@@ -87,7 +87,12 @@ export class CollectionsService {
             collection.description = obj.desc;
             collection.commission = obj.commission;
             console.log(collection);
-            return await this.collectionRepository.save(collection);
+            await this.collectionRepository.save(collection);
+            return Object.assign({
+                statusCode: 201,
+                statusMsg: "컬렉션을 수정했습니다.",
+                data: collection,
+            });
         } catch (error) {
             console.log("서비스", error.message);
             throw new BadRequestException(error.message);
@@ -98,6 +103,7 @@ export class CollectionsService {
     async updateCollection(id: string, updateData, address: string, files: Express.Multer.File[]) {
         try {
             const exisCollection = await this.findByOneCollection(id);
+            console.log(exisCollection);
             if (exisCollection.address !== address) {
                 throw new NotFoundException(`본인만 수정 가능합니다.`);
             }
@@ -107,7 +113,7 @@ export class CollectionsService {
             // console.log(json, "json");
 
             const obj = JSON.parse(json);
-
+            // console.log("obj", obj);
             const uploadeImages = [];
 
             let featureImage;
@@ -136,7 +142,13 @@ export class CollectionsService {
             exisCollection.name = obj.name;
             exisCollection.description = obj.description;
             exisCollection.commission = obj.commission;
-            return await this.collectionRepository.save(exisCollection);
+            await this.collectionRepository.update(id, exisCollection);
+
+            return Object.assign({
+                statusCode: 201,
+                statusMsg: "컬렉션을 수정했습니다.",
+                data: exisCollection,
+            });
         } catch (error) {
             throw new BadRequestException(error.message);
         }
@@ -153,6 +165,10 @@ export class CollectionsService {
                 throw new NotFoundException(`본인만 삭제 가능합니다.`);
             }
             await this.collectionRepository.delete(exisCollection);
+            return Object.assign({
+                statusCode: 201,
+                statusMsg: "컬렉션을 삭제했습니다.",
+            });
         } catch (error) {
             console.log("서비스 캐치에러", error.message);
             throw new BadRequestException(error.message);
