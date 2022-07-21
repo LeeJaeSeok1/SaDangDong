@@ -1,7 +1,5 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Put, UsePipes } from "@nestjs/common";
-import { LikeService } from "./like.service";
-import { CreateLikeDto } from "./dto/createLike.dto";
-import { UpdateLikeDto } from "./dto/updateLike.dto";
+import { LikeService } from "./favorites.service";
 import { ApiOperation } from "@nestjs/swagger";
 import { TransformInterceptor } from "src/config/transform.interceptor";
 import { AuthToken } from "src/config/auth.decorator";

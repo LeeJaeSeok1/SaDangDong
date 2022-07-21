@@ -3,8 +3,8 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { String } from "aws-sdk/clients/apigateway";
 import { createWriteStream } from "fs";
 import { Collection } from "src/collections/entities/collection.entity";
+import { FavolitesCount } from "src/favorites/entities/favoritesCount.entity";
 import { ImageUpload } from "src/images/entities/image.entity";
-import { LikeCount } from "src/like/entities/likeCount.entity";
 import { Repository } from "typeorm";
 import { Item } from "./entities/item.entity";
 
@@ -15,8 +15,8 @@ export class ItemsService {
         private itemRepository: Repository<Item>,
         @InjectRepository(Collection)
         private collectionRepository: Repository<Collection>,
-        @InjectRepository(LikeCount)
-        private likeCountRepository: Repository<LikeCount>,
+        @InjectRepository(FavolitesCount)
+        private favoritesCountRepository: Repository<FavolitesCount>,
     ) {}
 
     // 모든 아이템 보기
@@ -73,17 +73,17 @@ export class ItemsService {
             createItem.owner = address;
             await this.itemRepository.save(createItem);
 
-            const likeCount = new LikeCount();
-            likeCount.item_id = createItem.token_id;
-            likeCount.likeCount = 0;
-            await this.likeCountRepository.save(likeCount);
+            const favolitesCount = new FavolitesCount();
+            favolitesCount.item_id = createItem.token_id;
+            favolitesCount.favoritesCount = 0;
+            await this.favoritesCountRepository.save(favolitesCount);
             // return createItem;
 
             return Object.assign({
                 statusCode: 201,
                 statusMsg: "민팅을 성공 했습니다.",
                 data: createItem,
-                likeCount,
+                favolitesCount,
             });
         } catch (error) {
             console.log("아이템 생성 서비스 에러", error.message);

@@ -1,6 +1,5 @@
 import { Auction } from "src/auctions/entities/auction.entity";
 import { Collection } from "src/collections/entities/collection.entity";
-import { IsLike } from "src/like/entities/like.entity";
 import { User } from "src/users/entities/user.entity";
 import {
     Column,

@@ -16,10 +16,10 @@ import { ExploreModule } from "./explore/explore.module";
 import { UsersModule } from "./users/users.module";
 import { ItemsModule } from "./items/items.module";
 import { SellModule } from "./sell/sell.module";
-import { LikeModule } from "./like/like.module";
 import { ChatModule } from "./chat/chat.module";
 import { AuthorUsersModule } from "./authorUsers/authorUsers.module";
 import { JsonRpcModule } from "./json-rpc/json-rpc.module";
+import { FavoritesModule } from "./favorites/favorites.module";
 
 @Module({
     imports: [
@@ -41,7 +41,7 @@ import { JsonRpcModule } from "./json-rpc/json-rpc.module";
         SearchModule,
         ExploreModule,
         SellModule,
-        LikeModule,
+        FavoritesModule,
         EventsModule,
         ImagesModule,
         AuthorUsersModule,
