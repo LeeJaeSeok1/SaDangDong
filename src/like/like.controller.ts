@@ -6,19 +6,21 @@ import { ApiOperation } from "@nestjs/swagger";
 import { TransformInterceptor } from "src/config/transform.interceptor";
 import { AuthToken } from "src/config/auth.decorator";
 
-@Controller("like")
+@Controller("/api/like")
 export class LikeController {
     constructor(private likeService: LikeService) {}
 
     @ApiOperation({ summary: "좋아요" })
-    @Put(":id")
+    @Put(":id/like")
     @UsePipes(TransformInterceptor)
     async likeItem(@Param("id") id: string, @AuthToken() address: string) {
-        await this.likeService.likeItem(id, address);
-        return Object.assign({
-            statusCode: 201,
-            statusMsg: "좋아요에 추가 했습니다.",
-            data: { ...this.likeItem },
-        });
+        return await this.likeService.likeItem(id, address);
+    }
+
+    @ApiOperation({ summary: "좋아요 취소" })
+    @Put(":id/dislike")
+    @UsePipes(TransformInterceptor)
+    async dislikeItem(@Param("id") id: string, @AuthToken() address: string) {
+        return await this.likeService.disLikeItem(id, address);
     }
 }

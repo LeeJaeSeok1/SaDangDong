@@ -29,23 +29,32 @@ export class CollectionsService {
 
     // 컬렉션 상새보기
     async findOneCollection(id: string) {
-        console.log("컬렉션 서비스 아이디", id);
-        return await this.itemRepository.find({ where: { collection_id: id } });
+        // console.log("컬렉션 서비스 아이디", id);
+        const collectionInfo = await this.collectionRepository.findOne({ where: { name: id } });
+        const items = await this.itemRepository.find({ where: { collection_id: id } });
+
+        // return { collectionInfo, items };
+        return Object.assign({
+            statusCode: 201,
+            statusMsg: "컬렉션을 생성했습니다.",
+            data: collectionInfo,
+            items,
+        });
     }
 
     // 컬렉션 생성
     async newCollection(collectionData, files: Express.Multer.File[], address: string) {
         try {
-            console.log("서비스 컬렉션 데이터", collectionData);
-            console.log("files", files);
-            console.log("서비스 address", address);
+            // console.log("서비스 컬렉션 데이터", collectionData);
+            // console.log("files", files);
+            // console.log("서비스 address", address);
 
             const json = collectionData.fileInfo;
-            console.log(1);
-            console.log(json, "json");
+            // console.log(1);
+            // console.log(json, "json");
 
             const obj = JSON.parse(json);
-            console.log(obj, "obj");
+            // console.log(obj, "obj");
 
             const uploadeImages = [];
 
@@ -94,8 +103,8 @@ export class CollectionsService {
             }
 
             const json = updateData.fileInfo;
-            console.log(1);
-            console.log(json, "json");
+            // console.log(1);
+            // console.log(json, "json");
 
             const obj = JSON.parse(json);
 
@@ -135,10 +144,18 @@ export class CollectionsService {
 
     // 컬렉션 삭제
     async deleteCollection(id: string, address: string) {
-        const exisCollection = await this.findByOneCollection(id);
-        if (exisCollection.address !== address) {
-            throw new NotFoundException(`본인만 수정 가능합니다.`);
+        try {
+            console.log("서비스 아이디 확인", address);
+            console.log("컬럼삭제 서비스 아이디 확인", id);
+            const exisCollection = await this.findByOneCollection(id);
+            console.log("서비스, 컬럼확인", exisCollection);
+            if (exisCollection.address !== address) {
+                throw new NotFoundException(`본인만 삭제 가능합니다.`);
+            }
+            await this.collectionRepository.delete(exisCollection);
+        } catch (error) {
+            console.log("서비스 캐치에러", error.message);
+            throw new BadRequestException(error.message);
         }
-        await this.collectionRepository.delete(exisCollection);
     }
 }

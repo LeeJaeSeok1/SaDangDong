@@ -1,9 +1,10 @@
 import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { String } from "aws-sdk/clients/apigateway";
+import { createWriteStream } from "fs";
 import { Collection } from "src/collections/entities/collection.entity";
 import { ImageUpload } from "src/images/entities/image.entity";
-import { LikeCount } from "src/like/entities/like.entity";
+import { LikeCount } from "src/like/entities/likeCount.entity";
 import { Repository } from "typeorm";
 import { Item } from "./entities/item.entity";
 
@@ -24,7 +25,7 @@ export class ItemsService {
     }
 
     // 특정아이템 보기
-    findByIdItem(token_id: String) {
+    findByIdItem(token_id: string) {
         return this.itemRepository.findOne({ where: { token_id } });
     }
 
@@ -45,12 +46,11 @@ export class ItemsService {
     // 아이템 생성
     async createItem(files: Express.Multer.File[], obj, address: string) {
         try {
-            // console.log("서비스 아이템 데이터", itemData);
             console.log("files", files);
             console.log("서비스 address", address);
+            console.log("서비스 obj", obj);
 
             const uploadeImages = [];
-            let itemImage;
             let element;
             if (files) {
                 for (element of files) {
@@ -59,10 +59,6 @@ export class ItemsService {
                     file.mimeType = element.mimetype;
                     file.url = element.location;
                     uploadeImages.push(file);
-
-                    if (file.originalName === "itemImg") {
-                        itemImage = file.url;
-                    }
                 }
             }
             const createItem = new Item();
@@ -70,7 +66,9 @@ export class ItemsService {
             createItem.name = obj.name;
             createItem.description = obj.description;
             createItem.collection_id = obj.collection_id;
-            createItem.image = itemImage;
+            createItem.ipfsJson = obj.ipfsJson;
+            createItem.ipfsImage = obj.ipfsImage;
+            createItem.image = element.location;
             createItem.address = address;
             createItem.owner = address;
             await this.itemRepository.save(createItem);
@@ -79,7 +77,14 @@ export class ItemsService {
             likeCount.item_id = createItem.token_id;
             likeCount.likeCount = 0;
             await this.likeCountRepository.save(likeCount);
-            return createItem;
+            // return createItem;
+
+            return Object.assign({
+                statusCode: 201,
+                statusMsg: "민팅을 성공 했습니다.",
+                data: createItem,
+                likeCount,
+            });
         } catch (error) {
             console.log("아이템 생성 서비스 에러", error.message);
             throw new BadRequestException(error.message);

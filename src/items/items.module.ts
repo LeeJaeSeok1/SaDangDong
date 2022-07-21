@@ -5,7 +5,7 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { Item } from "./entities/item.entity";
 import { Collection } from "src/collections/entities/collection.entity";
 import { User } from "src/users/entities/user.entity";
-import { LikeCount } from "src/like/entities/like.entity";
+import { LikeCount } from "src/like/entities/likeCount.entity";
 
 @Module({
     imports: [TypeOrmModule.forFeature([Item, Collection, User, LikeCount])],

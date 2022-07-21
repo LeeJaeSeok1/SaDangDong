@@ -19,7 +19,7 @@ import { SellModule } from "./sell/sell.module";
 import { LikeModule } from "./like/like.module";
 import { ChatModule } from "./chat/chat.module";
 import { AuthorUsersModule } from "./authorUsers/authorUsers.module";
-import { JsonRpcModule } from './json-rpc/json-rpc.module';
+import { JsonRpcModule } from "./json-rpc/json-rpc.module";
 
 @Module({
     imports: [
@@ -45,7 +45,6 @@ import { JsonRpcModule } from './json-rpc/json-rpc.module';
         EventsModule,
         ImagesModule,
         AuthorUsersModule,
-        LikeModule,
         JsonRpcModule,
     ],
     controllers: [AppController],
