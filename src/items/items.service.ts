@@ -84,7 +84,7 @@ export class ItemsService {
             await this.itemRepository.save(createItem);
 
             const favoritesCount = new Favorites_Relation();
-            favoritesCount.item_id = createItem.token_id;
+            favoritesCount.token_id = createItem.token_id;
             favoritesCount.count = 0;
             await this.favoritesRelationRepository.save(favoritesCount);
             // return createItem;
