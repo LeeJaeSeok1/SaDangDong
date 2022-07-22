@@ -2,21 +2,21 @@ import { BadRequestException, Injectable, NotFoundException } from "@nestjs/comm
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { Favorites } from "./entities/favorites.entity";
-import { FavoritesCount } from "./entities/favoritesCount.entity";
+import { Favorites_Relation } from "./entities/favorites_relation.entity";
 
 @Injectable()
 export class FavoritesService {
     constructor(
         @InjectRepository(Favorites)
         private favoritesRepository: Repository<Favorites>,
-        @InjectRepository(FavoritesCount)
-        private favoritesCountRepository: Repository<FavoritesCount>,
+        @InjectRepository(Favorites_Relation)
+        private favoritesRelationRepository: Repository<Favorites_Relation>,
     ) {}
 
     async favorites(id: string, addressId: string) {
         try {
             const findUser = await this.favoritesRepository.findOne({ where: { item_id: id, address: addressId } });
-            const findCount = await this.favoritesCountRepository.findOne({ where: { item_id: id } });
+            const findCount = await this.favoritesRelationRepository.findOne({ where: { item_id: id } });
 
             if (!findCount) throw new NotFoundException("아이템이 없습니다.");
 
@@ -27,7 +27,7 @@ export class FavoritesService {
                 favorites.isFavorites = true;
                 await this.favoritesRepository.save(favorites);
 
-                const count = await this.favoritesCountRepository.query(
+                const count = await this.favoritesRelationRepository.query(
                     `UPDATE favolites_count SET favoritesCount = favoritesCount+1 WHERE item_id = "${id}";`,
                 );
                 return Object.assign({
@@ -44,7 +44,7 @@ export class FavoritesService {
                     `UPDATE favolites SET isFavorites = true WHERE address = "${addressId}" AND item_id = "${id}";`,
                 );
 
-                const favoritesCount = await this.favoritesCountRepository.query(
+                const favoritesCount = await this.favoritesRelationRepository.query(
                     `UPDATE favolites_count SET favoritesCount = favoritesCount+1 WHERE item_id = "${id}";`,
                 );
                 return Object.assign({
@@ -59,7 +59,7 @@ export class FavoritesService {
             const disfavorites = await this.favoritesRepository.query(
                 `UPDATE favolites SET isFavorites = false WHERE address = "${addressId}" AND item_id = "${id}";`,
             );
-            const disfavoritesCount = await this.favoritesCountRepository.query(
+            const disfavoritesCount = await this.favoritesRelationRepository.query(
                 `UPDATE favolites_count SET favoritesCount = favoritesCount-1 WHERE item_id = "${id}";`,
             );
             return Object.assign({

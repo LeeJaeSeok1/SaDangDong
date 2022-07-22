@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Collection } from "src/collections/entities/collection.entity";
-import { FavoritesCount } from "src/favorites/entities/favoritesCount.entity";
+import { Favorites_Relation } from "src/favorites/entities/favorites_relation.entity";
 import { ImageUpload } from "src/images/entities/image.entity";
 import { Repository } from "typeorm";
 import { Item } from "./entities/item.entity";
@@ -13,8 +13,8 @@ export class ItemsService {
         private itemRepository: Repository<Item>,
         @InjectRepository(Collection)
         private collectionRepository: Repository<Collection>,
-        @InjectRepository(FavoritesCount)
-        private favoritesCountRepository: Repository<FavoritesCount>,
+        @InjectRepository(Favorites_Relation)
+        private favoritesRelationRepository: Repository<Favorites_Relation>,
     ) {}
 
     // 모든 아이템 보기
@@ -83,10 +83,10 @@ export class ItemsService {
             createItem.owner = address;
             await this.itemRepository.save(createItem);
 
-            const favoritesCount = new FavoritesCount();
+            const favoritesCount = new Favorites_Relation();
             favoritesCount.item_id = createItem.token_id;
-            favoritesCount.favoritesCount = 0;
-            await this.favoritesCountRepository.save(favoritesCount);
+            favoritesCount.count = 0;
+            await this.favoritesRelationRepository.save(favoritesCount);
             // return createItem;
 
             return Object.assign({
