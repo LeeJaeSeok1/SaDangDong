@@ -37,6 +37,7 @@ export class UsersController {
     @ApiOperation({ summary: "메인페이지 유저 정보" })
     @Get("info")
     async getUser(@AuthToken() address: string) {
+        console.log("address", address);
         return this.usersService.getUser(address);
     }
 
@@ -44,7 +45,7 @@ export class UsersController {
     @ApiQuery({
         name: "tab",
         required: true,
-        description: "tab = collection, item, favorites",
+        description: "tab = collection, item, favorites, auction",
     })
     @ApiOperation({
         summary: "USER 페이지",

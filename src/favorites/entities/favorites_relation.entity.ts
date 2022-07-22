@@ -6,7 +6,7 @@ export class Favorites_Relation {
     id: number;
 
     @Column({ comment: "아이템 토큰 값" })
-    item_id: string;
+    token_id: string;
 
     @Column()
     count: number;

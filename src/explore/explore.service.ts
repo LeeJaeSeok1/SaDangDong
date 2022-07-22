@@ -46,25 +46,19 @@ export class ExploreService {
 
             if (tab === "item") {
                 information = await this.itemRepository.query(`
-                SELECT item.token_id, item.name, item.address, item.image, user.name AS user_name, favorites_relation.count, favorites.isFavorites
-                FROM item, user, favorites_relation, favorites
+                SELECT item.token_id, item.name, item.address, item.image, user.name AS user_name, favorites_relation.count
+                FROM item, user, favorites_relation
                 WHERE item.address = user.address
                 AND item.token_id = favorites_relation.token_id
-                AND item.token_id = favorites.token_id
-                AND favorites.address = ${address}
                 `);
             }
 
             if (tab === "auction") {
-                information = await this.auctionRepository.query(`
-                SELECT item.token_id, item.name, item.address, item.image, user.name AS user_name
-                ,favorites_relation.count, favorites.isFavorites, auction.id AS auction_id
-                ,auction.ended_at
-                FROM auction, item, user, favorites_relation, favorites
+                information = await this.itemRepository.query(`
+                SELECT item.token_id, item.name, item.address, item.image, user.name AS user_name, favorites_relation.count, auction.id AS auction_id, auction.ended_at
+                FROM auction, item, user, favorites_relation
                 WHERE item.address = user.address
                 AND item.token_id = favorites_relation.token_id
-                AND item.token_id = favorites.token_id
-                AND favorites.address = ${address}
                 AND auction.token_id = item.token_id
                 AND auction.progress = true
                 `);
@@ -74,7 +68,7 @@ export class ExploreService {
             return Object.assign({
                 statusCode: 200,
                 success: true,
-                statusMsg: "정보를 불러왔습니다.",
+                statusMsg: `${tab} 정보를 불러왔습니다.`,
                 data: information,
             });
         } catch (error) {
