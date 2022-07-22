@@ -15,7 +15,7 @@ export class FavoritesService {
 
     async favorites(id: string, addressId: string) {
         try {
-            const findUser = await this.favoritesRepository.findOne({ where: { item_id: id, address: addressId } });
+            const findUser = await this.favoritesRepository.findOne({ where: { token_id: id, address: addressId } });
             const findCount = await this.favoritesRelationRepository.findOne({ where: { item_id: id } });
 
             if (!findCount) throw new NotFoundException("아이템이 없습니다.");
@@ -23,7 +23,7 @@ export class FavoritesService {
             if (!findUser) {
                 const favorites = new Favorites();
                 favorites.address = addressId;
-                favorites.item_id = id;
+                favorites.token_id = id;
                 favorites.isFavorites = true;
                 await this.favoritesRepository.save(favorites);
 

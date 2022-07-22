@@ -23,7 +23,7 @@ export class Favorites {
     address: string;
 
     @Column({ nullable: true, comment: "아이템 토큰 값" })
-    item_id: string;
+    token_id: string;
 
     @CreateDateColumn()
     created_at: Date;
