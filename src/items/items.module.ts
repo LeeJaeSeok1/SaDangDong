@@ -5,10 +5,10 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { Item } from "./entities/item.entity";
 import { Collection } from "src/collections/entities/collection.entity";
 import { User } from "src/users/entities/user.entity";
-import { FavoritesCount } from "src/favorites/entities/favoritesCount.entity";
+import { Favorites_Relation } from "src/favorites/entities/favorites_relation.entity";
 
 @Module({
-    imports: [TypeOrmModule.forFeature([Item, Collection, User, FavoritesCount])],
+    imports: [TypeOrmModule.forFeature([Item, Collection, User, Favorites_Relation])],
     exports: [TypeOrmModule],
     controllers: [ItemsController],
     providers: [ItemsService],

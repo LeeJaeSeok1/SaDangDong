@@ -1,7 +1,7 @@
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity()
-export class FavoritesCount {
+export class Favorites_Relation {
     @PrimaryGeneratedColumn()
     id: number;
 
@@ -9,7 +9,7 @@ export class FavoritesCount {
     item_id: string;
 
     @Column()
-    favoritesCount: number;
+    count: number;
 
     @CreateDateColumn()
     created_at: Date;
