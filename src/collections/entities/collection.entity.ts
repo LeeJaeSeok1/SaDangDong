@@ -10,6 +10,7 @@ import {
     UpdateDateColumn,
     JoinColumn,
     PrimaryColumn,
+    DeleteDateColumn,
 } from "typeorm";
 
 @Entity()
@@ -34,6 +35,12 @@ export class Collection {
 
     @UpdateDateColumn()
     updated_at: Date;
+
+    @Column({ comment: "삭제여부 0 or 1", default: 0 })
+    archived: number;
+
+    @DeleteDateColumn()
+    archived_at: Date;
 
     @Column({ nullable: true })
     address: string;
