@@ -57,12 +57,16 @@ export class ExploreService {
 
             if (tab === "auction") {
                 information = await this.auctionRepository.query(`
-                SELECT item.token_id, item.name, item.address, item.image, user.name AS user_name, favorites_relation.count, favorites.isFavorites
+                SELECT item.token_id, item.name, item.address, item.image, user.name AS user_name
+                ,favorites_relation.count, favorites.isFavorites, auction.id AS auction_id
+                ,auction.ended_at
                 FROM auction, item, user, favorites_relation, favorites
                 WHERE item.address = user.address
                 AND item.token_id = favorites_relation.token_id
                 AND item.token_id = favorites.token_id
                 AND favorites.address = ${address}
+                AND auction.token_id = item.token_id
+                AND auction.progress = true
                 `);
             }
             console.log(information);
