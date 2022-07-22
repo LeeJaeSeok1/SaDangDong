@@ -34,6 +34,12 @@ export class UsersController {
         return this.usersService.sign(address);
     }
 
+    @ApiOperation({ summary: "메인페이지 유저 정보" })
+    @Get("info")
+    async getUser(@AuthToken() address: string) {
+        return this.usersService.getUser(address);
+    }
+
     // 회원 페이지
     @ApiQuery({
         name: "tab",
