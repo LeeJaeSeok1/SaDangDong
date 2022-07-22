@@ -5,6 +5,8 @@ import { Collection } from "src/collections/entities/collection.entity";
 import { Item } from "src/items/entities/item.entity";
 import { User } from "./entities/user.entity";
 import { ImageUpload } from "src/images/entities/image.entity";
+import { Favorites } from "src/favorites/entities/favorites.entity";
+import { Auction } from "src/auctions/entities/auction.entity";
 
 @Injectable()
 export class UsersService {
@@ -15,6 +17,10 @@ export class UsersService {
         private collectionRepository: Repository<Collection>,
         @InjectRepository(Item)
         private itemRepository: Repository<Item>,
+        @InjectRepository(Favorites)
+        private favoritesRepository: Repository<Favorites>,
+        @InjectRepository(Auction)
+        private auctionRepository: Repository<Auction>,
     ) {}
 
     // sign 페이지
@@ -46,6 +52,7 @@ export class UsersService {
 
     async getUser(address: string) {
         const user = await this.userRepository.findOne({ where: { address } });
+        console.log(user);
         return Object.assign({
             statusCode: 200,
             statusMsg: "유저 정보를 불러왔습니다.",
@@ -107,24 +114,31 @@ export class UsersService {
     // 회원 페이지
     async userInfo(id: string, tab: string) {
         try {
+            let information;
             if (tab === "collection") {
-                const userCollections = await this.collectionRepository.find({ where: { address: id } });
-                return Object.assign({
-                    statusCode: 200,
-                    success: true,
-                    statusMsg: "유저의 컬렌션 목록을 불러왔습니다.",
-                    data: userCollections,
-                });
+                information = await this.collectionRepository.find({ where: { address: id } });
             }
             if (tab === "item") {
-                const userItems = await this.itemRepository.find({ where: { address: id } });
-                return Object.assign({
-                    statusCode: 200,
-                    success: true,
-                    statusMsg: "유저의 아이템 목록을 불러왔습니다.",
-                    data: userItems,
-                });
+                information = await this.itemRepository.find({ where: { address: id } });
             }
+            if (tab === "favorites") {
+                information = await this.favoritesRepository.query(
+                    `SELECT * 
+                    FROM item I LEFT OUTER JOIN favorites F ON I.token_id = F.token_id 
+                    WHERE F.address = "${id}" `,
+                );
+            }
+
+            if (tab === "auction") {
+                information = await this.auctionRepository.find({ where: {} });
+            }
+
+            return Object.assign({
+                statusCode: 200,
+                success: true,
+                statusMsg: `유저의 ${tab} 목록을 불러왔습니다.`,
+                data: information,
+            });
         } catch (error) {
             throw new BadRequestException(error.message);
         }
