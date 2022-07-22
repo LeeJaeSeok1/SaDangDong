@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Collection } from "src/collections/entities/collection.entity";
@@ -54,9 +54,14 @@ export class AuthorUsersService {
             console.log(information);
             // if (tab === "auction") {
             // }
-            const data = { information, userInfo };
 
-            return data;
+            return Object.assign({
+                statusCode: 200,
+                success: true,
+                statusMsg: "유저의 정보를 불러왓습니다.",
+                data: information,
+                userInfo,
+            });
         } catch (error) {
             console.log(error.message);
         }

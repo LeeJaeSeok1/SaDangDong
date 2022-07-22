@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
+import { BadRequestException, Injectable } from "@nestjs/common";
 import { Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Collection } from "src/collections/entities/collection.entity";
@@ -43,7 +43,12 @@ export class SearchService {
             // if (tab === "auction") {
             //     const auctions = [];
             // }
-            return information;
+            return Object.assign({
+                statusCode: 200,
+                success: true,
+                statusMsg: "검색 목록을 불러왔습니다.",
+                data: information,
+            });
         } catch (error) {
             throw new BadRequestException(error.message);
         }

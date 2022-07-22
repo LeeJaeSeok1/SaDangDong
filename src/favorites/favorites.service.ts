@@ -32,6 +32,7 @@ export class FavoritesService {
                 );
                 return Object.assign({
                     statusCods: 201,
+                    success: true,
                     statusMsg: "favortes에 추가 했습니다",
                     data: favorites,
                     count,
@@ -47,6 +48,7 @@ export class FavoritesService {
                 );
                 return Object.assign({
                     statusCode: 201,
+                    success: true,
                     statusMsg: "좋아요에 추가 했습니다.",
                     data: updateFavotites,
                     favoritesCount,
@@ -73,6 +75,7 @@ export class FavoritesService {
 
                 return Object.assign({
                     statusCods: 201,
+                    success: true,
                     statusMsg: "유저를 추가 했습니다",
                     data: favorites,
                 });
@@ -91,6 +94,7 @@ export class FavoritesService {
             );
             return Object.assign({
                 statusCode: 201,
+                success: true,
                 statusMsg: "좋아요를 취소 했습니다.",
                 data: dislike,
                 dislikeCount,

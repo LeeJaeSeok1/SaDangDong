@@ -1,8 +1,6 @@
 import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
 import { Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
-import { CreateUserDto } from "./dto/createUser.dto";
-import { UpdateUserDto } from "./dto/updateUser.dto";
 import { Collection } from "src/collections/entities/collection.entity";
 import { Item } from "src/items/entities/item.entity";
 import { User } from "./entities/user.entity";
@@ -22,15 +20,25 @@ export class UsersService {
     // sign 페이지
     async sign(address: string) {
         try {
-            console.log("서비스 어드레스", address);
+            // console.log("서비스 어드레스", address);
             const existUser = await this.userRepository.findOne({ where: { address } });
-            console.log("existUser", existUser);
+            // console.log("existUser", existUser);
             if (!existUser) {
                 const user = new User();
                 user.address = address;
-                return await this.userRepository.save(user);
+                await this.userRepository.save(user);
+                return Object.assign({
+                    statusCode: 201,
+                    success: true,
+                    statusMsg: "유저가 등록 되었습니다.",
+                });
             }
-            return existUser;
+            return Object.assign({
+                statusCode: 201,
+                success: true,
+                statusMsg: "유저를 불러왔습니다..",
+                data: existUser,
+            });
         } catch (error) {
             throw new BadRequestException(error.message);
         }
@@ -44,14 +52,12 @@ export class UsersService {
     async settingUser(userData, address: string, files: Express.Multer.File[]) {
         try {
             const existUser = await this.findByUser(address);
-            console.log("existUser", existUser);
-            console.log("유저데이터", userData.name);
-            console.log("유저데이터", userData.address);
             if (existUser === null) throw new NotFoundException(`본인만 수정 가능합니다.`);
             if (existUser.address !== address) {
                 throw new NotFoundException(`본인만 수정 가능합니다.`);
             }
 
+            // 이미지 저장
             const uploadeImages = [];
             let profileImage;
             let bennerImage;
@@ -77,7 +83,13 @@ export class UsersService {
             existUser.name = userData.name;
             existUser.banner_image = bennerImage;
             existUser.profile_image = profileImage;
-            return await this.userRepository.save(existUser);
+            await this.userRepository.save(existUser);
+            return Object.assign({
+                statusCode: 201,
+                success: true,
+                statusMsg: "수정이 완료 됐습니다.",
+                datea: existUser,
+            });
         } catch (error) {
             throw new BadRequestException(error.message);
         }
@@ -91,10 +103,22 @@ export class UsersService {
             }
 
             if (tab === "collection") {
-                return await this.collectionRepository.find({ where: { address: address } });
+                const userCollections = await this.collectionRepository.find({ where: { address: address } });
+                return Object.assign({
+                    statusCode: 200,
+                    success: true,
+                    statusMsg: "유저의 컬렌션 목록을 불러왔습니다.",
+                    data: userCollections,
+                });
             }
             if (tab === "item") {
-                return await this.itemRepository.find({ where: { address: address } });
+                const userItems = await this.itemRepository.find({ where: { address: address } });
+                return Object.assign({
+                    statusCode: 200,
+                    success: true,
+                    statusMsg: "유저의 아이템 목록을 불러왔습니다.",
+                    data: userItems,
+                });
             }
         } catch (error) {
             throw new BadRequestException(error.message);
