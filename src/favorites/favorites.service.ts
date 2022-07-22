@@ -1,16 +1,16 @@
 import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { Favolites } from "./entities/favorites.entity";
-import { FavolitesCount } from "./entities/favoritesCount.entity";
+import { Favorites } from "./entities/favorites.entity";
+import { FavoritesCount } from "./entities/favoritesCount.entity";
 
 @Injectable()
 export class FavoritesService {
     constructor(
-        @InjectRepository(Favolites)
-        private favoritesRepository: Repository<Favolites>,
-        @InjectRepository(FavolitesCount)
-        private favoritesCountRepository: Repository<FavolitesCount>,
+        @InjectRepository(Favorites)
+        private favoritesRepository: Repository<Favorites>,
+        @InjectRepository(FavoritesCount)
+        private favoritesCountRepository: Repository<FavoritesCount>,
     ) {}
 
     async favorites(id: string, addressId: string) {
@@ -21,7 +21,7 @@ export class FavoritesService {
             if (!findCount) throw new NotFoundException("아이템이 없습니다.");
 
             if (!findUser) {
-                const favorites = new Favolites();
+                const favorites = new Favorites();
                 favorites.address = addressId;
                 favorites.item_id = id;
                 favorites.isFavorites = true;

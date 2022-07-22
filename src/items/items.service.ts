@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Collection } from "src/collections/entities/collection.entity";
-import { FavolitesCount } from "src/favorites/entities/favoritesCount.entity";
+import { FavoritesCount } from "src/favorites/entities/favoritesCount.entity";
 import { ImageUpload } from "src/images/entities/image.entity";
 import { Repository } from "typeorm";
 import { Item } from "./entities/item.entity";
@@ -13,8 +13,8 @@ export class ItemsService {
         private itemRepository: Repository<Item>,
         @InjectRepository(Collection)
         private collectionRepository: Repository<Collection>,
-        @InjectRepository(FavolitesCount)
-        private favoritesCountRepository: Repository<FavolitesCount>,
+        @InjectRepository(FavoritesCount)
+        private favoritesCountRepository: Repository<FavoritesCount>,
     ) {}
 
     // 모든 아이템 보기
@@ -83,10 +83,10 @@ export class ItemsService {
             createItem.owner = address;
             await this.itemRepository.save(createItem);
 
-            const favolitesCount = new FavolitesCount();
-            favolitesCount.item_id = createItem.token_id;
-            favolitesCount.favoritesCount = 0;
-            await this.favoritesCountRepository.save(favolitesCount);
+            const favoritesCount = new FavoritesCount();
+            favoritesCount.item_id = createItem.token_id;
+            favoritesCount.favoritesCount = 0;
+            await this.favoritesCountRepository.save(favoritesCount);
             // return createItem;
 
             return Object.assign({
@@ -94,7 +94,7 @@ export class ItemsService {
                 success: true,
                 statusMsg: "민팅을 성공 했습니다.",
                 data: createItem,
-                favolitesCount,
+                favoritesCount,
             });
         } catch (error) {
             console.log("아이템 생성 서비스 에러", error.message);
