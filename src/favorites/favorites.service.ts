@@ -16,7 +16,7 @@ export class FavoritesService {
     async favorites(id: string, addressId: string) {
         try {
             const findUser = await this.favoritesRepository.findOne({ where: { token_id: id, address: addressId } });
-            const findCount = await this.favoritesRelationRepository.findOne({ where: { item_id: id } });
+            const findCount = await this.favoritesRelationRepository.findOne({ where: { token_id: id } });
 
             if (!findCount) throw new NotFoundException("아이템이 없습니다.");
 
@@ -28,12 +28,11 @@ export class FavoritesService {
                 await this.favoritesRepository.save(favorites);
 
                 const count = await this.favoritesRelationRepository.query(
-                    `UPDATE favolites_count SET favoritesCount = favoritesCount+1 WHERE item_id = "${id}";`,
+                    `UPDATE favorites_relation SET count = count+1 WHERE item_id = "${id}";`,
                 );
                 return Object.assign({
-                    statusCods: 201,
                     success: true,
-                    statusMsg: "favortes에 추가 했습니다",
+                    statusMsg: "favorites에 추가 했습니다",
                     data: favorites,
                     count,
                 });
@@ -41,11 +40,11 @@ export class FavoritesService {
 
             if (findUser.isFavorites === false) {
                 const updateFavotites = await this.favoritesRepository.query(
-                    `UPDATE favolites SET isFavorites = true WHERE address = "${addressId}" AND item_id = "${id}";`,
+                    `UPDATE favorites SET isFavorites = true WHERE address = "${addressId}" AND token_id = "${id}";`,
                 );
 
                 const favoritesCount = await this.favoritesRelationRepository.query(
-                    `UPDATE favolites_count SET favoritesCount = favoritesCount+1 WHERE item_id = "${id}";`,
+                    `UPDATE favorites_relation SET count = count+1 WHERE item_id = "${id}";`,
                 );
                 return Object.assign({
                     statusCode: 201,
@@ -57,10 +56,10 @@ export class FavoritesService {
             }
 
             const disfavorites = await this.favoritesRepository.query(
-                `UPDATE favolites SET isFavorites = false WHERE address = "${addressId}" AND item_id = "${id}";`,
+                `UPDATE favorites SET isFavorites = false WHERE address = "${addressId}" AND token_id = "${id}";`,
             );
             const disfavoritesCount = await this.favoritesRelationRepository.query(
-                `UPDATE favolites_count SET favoritesCount = favoritesCount-1 WHERE item_id = "${id}";`,
+                `UPDATE favorites_relation SET count = count-1 WHERE item_id = "${id}";`,
             );
             return Object.assign({
                 statusCode: 201,
@@ -73,96 +72,4 @@ export class FavoritesService {
             throw new BadRequestException(error.message);
         }
     }
-
-    // async likeItem(id: string, addressId: string) {
-    //     try {
-    //         const findUser = await this.favoritesRepository.findOne({ where: { item_id: id, address: addressId } });
-    //         const findCount = await this.favoritesCountRepository.findOne({ where: { item_id: id } });
-
-    //         if (!findCount) throw new NotFoundException("아이템이 없습니다.");
-
-    //         if (!findUser) {
-    //             const favorites = new Favolites();
-    //             favorites.address = addressId;
-    //             favorites.item_id = id;
-    //             favorites.isFavorites = true;
-    //             await this.favoritesRepository.save(favorites);
-
-    //             const count = await this.favoritesCountRepository.query(
-    //                 `UPDATE favolites_count SET favoritesCount = favoritesCount+1 WHERE item_id = "${id}";`,
-    //             );
-    //             return Object.assign({
-    //                 statusCods: 201,
-    //                 success: true,
-    //                 statusMsg: "favortes에 추가 했습니다",
-    //                 data: favorites,
-    //                 count,
-    //             });
-    //         }
-    //         if (findUser && findUser.isFavorites === false) {
-    //             const updateFavotites = await this.favoritesRepository.query(
-    //                 `UPDATE favolites SET isFavorites = true WHERE address = "${addressId}" AND item_id = "${id}";`,
-    //             );
-
-    //             const favoritesCount = await this.favoritesCountRepository.query(
-    //                 `UPDATE favolites_count SET favoritesCount = favoritesCount+1 WHERE item_id = "${id}";`,
-    //             );
-    //             return Object.assign({
-    //                 statusCode: 201,
-    //                 success: true,
-    //                 statusMsg: "좋아요에 추가 했습니다.",
-    //                 data: updateFavotites,
-    //                 favoritesCount,
-    //             });
-    //         }
-    //         throw new BadRequestException("이미 누르셨습니다.");
-    //     } catch (error) {
-    //         throw new BadRequestException(error.message);
-    //     }
-    // }
-
-    // async disLikeItem(id: string, addressId: string) {
-    //     try {
-    //         const findUser = await this.favoritesRepository.findOne({ where: { item_id: id, address: addressId } });
-    //         const findCount = await this.favoritesCountRepository.findOne({ where: { item_id: id } });
-    //         console.log("findUser", findUser, "findCount", findCount);
-
-    //         if (!findCount) throw new NotFoundException("아이템이 없습니다.");
-    //         if (!findUser) {
-    //             const favorites = new Favolites();
-    //             favorites.address = addressId;
-    //             favorites.item_id = id;
-    //             await this.favoritesRepository.save(favorites);
-
-    //             return Object.assign({
-    //                 statusCods: 201,
-    //                 success: true,
-    //                 statusMsg: "유저를 추가 했습니다",
-    //                 data: favorites,
-    //             });
-    //         }
-
-    //         if (findUser.isFavorites === false) {
-    //             throw new NotFoundException("좋아요를 누르지 않았습니다.");
-    //         }
-
-    //         const dislike = await this.favoritesRepository.query(
-    //             `UPDATE favolites SET isFavorites = false WHERE address = "${addressId}" AND item_id = "${id}";`,
-    //         );
-
-    //         const dislikeCount = await this.favoritesCountRepository.query(
-    //             `UPDATE favolites_count SET favoritesCount = favoritesCount-1 WHERE item_id = "${id}";`,
-    //         );
-    //         return Object.assign({
-    //             statusCode: 201,
-    //             success: true,
-    //             statusMsg: "좋아요를 취소 했습니다.",
-    //             data: dislike,
-    //             dislikeCount,
-    //         });
-    //     } catch (error) {
-    //         console.log(error.message);
-    //         throw new BadRequestException(error.message);
-    //     }
-    // }
 }
