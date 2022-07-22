@@ -12,7 +12,7 @@ import {
 } from "typeorm";
 
 @Entity()
-export class Favolites {
+export class Favorites {
     @PrimaryGeneratedColumn()
     id: number;
 
