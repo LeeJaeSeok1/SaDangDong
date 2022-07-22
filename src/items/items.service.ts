@@ -1,7 +1,5 @@
-import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
+import { BadRequestException, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { String } from "aws-sdk/clients/apigateway";
-import { createWriteStream } from "fs";
 import { Collection } from "src/collections/entities/collection.entity";
 import { FavolitesCount } from "src/favorites/entities/favoritesCount.entity";
 import { ImageUpload } from "src/images/entities/image.entity";
@@ -21,12 +19,24 @@ export class ItemsService {
 
     // 모든 아이템 보기
     findItem(): Promise<Item[]> {
-        return this.itemRepository.find();
+        const items = this.itemRepository.find();
+        return Object.assign({
+            statusCode: 200,
+            success: true,
+            statusMsg: "아이템들을 불러왔습니다.",
+            data: items,
+        });
     }
 
     // 특정아이템 보기
     findByIdItem(token_id: string) {
-        return this.itemRepository.findOne({ where: { token_id } });
+        const item = this.itemRepository.findOne({ where: { token_id } });
+        return Object.assign({
+            statusCode: 200,
+            success: true,
+            statusMsg: "아이템을 불러 왔습니다.",
+            data: item,
+        });
     }
 
     // 유저 컬렉션 불러오기
@@ -36,8 +46,12 @@ export class ItemsService {
                 where: { address: address },
                 select: ["name"],
             });
-            console.log(collection);
-            return collection;
+            return Object.assign({
+                statusCode: 200,
+                success: true,
+                statusMsg: "유저의 컬렉션을 불러왔습니다.",
+                data: collection,
+            });
         } catch (error) {
             throw new BadRequestException(error.message);
         }
@@ -46,10 +60,6 @@ export class ItemsService {
     // 아이템 생성
     async createItem(files: Express.Multer.File[], obj, address: string) {
         try {
-            console.log("files", files);
-            console.log("서비스 address", address);
-            console.log("서비스 obj", obj);
-
             const uploadeImages = [];
             let element;
             if (files) {
@@ -81,6 +91,7 @@ export class ItemsService {
 
             return Object.assign({
                 statusCode: 201,
+                success: true,
                 statusMsg: "민팅을 성공 했습니다.",
                 data: createItem,
                 favolitesCount,
@@ -104,8 +115,13 @@ export class ItemsService {
     async deleteItem(id: string, address: string) {
         const exisItem = await this.findByIdItem(id);
         if (exisItem.owner !== address) {
-            throw new NotFoundException(`본인만 수정 가능합니다.`);
+            throw new BadRequestException(`본인만 삭제 가능합니다.`);
         }
         await this.itemRepository.delete(id);
+        return Object.assign({
+            statusCode: 201,
+            success: true,
+            statusMsg: "아이템을 삭제 했습니다.",
+        });
     }
 }

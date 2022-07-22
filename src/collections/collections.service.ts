@@ -35,8 +35,9 @@ export class CollectionsService {
 
         // return { collectionInfo, items };
         return Object.assign({
-            statusCode: 201,
-            statusMsg: "컬렉션을 생성했습니다.",
+            statusCode: 200,
+            success: true,
+            statusMsg: "컬렉션을 불러왔습니다.",
             data: collectionInfo,
             items,
         });
@@ -88,9 +89,11 @@ export class CollectionsService {
             collection.commission = obj.commission;
             console.log(collection);
             await this.collectionRepository.save(collection);
+
             return Object.assign({
                 statusCode: 201,
-                statusMsg: "컬렉션을 수정했습니다.",
+                success: true,
+                statusMsg: "컬렉션을 생성했습니다.",
                 data: collection,
             });
         } catch (error) {
@@ -146,6 +149,7 @@ export class CollectionsService {
 
             return Object.assign({
                 statusCode: 201,
+                success: true,
                 statusMsg: "컬렉션을 수정했습니다.",
                 data: exisCollection,
             });
@@ -165,8 +169,10 @@ export class CollectionsService {
                 throw new NotFoundException(`본인만 삭제 가능합니다.`);
             }
             await this.collectionRepository.delete(exisCollection);
+
             return Object.assign({
                 statusCode: 201,
+                success: true,
                 statusMsg: "컬렉션을 삭제했습니다.",
             });
         } catch (error) {
