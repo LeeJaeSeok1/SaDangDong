@@ -3,6 +3,7 @@ import { ExploreService } from "./explore.service";
 import { CreateExploreDto } from "./dto/create-explore.dto";
 import { UpdateExploreDto } from "./dto/update-explore.dto";
 import { ApiOperation, ApiQuery, ApiTags } from "@nestjs/swagger";
+import { AuthToken } from "src/config/auth.decorator";
 
 @ApiTags("Explore")
 @Controller("api")
@@ -28,8 +29,8 @@ export class ExploreController {
         description: "전체보기 패이지",
     })
     @Get("explore")
-    getExploreInfo(@Query("tab") tab: string) {
+    getExploreInfo(@Query("tab") tab: string, @AuthToken() address: string) {
         console.log(tab);
-        return this.exploreService.exploreInfo(tab);
+        return this.exploreService.exploreInfo(tab, address);
     }
 }

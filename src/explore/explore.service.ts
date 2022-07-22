@@ -5,6 +5,8 @@ import { Collection } from "src/collections/entities/collection.entity";
 import { Item } from "src/items/entities/item.entity";
 import { Auction } from "src/auctions/entities/auction.entity";
 import { User } from "src/users/entities/user.entity";
+import { Favorites_Relation } from "src/favorites/entities/favorites_relation.entity";
+import { Favorites } from "src/favorites/entities/favorites.entity";
 
 @Injectable()
 export class ExploreService {
@@ -17,6 +19,10 @@ export class ExploreService {
         private auctionRepository: Repository<Auction>,
         @InjectRepository(User)
         private userRepository: Repository<User>,
+        @InjectRepository(Favorites_Relation)
+        private favoritesrelationRepository: Repository<Favorites_Relation>,
+        @InjectRepository(Favorites)
+        private favoritesRepository: Repository<Favorites>,
     ) {}
 
     async mainInfo() {
@@ -26,9 +32,9 @@ export class ExploreService {
         }
     }
 
-    async exploreInfo(tab: string) {
+    async exploreInfo(tab: string, address: string) {
         try {
-            console.log(tab);
+            console.log(tab, address);
             let information;
             if (tab === "collection") {
                 information = await this.collectionRepository.query(`
@@ -37,19 +43,29 @@ export class ExploreService {
                 WHERE collection.address = user.address
                 `);
             }
-            console.log(information);
 
             if (tab === "item") {
                 information = await this.itemRepository.query(`
-                SELECT item.name, item.address, item.image, item.token_id, user.name AS user_name
-                FROM item, user
+                SELECT item.token_id, item.name, item.address, item.image, user.name AS user_name, favorites_relation.count, favorites.isFavorites
+                FROM item, user, favorites_relation, favorites
                 WHERE item.address = user.address
+                AND item.token_id = favorites_relation.token_id
+                AND item.token_id = favorites.token_id
+                AND favorites.address = ${address}
                 `);
             }
 
-            // if (tab === "auction") {
-            //     information = ?
-            // }
+            if (tab === "auction") {
+                information = await this.auctionRepository.query(`
+                SELECT item.token_id, item.name, item.address, item.image, user.name AS user_name, favorites_relation.count, favorites.isFavorites
+                FROM auction, item, user, favorites_relation, favorites
+                WHERE item.address = user.address
+                AND item.token_id = favorites_relation.token_id
+                AND item.token_id = favorites.token_id
+                AND favorites.address = ${address}
+                `);
+            }
+            console.log(information);
 
             return Object.assign({
                 statusCode: 200,

@@ -18,7 +18,6 @@ import { ItemsModule } from "./items/items.module";
 import { SellModule } from "./sell/sell.module";
 import { ChatModule } from "./chat/chat.module";
 import { AuthorUsersModule } from "./authorUsers/authorUsers.module";
-import { JsonRpcModule } from "./json-rpc/json-rpc.module";
 import { FavoritesModule } from "./favorites/favorites.module";
 
 @Module({
@@ -45,7 +44,6 @@ import { FavoritesModule } from "./favorites/favorites.module";
         EventsModule,
         ImagesModule,
         AuthorUsersModule,
-        JsonRpcModule,
     ],
     controllers: [AppController],
     providers: [AppService, { provide: APP_PIPE, useClass: ValidationPipe }],
