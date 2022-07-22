@@ -44,6 +44,15 @@ export class UsersService {
         }
     }
 
+    async getUser(address: string) {
+        const user = await this.userRepository.findOne({ where: { address } });
+        return Object.assign({
+            statusCode: 200,
+            statusMsg: "유저 정보를 불러왔습니다.",
+            data: user,
+        });
+    }
+
     findByUser(address: string) {
         return this.userRepository.findOne({ where: { address } });
     }
