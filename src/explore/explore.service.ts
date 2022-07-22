@@ -41,7 +41,7 @@ export class ExploreService {
 
             if (tab === "item") {
                 information = await this.itemRepository.query(`
-                SELECT item.name, item.address, item.image, user.name AS user_name
+                SELECT item.name, item.address, item.image, item.token_id, user.name AS user_name
                 FROM item, user
                 WHERE item.address = user.address
                 `);

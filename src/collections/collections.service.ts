@@ -168,8 +168,12 @@ export class CollectionsService {
             if (exisCollection.address !== address) {
                 throw new NotFoundException(`본인만 삭제 가능합니다.`);
             }
-            await this.collectionRepository.delete(exisCollection);
-
+            // await this.collectionRepository.query(`UPDATE collection SET archived = 1 WHERE name = "${id}";`);
+            // await this.collectionRepository.delete(exisCollection);
+            await this.collectionRepository
+                .createQueryBuilder("collection")
+                .softDelete()
+                .where("name = :id", { id: id });
             return Object.assign({
                 statusCode: 201,
                 success: true,
