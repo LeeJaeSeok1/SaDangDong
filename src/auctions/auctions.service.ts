@@ -23,7 +23,7 @@ export class AuctionsService {
         const NFTtoken = await this.itemRepository.query(`
         SELECT item.token_id
         FROM item
-        WHERE item.token_id =${token_id} AND item.owner = "${address}"
+        WHERE item.token_id ="${token_id}" AND item.owner = "${address}"
         `);
 
         if (NFTtoken.length === 0) {
