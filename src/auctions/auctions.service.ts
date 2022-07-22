@@ -23,7 +23,7 @@ export class AuctionsService {
         const NFTtoken = await this.itemRepository.query(`
         SELECT item.token_id
         FROM item
-        WHERE item.token_id =${token_id} AND item.owner = ${address}
+        WHERE item.token_id =${token_id} AND item.owner = "${address}"
         `);
 
         if (NFTtoken.length === 0) {
@@ -33,7 +33,7 @@ export class AuctionsService {
         const Check_auction = await this.auctionRepository.query(`
         SELECT *
         FROM auction
-        WHERE auction.token_id = ${token_id} AND auction.progress = true
+        WHERE auction.token_id = "${token_id}" AND auction.progress = true
         `);
 
         if (Check_auction.length !== 0) {
@@ -44,7 +44,7 @@ export class AuctionsService {
 
         const auction = new Auction();
         auction.price = createAuctionDto.price;
-        auction.token_id = NFTtoken;
+        auction.token_id = token_id;
         auction.started_at = start;
         auction.ended_at = end;
         auction.progress = true;
@@ -59,18 +59,18 @@ export class AuctionsService {
             item.collection_name, item.owner, item.name, item.description,
             item.address, item.image
             FROM auction, item
-            WHERE auction.token_id = ${token_id} 
+            WHERE auction.token_id = "${token_id}" 
             AND auction.token_id = item.token_id
             AND auction.progress = true
         `);
-
+        console.log(auction);
         if (!auction) {
             return "없는 토큰입니다.";
         }
 
-        const fixed_time = date_calculation(auction.ended_at);
+        const limited_time = date_calculation(auction.ended_at);
 
-        return { auction, fixed_time };
+        return { auction, limited_time };
     }
 
     getAllAuction(): Promise<Auction[]> {
