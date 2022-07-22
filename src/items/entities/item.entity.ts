@@ -24,9 +24,6 @@ export class Item {
     @Column({ nullable: true })
     description: string;
 
-    @Column({ nullable: true })
-    Blockchain: string;
-
     @Column({ comment: "제작자" })
     address: string;
 
