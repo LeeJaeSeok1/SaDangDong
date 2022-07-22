@@ -35,13 +35,12 @@ export class ItemsController {
         @AuthToken() address: string,
     ) {
         try {
-            const addressId = address.toLowerCase();
-            console.log("files", files);
-            console.log("body", itemData);
-            console.log("user", addressId);
-            console.log("itemDate", itemData);
+            // console.log("files", files);
+            // console.log("body", itemData);
+            // console.log("user", addressId);
+            // console.log("itemDate", itemData);
             const json = itemData.itemInfo;
-            console.log(json, "json");
+            // console.log(json, "json");
             const obj = JSON.parse(json);
             return this.itemsService.createItem(files, obj, address);
         } catch (error) {
@@ -55,9 +54,8 @@ export class ItemsController {
     @Get("minting")
     @UsePipes(TransformInterceptor)
     getCollection(@AuthToken() address: string) {
-        console.log("아이템민팅컬렉션", address);
-        const addressId = address.toLowerCase();
-        return this.itemsService.findColleciton(addressId);
+        // console.log("아이템민팅컬렉션", address);
+        return this.itemsService.findColleciton(address);
     }
 
     // 아이템 상세보기
@@ -82,7 +80,6 @@ export class ItemsController {
     @ApiOperation({ summary: "아이템 삭제", description: "아이템 삭제 페이지" })
     @Delete(":id")
     deleteItem(@Param("id") id: string, @AuthToken() address: string) {
-        const addressId = address.toLowerCase();
-        return this.itemsService.deleteItem(id, addressId);
+        return this.itemsService.deleteItem(id, address);
     }
 }

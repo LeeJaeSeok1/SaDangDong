@@ -19,7 +19,6 @@ import { AuthToken } from "src/config/auth.decorator";
 import { TransformInterceptor } from "src/config/transform.interceptor";
 import { storage } from "src/config/multerS3.config";
 import { FilesInterceptor } from "@nestjs/platform-express";
-import { throwIfEmpty } from "rxjs";
 
 @ApiTags("Collections")
 @Controller("api/collections")
@@ -35,7 +34,7 @@ export class CollectionsController {
     @ApiOperation({ summary: "컬렉션 상세보기" })
     @Get(":id")
     findOneColleciton(@Param("id") id: string) {
-        console.log("컨트롤러 컬렉션 아이디", id);
+        // console.log("컨트롤러 컬렉션 아이디", id);
         return this.collectionsService.findOneCollection(id);
     }
 
@@ -53,7 +52,6 @@ export class CollectionsController {
             // console.log("files", files);
             // console.log("address", address);
 
-            const addressId = address.toLowerCase();
             // return Object.assign({
             //     statusCode: 201,
             //     statusMsg: "컬렉션을 생성했습니다.",
@@ -61,7 +59,7 @@ export class CollectionsController {
             //     addressId,
             //     files,
             // });
-            return this.collectionsService.newCollection(collectionData, files, addressId);
+            return this.collectionsService.newCollection(collectionData, files, address);
         } catch (error) {
             console.log("컨트롤러", error.message);
             throw new BadRequestException(error.message);
@@ -79,12 +77,11 @@ export class CollectionsController {
         @AuthToken() address: string,
     ) {
         try {
-            const addressId = address.toLowerCase();
             console.log("컬럼수정 컨트롤러 어드레스 오리진", address);
             console.log("컬럼수정 컨트롤러 아이디 확인", id);
-            console.log("컬럼수정 컨트롤러 어드레스", addressId);
-            return this.collectionsService.updateCollection(id, updateData, addressId, files);
+            return this.collectionsService.updateCollection(id, updateData, address, files);
         } catch (error) {
+            console.log("에러메세지", error.message);
             throw new BadRequestException(error.message);
         }
     }
@@ -94,10 +91,8 @@ export class CollectionsController {
     deleteCollection(@Param("id") id: string, @AuthToken() address: string) {
         try {
             console.log("컬럼삭세 컨트롤러 어드레스 오리진", address);
-            const addressId = address.toLowerCase();
             console.log("컬럼삭제 컨트롤러 아이디 확인", id);
-            console.log("컬럼삭제 컨트롤러 어드레스", addressId);
-            return this.collectionsService.deleteCollection(id, addressId);
+            return this.collectionsService.deleteCollection(id, address);
         } catch (error) {
             console.log("컨트롤러 캐치 에러", error.message);
             throw new BadRequestException(error.message);

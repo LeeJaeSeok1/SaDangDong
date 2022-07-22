@@ -95,15 +95,11 @@ export class UsersService {
         }
     }
 
-    // 마이페이지
-    async userInfo(id: string, address: string, tab: string) {
+    // 회원 페이지
+    async userInfo(id: string, tab: string) {
         try {
-            if (id !== address) {
-                throw new NotFoundException("유저를 찾을 수 없습니다");
-            }
-
             if (tab === "collection") {
-                const userCollections = await this.collectionRepository.find({ where: { address: address } });
+                const userCollections = await this.collectionRepository.find({ where: { address: id } });
                 return Object.assign({
                     statusCode: 200,
                     success: true,
@@ -112,7 +108,7 @@ export class UsersService {
                 });
             }
             if (tab === "item") {
-                const userItems = await this.itemRepository.find({ where: { address: address } });
+                const userItems = await this.itemRepository.find({ where: { address: id } });
                 return Object.assign({
                     statusCode: 200,
                     success: true,
