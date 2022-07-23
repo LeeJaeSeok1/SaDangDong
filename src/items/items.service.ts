@@ -33,15 +33,22 @@ export class ItemsService {
 
     // 특정아이템 보기
     async findByIdItem(token_id: string) {
-        const item = await this.itemRepository.findOne({ where: { token_id } });
-        console.log(token_id);
-        console.log(typeof token_id);
-        console.log(item);
+        return await this.itemRepository.findOne({ where: { token_id } });
+    }
+
+    // 아이템 상세보기
+    async itemDetail(token_id: string) {
         return Object.assign({
             statusCode: 200,
             success: true,
             statusMsg: "아이템을 불러 왔습니다.",
-            data: item,
+            data: await this.itemRepository.query(`
+            SELECT item.token_id, item.name, item.address, item.image, user.profile_image, user.name AS user_name, favorites_relation.count AS favorites_count
+            FROM item, user, favorites_relation
+            WHERE item.token_id = ${token_id}
+            AND item.owner = user.address
+            AND item.token_id = favorites_relation.token_id
+            `),
         });
     }
 
@@ -87,8 +94,7 @@ export class ItemsService {
             createItem.ipfsImage = obj.ipfsImage;
             createItem.image = element.location;
             createItem.address = address;
-            createItem.ownerName = user.name;
-            createItem.ownerAddress = address;
+            createItem.owner = address;
             await this.itemRepository.save(createItem);
 
             const favoritesCount = new Favorites_Relation();

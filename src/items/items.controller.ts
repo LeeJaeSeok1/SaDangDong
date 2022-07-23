@@ -62,7 +62,7 @@ export class ItemsController {
     @ApiOperation({ summary: "아이템 상세보기", description: "아이템 상세보기 페이지" })
     @Get(":id")
     findByIdItem(@Param("id") id: string) {
-        return this.itemsService.findByIdItem(id);
+        return this.itemsService.itemDetail(id);
     }
 
     // @ApiOperation({summary: "아이템 좋아요",description: "아이템 좋아요 페이지",})
