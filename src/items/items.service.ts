@@ -1,9 +1,10 @@
 import { BadRequestException, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
 import { Collection } from "src/collections/entities/collection.entity";
 import { Favorites_Relation } from "src/favorites/entities/favorites_relation.entity";
 import { ImageUpload } from "src/images/entities/image.entity";
-import { Repository } from "typeorm";
+import { User } from "src/users/entities/user.entity";
 import { Item } from "./entities/item.entity";
 
 @Injectable()
@@ -15,6 +16,8 @@ export class ItemsService {
         private collectionRepository: Repository<Collection>,
         @InjectRepository(Favorites_Relation)
         private favoritesRelationRepository: Repository<Favorites_Relation>,
+        @InjectRepository(User)
+        private userRepository: Repository<User>,
     ) {}
 
     // 모든 아이템 보기
@@ -30,15 +33,22 @@ export class ItemsService {
 
     // 특정아이템 보기
     async findByIdItem(token_id: string) {
-        const item = await this.itemRepository.findOne({ where: { token_id } });
-        console.log(token_id);
-        console.log(typeof token_id);
-        console.log(item);
+        return await this.itemRepository.findOne({ where: { token_id } });
+    }
+
+    // 아이템 상세보기
+    async itemDetail(token_id: string) {
         return Object.assign({
             statusCode: 200,
             success: true,
             statusMsg: "아이템을 불러 왔습니다.",
-            data: item,
+            data: await this.itemRepository.query(`
+            SELECT item.token_id, item.name, item.address, item.image, user.profile_image, user.name AS user_name, favorites_relation.count AS favorites_count
+            FROM item, user, favorites_relation
+            WHERE item.token_id = ${token_id}
+            AND item.owner = user.address
+            AND item.token_id = favorites_relation.token_id
+            `),
         });
     }
 
@@ -63,6 +73,7 @@ export class ItemsService {
     // 아이템 생성
     async createItem(files: Express.Multer.File[], obj, address: string) {
         try {
+            const user = await this.userRepository.findOne({ where: { address } });
             const uploadeImages = [];
             let element;
             if (files) {
