@@ -6,7 +6,7 @@ import { getOneAuctionDto } from "./dto/getOneAuction.dto";
 import { Item } from "src/items/entities/item.entity";
 import { User } from "src/users/entities/user.entity";
 import { Auction } from "./entities/auction.entity";
-import { create_date, date_calculation } from "src/plug/date_function";
+import { create_date, date_calculation } from "src/plug/date.function";
 
 @Injectable()
 export class AuctionsService {
