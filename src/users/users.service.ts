@@ -102,9 +102,7 @@ export class UsersService {
             existUser.banner_image = bennerImage;
             existUser.profile_image = profileImage;
             await this.userRepository.save(existUser);
-            await this.itemRepository.query(
-                `UPDATE item SET ownerName = "${obj.name}" WHERE ownerAddress = "${address}";`,
-            );
+
             return Object.assign({
                 statusCode: 201,
                 success: true,
