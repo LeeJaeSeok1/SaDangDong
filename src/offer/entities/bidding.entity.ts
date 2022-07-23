@@ -1,6 +1,6 @@
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, PrimaryColumn, UpdateDateColumn } from "typeorm";
 
-@Entity()
+// @Entity()
 export class Bidding {}
 // primary key _id
 // price 최고가
