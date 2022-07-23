@@ -28,12 +28,12 @@ export class SearchController {
     getSearchInfo(
         @Query("tab") tab: string,
         @Query("name") name: string,
-        @Query("page") page: number,
-        @Query("pageSize") pageSize: number,
+        @Query("_page") _page: number,
+        @Query("_limit") _limit: number,
     ) {
         console.log(name, tab);
         const stringTab = decodeURIComponent(tab);
         const stringName = decodeURIComponent(name);
-        return this.searchService.searchInfo(stringTab, stringName, page, pageSize);
+        return this.searchService.searchInfo(stringTab, stringName, _page, _limit);
     }
 }
