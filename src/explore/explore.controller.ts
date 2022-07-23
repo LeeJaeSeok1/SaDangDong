@@ -29,8 +29,13 @@ export class ExploreController {
         description: "전체보기 패이지",
     })
     @Get("explore")
-    getExploreInfo(@Query("tab") tab: string, @AuthToken() address: string) {
+    getExploreInfo(
+        @Query("tab") tab: string,
+        @Query("page") page: number,
+        @Query("pageSize") pageSize: number,
+        @AuthToken() address: string,
+    ) {
         console.log(tab);
-        return this.exploreService.exploreInfo(tab, address);
+        return this.exploreService.exploreInfo(tab, address, page, pageSize);
     }
 }

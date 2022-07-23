@@ -25,10 +25,15 @@ export class SearchController {
         description: "검색 페이지",
     })
     @Get()
-    getSearchInfo(@Query("tab") tab: string, @Query("name") name: string) {
+    getSearchInfo(
+        @Query("tab") tab: string,
+        @Query("name") name: string,
+        @Query("page") page: number,
+        @Query("pageSize") pageSize: number,
+    ) {
         console.log(name, tab);
         const stringTab = decodeURIComponent(tab);
         const stringName = decodeURIComponent(name);
-        return this.searchService.searchInfo(stringTab, stringName);
+        return this.searchService.searchInfo(stringTab, stringName, page, pageSize);
     }
 }
