@@ -49,7 +49,10 @@ export class Item {
     archived_at: Date;
 
     @Column()
-    owner: string;
+    ownerName: string;
+
+    @Column()
+    ownerAddress: string;
     // @ManyToOne((type) => User, (user) => user.item)
     // // @JoinColumn({ name: "owner" })
     // user: User;

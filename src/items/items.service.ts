@@ -1,9 +1,10 @@
 import { BadRequestException, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
 import { Collection } from "src/collections/entities/collection.entity";
 import { Favorites_Relation } from "src/favorites/entities/favorites_relation.entity";
 import { ImageUpload } from "src/images/entities/image.entity";
-import { Repository } from "typeorm";
+import { User } from "src/users/entities/user.entity";
 import { Item } from "./entities/item.entity";
 
 @Injectable()
@@ -15,6 +16,8 @@ export class ItemsService {
         private collectionRepository: Repository<Collection>,
         @InjectRepository(Favorites_Relation)
         private favoritesRelationRepository: Repository<Favorites_Relation>,
+        @InjectRepository(User)
+        private userRepository: Repository<User>,
     ) {}
 
     // 모든 아이템 보기
@@ -63,6 +66,7 @@ export class ItemsService {
     // 아이템 생성
     async createItem(files: Express.Multer.File[], obj, address: string) {
         try {
+            const user = await this.userRepository.findOne({ where: { address } });
             const uploadeImages = [];
             let element;
             if (files) {
@@ -83,7 +87,8 @@ export class ItemsService {
             createItem.ipfsImage = obj.ipfsImage;
             createItem.image = element.location;
             createItem.address = address;
-            createItem.owner = address;
+            createItem.ownerName = user.name;
+            createItem.ownerAddress = address;
             await this.itemRepository.save(createItem);
 
             const favoritesCount = new Favorites_Relation();

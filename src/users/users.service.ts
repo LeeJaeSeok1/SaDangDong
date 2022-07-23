@@ -73,7 +73,8 @@ export class UsersService {
             if (existUser.address !== address) {
                 throw new NotFoundException(`본인만 수정 가능합니다.`);
             }
-
+            const json = userData.userInfo;
+            const obj = JSON.parse(json);
             // 이미지 저장
             const uploadeImages = [];
             let profileImage;
@@ -97,10 +98,13 @@ export class UsersService {
                 }
             }
 
-            existUser.name = userData.name;
+            existUser.name = obj.name;
             existUser.banner_image = bennerImage;
             existUser.profile_image = profileImage;
             await this.userRepository.save(existUser);
+            await this.itemRepository.query(
+                `UPDATE item SET ownerName = "${obj.name}" WHERE ownerAddress = "${address}";`,
+            );
             return Object.assign({
                 statusCode: 201,
                 success: true,
