@@ -5,6 +5,8 @@ import { Collection } from "src/collections/entities/collection.entity";
 import { Item } from "src/items/entities/item.entity";
 import { Auction } from "src/auctions/entities/auction.entity";
 import { User } from "src/users/entities/user.entity";
+import { ConfigurationServicePlaceholders } from "aws-sdk/lib/config_service_placeholders";
+import { Offset } from "src/plug/pagination.function";
 
 @Injectable()
 export class SearchService {
@@ -19,20 +21,16 @@ export class SearchService {
         private userRepository: Repository<User>,
     ) {}
 
-    async searchInfo(tab: string, name: string, page: number, pageSize: number) {
+    async searchInfo(tab: string, name: string, _page: number, _limit: number) {
         try {
             console.log(name, tab);
 
-            let start = 0;
-            if (page <= 0) {
-                page = 1;
-            }
-            start = (page - 1) * pageSize;
-
+            let start = Offset(_page, _limit);
             let information;
+
             if (tab === "collection") {
                 const pageCount = await this.collectionRepository.count();
-                if (page > Math.round(pageCount / pageSize)) {
+                if (_page > Math.round(pageCount / _limit)) {
                     return null;
                 }
                 information = await this.collectionRepository.query(`
@@ -41,13 +39,14 @@ export class SearchService {
                 WHERE collection.name like "%${name}%" 
                 AND collection.address = user.address
                 ORDER BY collection.created_at DESC
-                LIMIT ${start}, ${pageSize}
+                LIMIT ${start}, ${_limit}
                 `);
+                console.log(information);
             }
 
             if (tab === "item") {
                 const pageCount = await this.itemRepository.count();
-                if (page > Math.round(pageCount / pageSize)) {
+                if (_page > Math.round(pageCount / _limit)) {
                     return null;
                 }
                 information = await this.itemRepository.query(`
@@ -57,13 +56,13 @@ export class SearchService {
                 AND item.address = user.address
                 AND item.token_id = favorites_relation.token_id
                 ORDER BY item.created_at DESC
-                LIMIT ${start}, ${pageSize}
+                LIMIT ${start}, ${_limit}
                 `);
             }
 
             if (tab === "auction") {
                 const pageCount = await this.auctionRepository.count();
-                if (page > Math.round(pageCount / pageSize)) {
+                if (_page > Math.round(pageCount / _limit)) {
                     return null;
                 }
                 information = await this.auctionRepository.query(`
@@ -75,7 +74,7 @@ export class SearchService {
                 AND auction.token_id = item.token_id
                 AND auction.progress = true
                 ORDER BY auction.started_at DESC
-                LIMIT ${start}, ${pageSize}
+                LIMIT ${start}, ${_limit}
                 `);
             }
             console.log(information);

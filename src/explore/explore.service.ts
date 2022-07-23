@@ -1,4 +1,4 @@
-import { ConsoleLogger, Injectable } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Collection } from "src/collections/entities/collection.entity";
@@ -7,7 +7,7 @@ import { Auction } from "src/auctions/entities/auction.entity";
 import { User } from "src/users/entities/user.entity";
 import { Favorites_Relation } from "src/favorites/entities/favorites_relation.entity";
 import { Favorites } from "src/favorites/entities/favorites.entity";
-import { number } from "joi";
+import { Offset } from "src/plug/pagination.function";
 
 @Injectable()
 export class ExploreService {
@@ -33,56 +33,38 @@ export class ExploreService {
         }
     }
 
-    async exploreInfo(tab: string, address: string, page: number, pageSize: number) {
+    async exploreInfo(tab: string, address: string, _page: number, _limit: number) {
         try {
-            console.log(tab, address);
-
-            let start = 0;
-            if (page <= 0) {
-                page = 1;
-            }
-            start = (page - 1) * pageSize;
-
-            // const pageCount = await this.itemRepository.count();
-            // if (page > Math.round(pageCount / pageSize)) {
-            //     return null;
-            // }
-
+            // 페이지 네이션 처리
+            let start = Offset(_page, _limit);
             let information;
+
             if (tab === "collection") {
-                const pageCount = await this.collectionRepository.count();
-                if (page > Math.round(pageCount / pageSize)) {
-                    return null;
-                }
                 information = await this.collectionRepository.query(`
-                SELECT collection.description, collection.name, collection.feature_image, user.name AS user_name, user.profile_image
+                SELECT collection.name, collection.description, collection.feature_image, user.name AS user_name, user.profile_image
                 FROM collection, user
                 WHERE collection.address = user.address
                 ORDER BY collection.created_at DESC
-                LIMIT ${start}, ${pageSize}
+                LIMIT ${start}, ${_limit}
                 `);
+                // 오더바이 아래에 추가
+                console.log("스타트", start, "리밋", _limit);
+                console.log(information);
+                console.log(typeof information);
             }
 
             if (tab === "item") {
-                const pageCount = await this.itemRepository.count();
-                if (page > Math.round(pageCount / pageSize)) {
-                    return null;
-                }
                 information = await this.itemRepository.query(`
                 SELECT item.token_id, item.name, item.address, item.image, user.name AS user_name, favorites_relation.count
                 FROM item, user, favorites_relation
                 WHERE item.address = user.address
                 AND item.token_id = favorites_relation.token_id
                 ORDER BY item.created_at DESC
-                LIMIT ${start}, ${pageSize}
+                LIMIT ${start}, ${_limit}
                 `);
             }
 
             if (tab === "auction") {
-                const pageCount = await this.auctionRepository.count();
-                if (page > Math.round(pageCount / pageSize)) {
-                    return null;
-                }
                 information = await this.auctionRepository.query(`
                 SELECT item.token_id, item.name, item.address, item.image, user.name AS user_name, favorites_relation.count, auction.id AS auction_id, auction.ended_at
                 FROM auction, item, user, favorites_relation
@@ -91,7 +73,7 @@ export class ExploreService {
                 AND auction.token_id = item.token_id
                 AND auction.progress = true
                 ORDER BY auction.started_at DESC
-                LIMIT ${start}, ${pageSize}
+                LIMIT ${start}, ${_limit}
                 `);
             }
             // console.log(information);

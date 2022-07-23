@@ -38,17 +38,18 @@ export class ItemsService {
 
     // 아이템 상세보기
     async itemDetail(token_id: string) {
+        const item = await this.itemRepository.query(`
+        SELECT item.token_id, item.name, item.description, item.collection_name, item.address, item.image, user.profile_image, user.name AS user_name, favorites_relation.count AS favorites_count
+        FROM item, user, favorites_relation
+        WHERE item.token_id = ${token_id}
+        AND item.owner = user.address
+        AND item.token_id = favorites_relation.token_id
+        `);
         return Object.assign({
             statusCode: 200,
             success: true,
             statusMsg: "아이템을 불러 왔습니다.",
-            data: await this.itemRepository.query(`
-            SELECT item.token_id, item.name, item.address, item.image, user.profile_image, user.name AS user_name, favorites_relation.count AS favorites_count
-            FROM item, user, favorites_relation
-            WHERE item.token_id = ${token_id}
-            AND item.owner = user.address
-            AND item.token_id = favorites_relation.token_id
-            `),
+            data: item,
         });
     }
 

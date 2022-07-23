@@ -31,11 +31,11 @@ export class ExploreController {
     @Get("explore")
     getExploreInfo(
         @Query("tab") tab: string,
-        @Query("page") page: number,
-        @Query("pageSize") pageSize: number,
+        @Query("_page") _page: number,
+        @Query("_limit") _limit: number,
         @AuthToken() address: string,
     ) {
         console.log(tab);
-        return this.exploreService.exploreInfo(tab, address, page, pageSize);
+        return this.exploreService.exploreInfo(tab, address, _page, _limit);
     }
 }
