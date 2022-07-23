@@ -19,34 +19,70 @@ export class SearchService {
         private userRepository: Repository<User>,
     ) {}
 
-    async searchInfo(tab: string, name: string) {
+    async searchInfo(tab: string, name: string, page: number, pageSize: number) {
         try {
             console.log(name, tab);
+
+            let start = 0;
+            if (page <= 0) {
+                page = 1;
+            }
+            start = (page - 1) * pageSize;
+
             let information;
             if (tab === "collection") {
+                const pageCount = await this.collectionRepository.count();
+                if (page > Math.round(pageCount / pageSize)) {
+                    return null;
+                }
                 information = await this.collectionRepository.query(`
                 SELECT collection.description, collection.name, collection.feature_image, user.name AS user_name, user.profile_image
                 FROM collection, user
-                WHERE collection.name like '%${name}%' AND collection.address = user.address
+                WHERE collection.name like "%${name}%" 
+                AND collection.address = user.address
+                ORDER BY collection.created_at DESC
+                LIMIT ${start}, ${pageSize}
+                `);
+            }
+
+            if (tab === "item") {
+                const pageCount = await this.itemRepository.count();
+                if (page > Math.round(pageCount / pageSize)) {
+                    return null;
+                }
+                information = await this.itemRepository.query(`
+                SELECT item.name, item.address, item.image, user.name AS user_name, favorites_relation.count
+                FROM item, user, favorites_relation
+                WHERE item.name like '%${name}%' 
+                AND item.address = user.address
+                AND item.token_id = favorites_relation.token_id
+                ORDER BY item.created_at DESC
+                LIMIT ${start}, ${pageSize}
+                `);
+            }
+
+            if (tab === "auction") {
+                const pageCount = await this.auctionRepository.count();
+                if (page > Math.round(pageCount / pageSize)) {
+                    return null;
+                }
+                information = await this.auctionRepository.query(`
+                SELECT item.token_id, item.name, item.address, item.image, user.name AS user_name, favorites_relation.count, auction.id AS auction_id, auction.ended_at
+                FROM auction, item, user, favorites_relation
+                WHERE item.name like '%${name}%'
+                AND item.address = user.address
+                AND item.token_id = favorites_relation.token_id
+                AND auction.token_id = item.token_id
+                AND auction.progress = true
+                ORDER BY auction.started_at DESC
+                LIMIT ${start}, ${pageSize}
                 `);
             }
             console.log(information);
-
-            if (tab === "item") {
-                information = await this.itemRepository.query(`
-                SELECT item.name, item.address, item.image, user.name AS user_name
-                FROM item, user
-                WHERE item.name like '%${name}%' AND item.address = user.address
-                `);
-            }
-
-            // if (tab === "auction") {
-            //     const auctions = [];
-            // }
             return Object.assign({
                 statusCode: 200,
                 success: true,
-                statusMsg: "검색 목록을 불러왔습니다.",
+                statusMsg: `${tab}의 검색 목록을 불러왔습니다.`,
                 data: information,
             });
         } catch (error) {

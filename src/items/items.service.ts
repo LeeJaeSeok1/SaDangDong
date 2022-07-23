@@ -29,8 +29,11 @@ export class ItemsService {
     }
 
     // 특정아이템 보기
-    findByIdItem(token_id: string) {
-        const item = this.itemRepository.findOne({ where: { token_id } });
+    async findByIdItem(token_id: string) {
+        const item = await this.itemRepository.findOne({ where: { token_id } });
+        console.log(token_id);
+        console.log(typeof token_id);
+        console.log(item);
         return Object.assign({
             statusCode: 200,
             success: true,

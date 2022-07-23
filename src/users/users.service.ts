@@ -37,6 +37,7 @@ export class UsersService {
                     statusCode: 201,
                     success: true,
                     statusMsg: "유저가 등록 되었습니다.",
+                    data: user,
                 });
             }
             return Object.assign({
