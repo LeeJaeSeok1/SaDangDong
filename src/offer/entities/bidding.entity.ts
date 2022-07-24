@@ -1,8 +1,28 @@
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, PrimaryColumn, UpdateDateColumn } from "typeorm";
+import {
+    Column,
+    CreateDateColumn,
+    DeleteDateColumn,
+    Entity,
+    PrimaryColumn,
+    PrimaryGeneratedColumn,
+    UpdateDateColumn,
+} from "typeorm";
 
 // @Entity()
-export class Bidding {}
-// primary key _id
-// price 최고가
-// address 최고가 제안자
-// auctionId
+export class Bidding {
+    @PrimaryGeneratedColumn()
+    id: number;
+    // primary key _id
+
+    @Column({ type: "decimal", precision: 7, scale: 4, default: 0 })
+    price: number;
+    // price 최고가
+
+    @Column()
+    address: string;
+    // 최고가 제안자 address
+
+    @Column()
+    auctionId: number;
+    // auctionId
+}

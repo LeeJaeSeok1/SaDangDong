@@ -1,6 +1,4 @@
 import { isNotEmpty } from "class-validator";
-import { Chat } from "src/auctions/entities/chat.entity";
-import { Offer } from "src/auctions/entities/offer.entity";
 import { Collection } from "src/collections/entities/collection.entity";
 import { Item } from "src/items/entities/item.entity";
 import { Sell } from "src/sell/entities/sell.entity";

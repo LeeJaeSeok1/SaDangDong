@@ -42,6 +42,7 @@ export class ItemsController {
             const json = itemData.itemInfo;
             // console.log(json, "json");
             const obj = JSON.parse(json);
+
             return this.itemsService.createItem(files, obj, address);
         } catch (error) {
             console.log("컨트롤러", error.message);
