@@ -1,7 +1,5 @@
 import { Item } from "src/items/entities/item.entity";
 import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
-import { Chat } from "./chat.entity";
-import { Offer } from "./offer.entity";
 
 @Entity()
 export class Auction {

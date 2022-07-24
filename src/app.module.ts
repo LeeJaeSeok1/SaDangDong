@@ -8,7 +8,7 @@ import config from "./config/config";
 import { APP_PIPE } from "@nestjs/core";
 import * as Joi from "joi";
 import { CollectionsModule } from "./collections/collections.module";
-import { EventsModule } from "./events/events.module";
+// import { EventsModule } from "./events/events.module";
 import { ImagesModule } from "./images/images.module";
 import { AuctionsModule } from "./auctions/auctions.module";
 import { SearchModule } from "./search/search.module";
@@ -42,7 +42,7 @@ import { OfferModule } from "./offer/offer.module";
         ExploreModule,
         SellModule,
         FavoritesModule,
-        EventsModule,
+        // EventsModule,
         ImagesModule,
         AuthorUsersModule,
         OfferModule,
