@@ -47,6 +47,7 @@ export class ItemsService {
     // 아이템 상세보기
     async itemDetail(token_id: string) {
         try {
+            console.log(token_id);
             const item = await this.itemRepository.query(`
             SELECT item.token_id, item.name, item.description, item.collection_name, item.address, item.image, item.ipfsImage, user.profile_image, user.name AS user_name, favorites_relation.count AS favorites_count
             FROM item, user, favorites_relation

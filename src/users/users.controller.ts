@@ -9,8 +9,8 @@ import {
     UsePipes,
     ValidationPipe,
     UseInterceptors,
-    BadRequestException,
     UploadedFiles,
+    UseFilters,
 } from "@nestjs/common";
 import { UsersService } from "./users.service";
 import { ApiBody, ApiHeader, ApiOperation, ApiQuery, ApiTags } from "@nestjs/swagger";
@@ -19,8 +19,10 @@ import { TransformInterceptor } from "src/config/transform.interceptor";
 import { AuthToken } from "src/config/auth.decorator";
 import { FilesInterceptor } from "@nestjs/platform-express";
 import { storage } from "src/config/multerS3.config";
+import { HttpExceptionFilter } from "src/config/httpExcception.filter";
 
 @ApiTags("Account")
+@UseFilters(new HttpExceptionFilter())
 @Controller("api/account")
 export class UsersController {
     constructor(private usersService: UsersService) {}
@@ -62,11 +64,7 @@ export class UsersController {
     @UseInterceptors(FilesInterceptor("files", 2, { storage: storage }))
     @UsePipes(TransformInterceptor)
     async setting(@Body() userData, @AuthToken() address: string, @UploadedFiles() files: Express.Multer.File[]) {
-        try {
-            return this.usersService.settingUser(userData, address, files);
-        } catch (error) {
-            throw new BadRequestException(error.message);
-        }
+        return this.usersService.settingUser(userData, address, files);
     }
 
     @ApiOperation({ summary: "유저확인" })

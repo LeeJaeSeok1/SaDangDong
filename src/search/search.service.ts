@@ -5,7 +5,6 @@ import { Collection } from "src/collections/entities/collection.entity";
 import { Item } from "src/items/entities/item.entity";
 import { Auction } from "src/auctions/entities/auction.entity";
 import { User } from "src/users/entities/user.entity";
-import { ConfigurationServicePlaceholders } from "aws-sdk/lib/config_service_placeholders";
 import { Offset } from "src/plug/pagination.function";
 
 @Injectable()
@@ -24,15 +23,11 @@ export class SearchService {
     async searchInfo(tab: string, name: string, _page: number, _limit: number) {
         try {
             console.log(name, tab);
-
+            console.log(_page, _limit);
             let start = Offset(_page, _limit);
             let information;
 
             if (tab === "collection") {
-                const pageCount = await this.collectionRepository.count();
-                if (_page > Math.round(pageCount / _limit)) {
-                    return null;
-                }
                 information = await this.collectionRepository.query(`
                 SELECT collection.description, collection.name, collection.feature_image, user.name AS user_name, user.profile_image
                 FROM collection, user
@@ -45,10 +40,6 @@ export class SearchService {
             }
 
             if (tab === "item") {
-                const pageCount = await this.itemRepository.count();
-                if (_page > Math.round(pageCount / _limit)) {
-                    return null;
-                }
                 information = await this.itemRepository.query(`
                 SELECT item.name, item.address, item.image, user.name AS user_name, favorites_relation.count
                 FROM item, user, favorites_relation
@@ -61,10 +52,6 @@ export class SearchService {
             }
 
             if (tab === "auction") {
-                const pageCount = await this.auctionRepository.count();
-                if (_page > Math.round(pageCount / _limit)) {
-                    return null;
-                }
                 information = await this.auctionRepository.query(`
                 SELECT item.token_id, item.name, item.address, item.image, user.name AS user_name, favorites_relation.count, auction.id AS auction_id, auction.ended_at
                 FROM auction, item, user, favorites_relation

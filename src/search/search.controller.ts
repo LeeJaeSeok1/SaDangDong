@@ -1,10 +1,10 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from "@nestjs/common";
+import { Controller, Get, Query, UseFilters } from "@nestjs/common";
 import { SearchService } from "./search.service";
-import { CreateSearchDto } from "./dto/create-search.dto";
-import { UpdateSearchDto } from "./dto/update-search.dto";
 import { ApiOperation, ApiQuery, ApiTags } from "@nestjs/swagger";
+import { HttpExceptionFilter } from "src/config/httpExcception.filter";
 
 @ApiTags("Search")
+@UseFilters(new HttpExceptionFilter())
 @Controller("api/search")
 export class SearchController {
     constructor(private readonly searchService: SearchService) {}
@@ -33,7 +33,7 @@ export class SearchController {
     ) {
         console.log(name, tab);
         const stringTab = decodeURIComponent(tab);
-        const stringName = decodeURIComponent(name);
-        return this.searchService.searchInfo(stringTab, stringName, _page, _limit);
+        // const stringName = decodeURIComponent(name);
+        return this.searchService.searchInfo(stringTab, name, _page, _limit);
     }
 }
