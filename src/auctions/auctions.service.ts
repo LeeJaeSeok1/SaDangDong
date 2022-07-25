@@ -7,6 +7,7 @@ import { Item } from "src/items/entities/item.entity";
 import { User } from "src/users/entities/user.entity";
 import { Auction } from "./entities/auction.entity";
 import { create_date, date_calculation } from "src/plug/date.function";
+import { Bidding } from "src/offer/entities/bidding.entity";
 
 @Injectable()
 export class AuctionsService {
@@ -17,6 +18,8 @@ export class AuctionsService {
         private itemRepository: Repository<Item>,
         @InjectRepository(User)
         private userRepository: Repository<User>,
+        @InjectRepository(Bidding)
+        private biddingRepository: Repository<Bidding>,
     ) {}
 
     async startAuction(token_id: string, createAuctionDto: CreateAuctionDto, address: string) {
@@ -49,7 +52,16 @@ export class AuctionsService {
         auction.ended_at = end;
         auction.progress = true;
 
-        return await this.auctionRepository.save(auction);
+        console.log(auction);
+
+        await this.auctionRepository.save(auction);
+
+        const bidding = new Bidding();
+        bidding.price = auction.price;
+
+        await this.biddingRepository.save(bidding);
+
+        return { auction, bidding };
     }
 
     async getOneAuction(token_id: string) {

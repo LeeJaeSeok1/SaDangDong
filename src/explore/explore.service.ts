@@ -36,7 +36,7 @@ export class ExploreService {
     async exploreInfo(tab: string, address: string, _page: number, _limit: number) {
         try {
             // 페이지 네이션 처리
-            let start = Offset(_page, _limit);
+            const start = Offset(_page, _limit);
             let information;
 
             if (tab === "collection") {

@@ -41,6 +41,7 @@ export class ItemsController {
             // console.log("itemDate", itemData);
 
             return this.itemsService.createItem(files, itemData, address);
+
         } catch (error) {
             console.log("컨트롤러", error.message);
             throw new BadRequestException(error.message);
