@@ -28,7 +28,7 @@ export class FavoritesService {
                 await this.favoritesRepository.save(favorites);
 
                 const count = await this.favoritesRelationRepository.query(
-                    `UPDATE favorites_relation SET count = count+1 WHERE item_id = "${id}";`,
+                    `UPDATE favorites_relation SET count = count+1 WHERE token_id = "${id}";`,
                 );
                 return Object.assign({
                     success: true,
@@ -44,7 +44,7 @@ export class FavoritesService {
                 );
 
                 const favoritesCount = await this.favoritesRelationRepository.query(
-                    `UPDATE favorites_relation SET count = count+1 WHERE item_id = "${id}";`,
+                    `UPDATE favorites_relation SET count = count+1 WHERE token_id = "${id}";`,
                 );
                 return Object.assign({
                     statusCode: 201,
@@ -59,7 +59,7 @@ export class FavoritesService {
                 `UPDATE favorites SET isFavorites = false WHERE address = "${addressId}" AND token_id = "${id}";`,
             );
             const disfavoritesCount = await this.favoritesRelationRepository.query(
-                `UPDATE favorites_relation SET count = count-1 WHERE item_id = "${id}";`,
+                `UPDATE favorites_relation SET count = count-1 WHERE token_id = "${id}";`,
             );
             return Object.assign({
                 statusCode: 201,
