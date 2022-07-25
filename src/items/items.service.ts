@@ -7,7 +7,7 @@ import { ImageUpload } from "src/images/entities/image.entity";
 import { User } from "src/users/entities/user.entity";
 import { Item } from "./entities/item.entity";
 import { Auction } from "src/auctions/entities/auction.entity";
-import { date_calculation } from "src/plug/date.function";
+import { date_calculate } from "src/plug/caculation.function";
 
 @Injectable()
 export class ItemsService {
@@ -59,7 +59,7 @@ export class ItemsService {
                 `);
             console.log(itemIpfsJson);
             const auction = await this.auctionRepository.findOne({ where: { token_id } });
-            const limited_time = date_calculation(auction.ended_at);
+            const limited_time = date_calculate(auction.ended_at);
 
             const ipfsJson = itemIpfsJson.ipfsJson.split("//")[1];
             console.log(ipfsJson);
