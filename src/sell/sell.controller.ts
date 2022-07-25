@@ -3,32 +3,17 @@ import { SellService } from "./sell.service";
 import { CreateSellDto } from "./dto/create-sell.dto";
 import { UpdateSellDto } from "./dto/update-sell.dto";
 
-@Controller("sell")
+@Controller("api/sell")
 export class SellController {
     constructor(private readonly sellService: SellService) {}
 
-    // @Post()
-    // create(@Body() createSellDto: CreateSellDto) {
-    //   return this.sellService.create(createSellDto);
-    // }
+    @Post(":auction_id")
+    SellComplete(@Body() createSellDto: CreateSellDto, @Param("auction_id") auction_id: number) {
+        return this.sellService.SellComplete(createSellDto, auction_id);
+    }
 
-    // @Get()
-    // findAll() {
-    //   return this.sellService.findAll();
-    // }
-
-    // @Get(':id')
-    // findOne(@Param('id') id: string) {
-    //   return this.sellService.findOne(+id);
-    // }
-
-    // @Patch(':id')
-    // update(@Param('id') id: string, @Body() updateSellDto: UpdateSellDto) {
-    //   return this.sellService.update(+id, updateSellDto);
-    // }
-
-    // @Delete(':id')
-    // remove(@Param('id') id: string) {
-    //   return this.sellService.remove(+id);
-    // }
+    @Get()
+    findAll() {
+        return this.sellService.findAll();
+    }
 }

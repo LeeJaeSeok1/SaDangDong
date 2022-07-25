@@ -1,9 +1,7 @@
-import { Auction } from "src/auctions/entities/auction.entity";
-import { User } from "src/users/entities/user.entity";
 import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
-export class Sell extends Auction {
+export class Sell {
     @PrimaryGeneratedColumn()
     id: number;
 
@@ -15,6 +13,9 @@ export class Sell extends Auction {
 
     @Column()
     end_at: Date;
+
+    @Column()
+    address: string;
 
     // @OneToOne((type) => User, (user) => user.sell)
     // // @JoinColumn({ name: "sell_id" })

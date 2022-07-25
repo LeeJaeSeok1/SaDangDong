@@ -6,7 +6,7 @@ import { getOneAuctionDto } from "./dto/getOneAuction.dto";
 import { Item } from "src/items/entities/item.entity";
 import { User } from "src/users/entities/user.entity";
 import { Auction } from "./entities/auction.entity";
-import { create_date, date_calculation } from "src/plug/caculation.function";
+import { create_date, date_calculate } from "src/plug/caculation.function";
 import { Bidding } from "src/offer/entities/bidding.entity";
 
 @Injectable()
@@ -80,7 +80,7 @@ export class AuctionsService {
             return "없는 토큰입니다.";
         }
 
-        const limited_time = date_calculation(auction.ended_at);
+        const limited_time = date_calculate(auction.ended_at);
 
         return { auction, limited_time };
     }
