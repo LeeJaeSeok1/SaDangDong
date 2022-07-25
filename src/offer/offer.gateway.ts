@@ -16,20 +16,19 @@ import { AuthToken } from "src/config/auth.decorator";
 
 @WebSocketGateway({ namespace: "offer", cors: { origin: "*" } })
 export class OfferGateway {
-    @WebSocketServer() server: Server;
+    @WebSocketServer() public server: Server;
 
     constructor(private readonly offerService: OfferService) {}
 
     @SubscribeMessage("OffertoServer")
     async createOffer(
-        @MessageBody() offer: number,
+        @MessageBody() data: { price: number; mycoin: number },
         @AuthToken() address: string,
         @Param("auction_id") auction_id: string,
     ) {
-        console.log(offer, address, auction_id);
-        const myoffer = await this.offerService.createOffer(address, offer, auction_id);
-
-        // this.server.emit('offer', offer);
+        console.log(data, address, auction_id);
+        const myoffer = await this.offerService.createOffer(address, data, auction_id);
+        this.server.emit("offer", myoffer);
         return myoffer;
     }
 
@@ -39,14 +38,8 @@ export class OfferGateway {
     }
 
     @SubscribeMessage("join")
-    joinRoom(@MessageBody("name") name: string, @ConnectedSocket() client: Socket) {
-        return this.offerService.indentify(name, client.id);
-    }
-
-    @SubscribeMessage("typing")
-    async typing(@MessageBody("isTyping") isTyping: boolean, @ConnectedSocket() client: Socket) {
-        const name = await this.offerService.getClientName(client.id);
-
-        client.broadcast.emit("typing", { name, isTyping });
+    joinRoom(@MessageBody() data: { auction_id: number; address: string }, @ConnectedSocket() client: Socket) {
+        console.log(data, client.id);
+        return this.offerService.joinRoom(data, client.id);
     }
 }
