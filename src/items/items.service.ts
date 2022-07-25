@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from "@nestjs/common";
+import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { Collection } from "src/collections/entities/collection.entity";
@@ -6,6 +6,8 @@ import { Favorites_Relation } from "src/favorites/entities/favorites_relation.en
 import { ImageUpload } from "src/images/entities/image.entity";
 import { User } from "src/users/entities/user.entity";
 import { Item } from "./entities/item.entity";
+import { Auction } from "src/auctions/entities/auction.entity";
+import { date_calculation } from "src/plug/date.function";
 
 @Injectable()
 export class ItemsService {
@@ -18,6 +20,8 @@ export class ItemsService {
         private favoritesRelationRepository: Repository<Favorites_Relation>,
         @InjectRepository(User)
         private userRepository: Repository<User>,
+        @InjectRepository(Auction)
+        private auctionRepository: Repository<Auction>,
     ) {}
 
     // 모든 아이템 보기
@@ -48,13 +52,35 @@ export class ItemsService {
     async itemDetail(token_id: string) {
         try {
             console.log(token_id);
-            const item = await this.itemRepository.query(`
-            SELECT item.token_id, item.name, item.description, item.collection_name, item.address, item.image, item.ipfsImage, user.profile_image, user.name AS user_name, favorites_relation.count AS favorites_count
-            FROM item, user, favorites_relation
+            const [itemIpfsJson] = await this.itemRepository.query(`
+                SELECT item.ipfsJson
+                FROM item
+                WHERE item.token_id = "${token_id}"
+                `);
+            console.log(itemIpfsJson);
+            const auction = await this.auctionRepository.findOne({ where: { token_id } });
+            const limited_time = date_calculation(auction.ended_at);
+
+            const ipfsJson = itemIpfsJson.ipfsJson.split("//")[1];
+            console.log(ipfsJson);
+
+            const [item] = await this.itemRepository.query(`
+            SELECT DISTINCT item.token_id, item.name, item.description, item.address, item.image, item.ipfsImage,
+            item.collection_name, collection.description AS collection_description, 
+            user.name AS user_name, user.profile_image, 
+            favorites_relation.count AS favorites_count,
+            auction.progress AS auction_progress, auction.price AS auction_price, auction.ended_at AS auction_endedAt
+            FROM item, user, favorites_relation, collection, auction
             WHERE item.token_id = ${token_id}
+            AND item.token_id = auction.token_id
+            AND item.collection_name = collection.name
             AND item.owner = user.address
             AND item.token_id = favorites_relation.token_id
             `);
+            item.ipfsJson = ipfsJson;
+            item.ended_at = limited_time;
+            console.log(item);
+
             return Object.assign({
                 statusCode: 200,
                 success: true,
@@ -140,13 +166,23 @@ export class ItemsService {
     }
 
     // 아이템 수정
-    // async updateItem(id: number, updateItemDto: UpdateItemDto): Promise<Item> {
-    //     const exisItem = await this.findByIdItem(id);
+    async updateItem(id: string, itemData, address: string) {
+        const exisItem = await this.findByIdItem(id);
 
-    //     if (!exisItem) throw new NotFoundException(`collection not found with the id ${id}`);
+        if (!exisItem) throw new NotFoundException(`collection not found with the id ${id}`);
 
-    //     return this.itemRepository.save(updateItemDto);
-    // }
+        if (exisItem.owner !== address) {
+            throw new BadRequestException("본인만 수정 가능합니다.");
+        }
+
+        console.log(itemData);
+
+        exisItem.name = itemData.name;
+        exisItem.token_id = itemData.token_id;
+        exisItem.description = itemData.description;
+        exisItem.collection_name = itemData.collection_id;
+        await this.itemRepository.update(id, exisItem);
+    }
 
     // 아이템 삭제
     async deleteItem(id: string, address: string) {

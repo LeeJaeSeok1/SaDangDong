@@ -9,7 +9,7 @@ import {
     UseInterceptors,
     ValidationPipe,
     UploadedFiles,
-    UseFilters,
+    Put,
 } from "@nestjs/common";
 import { ItemsService } from "./items.service";
 import { ApiOperation, ApiTags } from "@nestjs/swagger";
@@ -17,10 +17,8 @@ import { TransformInterceptor } from "src/config/transform.interceptor";
 import { FilesInterceptor } from "@nestjs/platform-express";
 import { storage } from "src/config/multerS3.config";
 import { AuthToken } from "src/config/auth.decorator";
-import { HttpExceptionFilter } from "src/config/httpExcception.filter";
 
 @ApiTags("Items")
-@UseFilters(new HttpExceptionFilter())
 @Controller("api/items")
 export class ItemsController {
     constructor(private readonly itemsService: ItemsService) {}
@@ -58,18 +56,17 @@ export class ItemsController {
         return this.itemsService.itemDetail(id);
     }
 
-    // @ApiOperation({summary: "아이템 좋아요",description: "아이템 좋아요 페이지",})
-    // @Put(":NFTtocken")
-    // isLike(@Param("NFTtoken") NFTtoken: string) {
-    //     return `여기는 아이템 #${NFTtoken}의 좋아요 누르는 페이지`;
-    // }
+    // 아이템 수정
+    @ApiOperation({ summary: " 아이템 수정" })
+    @UsePipes(TransformInterceptor)
+    @Put(":id")
+    updateItem(@Param("id") id: string, @Body(ValidationPipe) itemData, @AuthToken() address: string) {
+        console.log(itemData);
+        console.log(id);
+        return this.itemsService.updateItem(id, itemData, address);
+    }
 
-    // @ApiOperation({ summary: "아이템 수정", description: "아이템 수정 페이지" })
-    // @Put(":id")
-    // updateItem(@Param("id") id: number, @Body() updateItemDto: UpdateItemDto) {
-    //     return this.itemsService.updateItem(id, updateItemDto);
-    // }
-
+    // 아이템 삭제
     @ApiOperation({ summary: "아이템 삭제", description: "아이템 삭제 페이지" })
     @Delete(":id")
     deleteItem(@Param("id") id: string, @AuthToken() address: string) {

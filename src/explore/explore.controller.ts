@@ -2,10 +2,8 @@ import { Controller, Get, Query, UseFilters } from "@nestjs/common";
 import { ExploreService } from "./explore.service";
 import { ApiOperation, ApiQuery, ApiTags } from "@nestjs/swagger";
 import { AuthToken } from "src/config/auth.decorator";
-import { HttpExceptionFilter } from "src/config/httpExcception.filter";
 
 @ApiTags("Explore")
-@UseFilters(new HttpExceptionFilter())
 @Controller("api")
 export class ExploreController {
     constructor(private readonly exploreService: ExploreService) {}
