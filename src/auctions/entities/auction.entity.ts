@@ -6,7 +6,7 @@ export class Auction {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({ type: "decimal", precision: 7, scale: 4, default: 0 })
+    @Column({ type: "decimal", precision: 7, scale: 4 })
     price: number;
 
     @Column()
