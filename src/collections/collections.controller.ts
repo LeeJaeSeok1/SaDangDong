@@ -11,6 +11,7 @@ import {
     BadRequestException,
     UseInterceptors,
     UploadedFiles,
+    UseFilters,
 } from "@nestjs/common";
 import { CollectionsService } from "./collections.service";
 import { ApiOperation, ApiTags } from "@nestjs/swagger";
@@ -19,8 +20,10 @@ import { AuthToken } from "src/config/auth.decorator";
 import { TransformInterceptor } from "src/config/transform.interceptor";
 import { storage } from "src/config/multerS3.config";
 import { FilesInterceptor } from "@nestjs/platform-express";
+import { HttpExceptionFilter } from "src/config/httpExcception.filter";
 
 @ApiTags("Collections")
+@UseFilters(new HttpExceptionFilter())
 @Controller("api/collections")
 export class CollectionsController {
     constructor(private readonly collectionsService: CollectionsService) {}
@@ -47,23 +50,18 @@ export class CollectionsController {
         @Body(ValidationPipe) collectionData,
         @AuthToken() address: string,
     ) {
-        try {
-            // console.log("collectionData", collectionData);
-            // console.log("files", files);
-            // console.log("address", address);
+        // console.log("collectionData", collectionData);
+        // console.log("files", files);
+        // console.log("address", address);
 
-            // return Object.assign({
-            //     statusCode: 201,
-            //     statusMsg: "컬렉션을 생성했습니다.",
-            //     data: collectionData,
-            //     addressId,
-            //     files,
-            // });
-            return this.collectionsService.newCollection(collectionData, files, address);
-        } catch (error) {
-            console.log("컨트롤러", error.message);
-            throw new BadRequestException(error.message);
-        }
+        // return Object.assign({
+        //     statusCode: 201,
+        //     statusMsg: "컬렉션을 생성했습니다.",
+        //     data: collectionData,
+        //     addressId,
+        //     files,
+        // });
+        return this.collectionsService.newCollection(collectionData, files, address);
     }
 
     @ApiOperation({ summary: "컬렉션 수정" })

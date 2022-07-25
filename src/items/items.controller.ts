@@ -7,19 +7,20 @@ import {
     Delete,
     UsePipes,
     UseInterceptors,
-    BadRequestException,
     ValidationPipe,
     UploadedFiles,
+    UseFilters,
 } from "@nestjs/common";
 import { ItemsService } from "./items.service";
-import { CreateItemDto } from "./dto/createItem.dto";
 import { ApiOperation, ApiTags } from "@nestjs/swagger";
 import { TransformInterceptor } from "src/config/transform.interceptor";
 import { FilesInterceptor } from "@nestjs/platform-express";
 import { storage } from "src/config/multerS3.config";
 import { AuthToken } from "src/config/auth.decorator";
+import { HttpExceptionFilter } from "src/config/httpExcception.filter";
 
 @ApiTags("Items")
+@UseFilters(new HttpExceptionFilter())
 @Controller("api/items")
 export class ItemsController {
     constructor(private readonly itemsService: ItemsService) {}
@@ -34,24 +35,19 @@ export class ItemsController {
         @Body(ValidationPipe) itemData,
         @AuthToken() address: string,
     ) {
-        try {
-            // console.log("files", files);
-            // console.log("body", itemData);
-            // console.log("user", addressId);
-            // console.log("itemDate", itemData);
+        // console.log("files", files);
+        // console.log("body", itemData);
+        // console.log("user", addressId);
+        // console.log("itemDate", itemData);
 
-            return this.itemsService.createItem(files, itemData, address);
-        } catch (error) {
-            console.log("컨트롤러", error.message);
-            throw new BadRequestException(error.message);
-        }
+        return this.itemsService.createItem(files, itemData, address);
     }
 
     // 유저의 컬렉션 가져오기
     @ApiOperation({ summary: "유저 컬렉션 받아오기" })
     @Get("collections")
     getCollection(@AuthToken() address: string) {
-        // console.log("아이템민팅컬렉션", address);
+        console.log("아이템민팅컬렉션", address);
         return this.itemsService.findColleciton(address);
     }
 

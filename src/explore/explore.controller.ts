@@ -1,11 +1,11 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from "@nestjs/common";
+import { Controller, Get, Query, UseFilters } from "@nestjs/common";
 import { ExploreService } from "./explore.service";
-import { CreateExploreDto } from "./dto/create-explore.dto";
-import { UpdateExploreDto } from "./dto/update-explore.dto";
 import { ApiOperation, ApiQuery, ApiTags } from "@nestjs/swagger";
 import { AuthToken } from "src/config/auth.decorator";
+import { HttpExceptionFilter } from "src/config/httpExcception.filter";
 
 @ApiTags("Explore")
+@UseFilters(new HttpExceptionFilter())
 @Controller("api")
 export class ExploreController {
     constructor(private readonly exploreService: ExploreService) {}

@@ -1,11 +1,13 @@
-import { Controller, Get, Post, Body, Param } from "@nestjs/common";
+import { Controller, Get, Post, Body, Param, UseFilters } from "@nestjs/common";
 import { ApiOperation, ApiTags } from "@nestjs/swagger";
 import { AuthToken } from "src/config/auth.decorator";
+import { HttpExceptionFilter } from "src/config/httpExcception.filter";
 import { AuctionsService } from "./auctions.service";
 import { CreateAuctionDto } from "./dto/createAuction.dto";
 import { Auction } from "./entities/auction.entity";
 
 @ApiTags("Auction")
+@UseFilters(new HttpExceptionFilter())
 @Controller("api/auction")
 export class AuctionsController {
     constructor(private readonly auctionsService: AuctionsService) {}
