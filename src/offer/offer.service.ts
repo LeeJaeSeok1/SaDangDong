@@ -27,7 +27,7 @@ export class OfferService {
 
     async createOffer(address, data, auction_id) {
         try {
-            const [auction, bidding] = await Promise.all([
+            const [[auction], [bidding]] = await Promise.all([
                 this.auctionRepository.query(`
                 SELECT *
                 FROM auction
@@ -46,7 +46,7 @@ export class OfferService {
                 return "현재 최고가보다 작습니다.";
             }
             const price = await this.biddingRepository.query(`
-            SELECT bidding.price
+            SELECT bidding.*
             FROM bidding, auction
             WHERE auction.progress = true
             WHERE auction.id = bidding.auction_id
@@ -69,14 +69,17 @@ export class OfferService {
             bidding.price = data.price;
             bidding.address = address;
 
-            await Promise.all([this.offerRepository.save(newOffer), this.biddingRepository.save(bidding)]);
+            await Promise.all([
+                this.offerRepository.save(newOffer),
+                this.biddingRepository.update(bidding.id, bidding),
+            ]);
             return { bidding, newOffer };
         } catch (error) {}
     }
 
     async findAllOffer(address, auction_id) {
         console.log(address, auction_id);
-        const [auction, bidding, offer] = await Promise.all([
+        const [[auction], [bidding], offer] = await Promise.all([
             this.auctionRepository.query(`
             SELECT *
             FROM auction
@@ -97,7 +100,7 @@ export class OfferService {
             return "없는 경매입니다.";
         }
 
-        return { auction, bidding, offer };
+        return { auction, bidding, data: offer };
     }
 
     async joinRoom(data, clientId) {

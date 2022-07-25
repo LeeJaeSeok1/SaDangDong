@@ -9,7 +9,7 @@
     <link href="https://unpkg.com/vue-simple-notify/dist/vue-simple-notify.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://unpkg.com/vue-simple-notify/dist/vue-simple-notify.min.js"></script>
-    <script src="/socket.io/socket.io.js"></script>
+    <script src="http://localhost:3000/socket.io/socket.io.js"></script>
 </head>
 <body>
     <main id="v-app">
@@ -92,7 +92,7 @@
             created() {
                 this.username = prompt('Enter your username:');
                 
-                this.socket.chat = io('http://localhost:3001/chat');
+                this.socket.chat = io('http://localhost:3000/chat');
                 this.socket.chat.on('chatToClient', (msg) => {
                     this.receiveChatMessage(msg);
                 });
@@ -106,7 +106,7 @@
                 this.socket.chat.on('leftRoom', (room) => {
                     this.rooms[room] = false;
                 });
-                this.socket.alerts = io('http://localhost:3001/alert');
+                this.socket.alerts = io('http://localhost:3000/alert');
                 this.socket.alerts.on('alertToClient', (msg) => {
                     this.receiveAlertMessage(msg);
                 });

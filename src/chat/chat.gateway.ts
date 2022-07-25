@@ -1,45 +1,43 @@
-import { Logger, CACHE_MANAGER, CacheTTL,  UseInterceptors, HttpException, Inject, Injectable } from '@nestjs/common';
-import { OnGatewayInit, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
-import { Server, Socket } from 'socket.io';
-import { Cache } from 'cache-manager';
+import { Logger, CACHE_MANAGER, CacheTTL, UseInterceptors, HttpException, Inject, Injectable } from "@nestjs/common";
+import { OnGatewayInit, SubscribeMessage, WebSocketGateway, WebSocketServer } from "@nestjs/websockets";
+import { Server, Socket } from "socket.io";
+import { Cache } from "cache-manager";
 // import { HttpCacheInterceptor } from '../interceptor/http-cache.interceptor';
 
 @Injectable()
-@WebSocketGateway({ namespace: '/chat' })
+@WebSocketGateway({ namespace: "/chat", cors: { origin: "*" } })
 export class ChatGateway implements OnGatewayInit {
-  constructor(
-    @Inject(CACHE_MANAGER) private redisManager: Cache
-  ) {}
+    constructor(@Inject(CACHE_MANAGER) private redisManager: Cache) {}
 
-  @WebSocketServer() wss: Server;
+    @WebSocketServer() wss: Server;
 
-  private logger: Logger = new Logger('ChatGateway')
+    private logger: Logger = new Logger("ChatGateway");
 
-  afterInit(server: any) {
-    this.logger.log('Initialized!');
-  }
+    afterInit(server: any) {
+        this.logger.log("Initialized!");
+    }
 
-  // @CacheTTL(600)
-  // @UseInterceptors(HttpCacheInterceptor)
-  @SubscribeMessage('chatToServer')
-  async handleMessage(client: Socket, message: { sender: string, room: string, message: string}) {
-    this.wss.to(message.room).emit('chatToClient', message);
-    await this.redisManager.set('api: chat', message, { ttl: 60 });
-  }
+    // @CacheTTL(600)
+    // @UseInterceptors(HttpCacheInterceptor)
+    @SubscribeMessage("chatToServer")
+    async handleMessage(client: Socket, message: { sender: string; room: string; message: string }) {
+        console.log(message);
+        this.wss.to(message.room).emit("chatToClient", message);
+        await this.redisManager.set("api: chat", message, { ttl: 60 });
+    }
 
-  @SubscribeMessage('joinRoom')
-  handleJoinRoom(client: Socket, room: string) {
-    client.join(room);
-    client.emit('joinedRoom', room);
-  }
-  
-  @SubscribeMessage('leaveRoom')
-  handleLeaveRoom(client: Socket, room: string) {
-    client.leave(room);
-    client.emit('leftRoom', room);
-  }
+    @SubscribeMessage("joinRoom")
+    handleJoinRoom(client: Socket, room: string) {
+        client.join(room);
+        client.emit("joinedRoom", room);
+    }
+
+    @SubscribeMessage("leaveRoom")
+    handleLeaveRoom(client: Socket, room: string) {
+        client.leave(room);
+        client.emit("leftRoom", room);
+    }
 }
-
 
 // import { Logger } from '@nestjs/common';
 // import {
