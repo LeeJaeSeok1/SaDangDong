@@ -22,44 +22,56 @@ export class ItemsService {
 
     // 모든 아이템 보기
     findItem(): Promise<Item[]> {
-        const items = this.itemRepository.find();
-        return Object.assign({
-            statusCode: 200,
-            success: true,
-            statusMsg: "아이템들을 불러왔습니다.",
-            data: items,
-        });
+        try {
+            const items = this.itemRepository.find();
+            return Object.assign({
+                statusCode: 200,
+                success: true,
+                statusMsg: "아이템들을 불러왔습니다.",
+                data: items,
+            });
+        } catch (error) {
+            throw new BadRequestException(error.message);
+        }
     }
 
     // 특정아이템 보기
     async findByIdItem(token_id: string) {
-        return await this.itemRepository.findOne({ where: { token_id } });
+        try {
+            return await this.itemRepository.findOne({ where: { token_id } });
+        } catch (error) {
+            throw new BadRequestException(error.message);
+        }
     }
 
     // 아이템 상세보기
     async itemDetail(token_id: string) {
-        const item = await this.itemRepository.query(`
-        SELECT item.token_id, item.name, item.description, item.collection_name, item.address, item.image, user.profile_image, user.name AS user_name, favorites_relation.count AS favorites_count
-        FROM item, user, favorites_relation
-        WHERE item.token_id = ${token_id}
-        AND item.owner = user.address
-        AND item.token_id = favorites_relation.token_id
-        `);
-        return Object.assign({
-            statusCode: 200,
-            success: true,
-            statusMsg: "아이템을 불러 왔습니다.",
-            data: item,
-        });
+        try {
+            const item = await this.itemRepository.query(`
+            SELECT item.token_id, item.name, item.description, item.collection_name, item.address, item.image, item.ipfsImage, user.profile_image, user.name AS user_name, favorites_relation.count AS favorites_count
+            FROM item, user, favorites_relation
+            WHERE item.token_id = ${token_id}
+            AND item.owner = user.address
+            AND item.token_id = favorites_relation.token_id
+            `);
+            return Object.assign({
+                statusCode: 200,
+                success: true,
+                statusMsg: "아이템을 불러 왔습니다.",
+                data: item,
+            });
+        } catch (error) {
+            throw new BadRequestException(error.message);
+        }
     }
 
     // 유저 컬렉션 불러오기
     async findColleciton(address: string) {
         try {
-            const collection = await this.collectionRepository.find({
-                where: { address: address },
-                select: ["name"],
-            });
+            const collection = await this.collectionRepository.query(`
+            SELECT collection.name
+            FROM collection
+            WHERE collection.address = "${address}"`);
             return Object.assign({
                 statusCode: 200,
                 success: true,
@@ -72,9 +84,11 @@ export class ItemsService {
     }
 
     // 아이템 생성
-    async createItem(files: Express.Multer.File[], obj, address: string) {
+    async createItem(files: Express.Multer.File[], itemData, address: string) {
         try {
-            const user = await this.userRepository.findOne({ where: { address } });
+            const json = itemData.itemInfo;
+            // console.log(json, "json");
+            const obj = JSON.parse(json);
             const uploadeImages = [];
             let element;
             if (files) {
@@ -98,12 +112,19 @@ export class ItemsService {
             createItem.owner = address;
             await this.itemRepository.save(createItem);
 
+            // const newItem = await this.itemRepository.query(`
+            // INSERT INTO item (token_id, name, description, collection_name, ipfsJson, ipfsImage, image, address, owner)
+            // VALUES ("${obj.token_id}", "${obj.name}", "${obj.description}", "${obj.collection_name}", "${obj.ipfsJson}", "${obj.ipfsImage}", "${element.location}", "${address}", "${address}")
+            // `);
+
             const favoritesCount = new Favorites_Relation();
-            favoritesCount.token_id = createItem.token_id;
+            favoritesCount.token_id = obj.token_id;
             favoritesCount.count = 0;
             await this.favoritesRelationRepository.save(favoritesCount);
             // return createItem;
 
+            // 0xfb6c2f43d42d39b88fdb964856eb8ec00ff79016;
+            // 0xa9f0571052289ed8d731d511ede36ece3df3d0d1;
             return Object.assign({
                 statusCode: 201,
                 success: true,
@@ -128,15 +149,19 @@ export class ItemsService {
 
     // 아이템 삭제
     async deleteItem(id: string, address: string) {
-        const exisItem = await this.findByIdItem(id);
-        if (exisItem.owner !== address) {
-            throw new BadRequestException(`본인만 삭제 가능합니다.`);
+        try {
+            const exisItem = await this.findByIdItem(id);
+            if (exisItem.owner !== address) {
+                throw new BadRequestException(`본인만 삭제 가능합니다.`);
+            }
+            await this.itemRepository.delete(id);
+            return Object.assign({
+                statusCode: 201,
+                success: true,
+                statusMsg: "아이템을 삭제 했습니다.",
+            });
+        } catch (error) {
+            throw new BadRequestException(error.message);
         }
-        await this.itemRepository.delete(id);
-        return Object.assign({
-            statusCode: 201,
-            success: true,
-            statusMsg: "아이템을 삭제 했습니다.",
-        });
     }
 }
