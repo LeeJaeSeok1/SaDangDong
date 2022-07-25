@@ -9,50 +9,38 @@ import {
     WebSocketServer,
 } from "@nestjs/websockets";
 import { Server, Socket } from "socket.io";
-import { Logger } from "@nestjs/common";
+import { Controller, Get, Post, Body, Patch, Param, Delete, Logger } from "@nestjs/common";
 import { onlineMap } from "./onlineMap";
-import { Injectable, NotFoundException } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
-import { Auction } from "src/auctions/entities/auction.entity";
-import { Bidding } from "src/offer/entities/bidding.entity";
-import { Offer } from "./entities/offer.entity";
+import { OfferService } from "./offer.service";
 
-@WebSocketGateway(8080, { namespace: "/offer" })
-export class OfferGateway implements OnGatewayInit {
-    constructor(
-        @InjectRepository(Auction)
-        private auctionRepository: Repository<Auction>,
-        @InjectRepository(Bidding)
-        private biddingRepository: Repository<Bidding>,
-        @InjectRepository(Offer)
-        private offerRepository: Repository<Offer>,
-    ) {}
+@WebSocketGateway({ cors: { origin: "*" } })
+export class OfferGateway {
+    @WebSocketServer() server: Server;
 
-    @WebSocketServer() wss: Server;
+    constructor(private readonly offerService: OfferService) {}
 
-    private logger: Logger = new Logger("OfferGateway");
+    @SubscribeMessage("OffertoServer")
+    async create(@MessageBody() offer: string) {
+        const myoffer = await this.offerService.create();
 
-    afterInit(server: any) {
-        this.logger.log("Initialized!");
+        // this.server.emit('offer', offer);
+        return myoffer;
     }
 
-    @SubscribeMessage("OfferToServer")
-    handleMessage(client: Socket, message: { sender: string; room: string; offer: number }) {
-        console.log(message);
-        this.wss.to(message.room).emit("OfferToClient", message);
+    @SubscribeMessage("findAllOffers")
+    findAll() {
+        return this.offerService.findAll();
     }
 
-    @SubscribeMessage("joinOfferRoom")
-    handleRoomJoin(client: Socket, room: string) {
-        console.log(room);
-        client.join(room);
-        client.emit("joinedRoom", room);
+    @SubscribeMessage("join")
+    joinRoom(@MessageBody("name") name: string, @ConnectedSocket() client: Socket) {
+        return this.offerService.indentify(name, client.id);
     }
 
-    @SubscribeMessage("leaveOfferRoom")
-    handleRoomLeave(client: Socket, room: string) {
-        client.leave(room);
-        client.emit("leftRoom", room);
+    @SubscribeMessage("typiing")
+    async typing(@MessageBody("isTyping") isTyping: boolean, @ConnectedSocket() client: Socket) {
+        const name = await this.offerService.getClientName(client.id);
+
+        client.broadcast.emit("typing", { name, isTyping });
     }
 }
