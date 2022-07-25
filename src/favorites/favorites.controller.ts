@@ -3,10 +3,8 @@ import { FavoritesService } from "./favorites.service";
 import { ApiOperation } from "@nestjs/swagger";
 import { TransformInterceptor } from "src/config/transform.interceptor";
 import { AuthToken } from "src/config/auth.decorator";
-import { HttpExceptionFilter } from "src/config/httpExcception.filter";
 
 @Controller("/api/favorites")
-@UseFilters(new HttpExceptionFilter())
 export class FavoritesController {
     constructor(private favoritesService: FavoritesService) {}
 

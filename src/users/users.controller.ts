@@ -19,10 +19,8 @@ import { TransformInterceptor } from "src/config/transform.interceptor";
 import { AuthToken } from "src/config/auth.decorator";
 import { FilesInterceptor } from "@nestjs/platform-express";
 import { storage } from "src/config/multerS3.config";
-import { HttpExceptionFilter } from "src/config/httpExcception.filter";
 
 @ApiTags("Account")
-@UseFilters(new HttpExceptionFilter())
 @Controller("api/account")
 export class UsersController {
     constructor(private usersService: UsersService) {}
@@ -54,8 +52,13 @@ export class UsersController {
         description: "유저 collection, item, favorites 페이지",
     })
     @Get(":id")
-    getUserInfo(@Param("id") id: string, @Query("tab") tab: string) {
-        return this.usersService.userInfo(id, tab);
+    getUserInfo(
+        @Param("id") id: string,
+        @Query("tab") tab: string,
+        @Query("_page") _page: number,
+        @Query("_limit") _limit: number,
+    ) {
+        return this.usersService.userInfo(id, tab, _page, _limit);
     }
 
     @ApiOperation({ summary: "회원수정 페이지" })

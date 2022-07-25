@@ -20,10 +20,8 @@ import { AuthToken } from "src/config/auth.decorator";
 import { TransformInterceptor } from "src/config/transform.interceptor";
 import { storage } from "src/config/multerS3.config";
 import { FilesInterceptor } from "@nestjs/platform-express";
-import { HttpExceptionFilter } from "src/config/httpExcception.filter";
 
 @ApiTags("Collections")
-@UseFilters(new HttpExceptionFilter())
 @Controller("api/collections")
 export class CollectionsController {
     constructor(private readonly collectionsService: CollectionsService) {}
