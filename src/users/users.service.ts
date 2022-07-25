@@ -7,6 +7,7 @@ import { User } from "./entities/user.entity";
 import { ImageUpload } from "src/images/entities/image.entity";
 import { Favorites } from "src/favorites/entities/favorites.entity";
 import { Auction } from "src/auctions/entities/auction.entity";
+import { Offset } from "src/plug/pagination.function";
 
 @Injectable()
 export class UsersService {
@@ -115,25 +116,57 @@ export class UsersService {
     }
 
     // 회원 페이지
-    async userInfo(id: string, tab: string) {
+    async userInfo(id: string, tab: string, _page: number, _limit: number) {
         try {
+            const start = Offset(_page, _limit);
+
             let information;
             if (tab === "collection") {
-                information = await this.collectionRepository.find({ where: { address: id } });
+                information = await this.collectionRepository.query(`
+                SELECT DISTINCT collection.name, collection.description, collection.feature_image, collection.created_at,
+                user.name AS user_name, user.profile_image
+                FROM collection, user
+                WHERE collection.address = "${id}"
+                ORDER BY collection.created_at DESC
+                LIMIT 100
+                `);
             }
             if (tab === "item") {
-                information = await this.itemRepository.find({ where: { address: id } });
+                information = await this.itemRepository.query(`
+                SELECT DISTINCT item.token_id, item.name, item.address, item.image, user.name AS user_name,
+                favorites_relation.count, item.created_at
+                FROM item, user, favorites_relation
+                WHERE item.owner = "${id}"
+                AND item.token_id = favorites_relation.token_id
+                ORDER BY item.created_at DESC
+                LIMIT ${start}, ${_limit}
+                `);
             }
             if (tab === "favorites") {
-                information = await this.favoritesRepository.query(
-                    `SELECT * 
-                    FROM item I LEFT OUTER JOIN favorites F ON I.token_id = F.token_id 
-                    WHERE F.address = "${id}" `,
-                );
+                information = await this.favoritesRepository.query(`
+                SELECT item.token_id, item.name, item.address, item.image,
+                user.name AS user_name, favorites_relation.count
+                FROM item, user, favorites, favorites_relation
+                WHERE item.owner = "${id}"
+                AND item.owner = user.address
+                AND item.token_id = favorites.token_id
+                AND item.token_id = favorites_relation.token_id
+                AND favorites.address = "${id}"
+                AND favorites.isFavorites = true
+                ORDER BY item.created_at DESC
+                `);
             }
 
             if (tab === "auction") {
-                information = await this.auctionRepository.find({ where: {} });
+                information = await this.auctionRepository.query(`
+                SELECT item.token_id, item.name, item.address, item.image, user.name AS user_name, favorites_relation.count, auction.id AS auction_id, auction.ended_at
+                FROM auction, item, user, favorites_relation
+                WHERE item.address = "${id}"
+                AND item.token_id = favorites_relation.token_id
+                AND auction.token_id = item.token_id
+                AND auction.progress = true
+                ORDER BY auction.started_at DESC
+                `);
             }
 
             return Object.assign({
