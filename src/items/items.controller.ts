@@ -39,11 +39,9 @@ export class ItemsController {
             // console.log("body", itemData);
             // console.log("user", addressId);
             // console.log("itemDate", itemData);
-            const json = itemData.itemInfo;
-            // console.log(json, "json");
-            const obj = JSON.parse(json);
 
-            return this.itemsService.createItem(files, obj, address);
+            return this.itemsService.createItem(files, itemData, address);
+
         } catch (error) {
             console.log("컨트롤러", error.message);
             throw new BadRequestException(error.message);
@@ -51,9 +49,8 @@ export class ItemsController {
     }
 
     // 유저의 컬렉션 가져오기
-    @ApiOperation({ summary: "아이템 민팅", description: "아이템 민팅 페이지" })
-    @Get("minting")
-    @UsePipes(TransformInterceptor)
+    @ApiOperation({ summary: "유저 컬렉션 받아오기" })
+    @Get("collections")
     getCollection(@AuthToken() address: string) {
         // console.log("아이템민팅컬렉션", address);
         return this.itemsService.findColleciton(address);

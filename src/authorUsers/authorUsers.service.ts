@@ -19,51 +19,51 @@ export class AuthorUsersService {
         private userRepository: Repository<User>,
     ) {}
 
-    async authorInfo(tab: string, address: string) {
-        try {
-            console.log(tab, address);
-            const userInfo = await this.userRepository.query(`
-            SELECT name, profile_image, banner_image
-            FROM user
-            WHERE user.address = "${address}"
-            `);
-            let information;
-            console.log(userInfo);
-            if (tab === "collection") {
-                information = await this.collectionRepository.query(`
-                SELECT *
-                FROM (
-                    SELECT collection.description, collection.name, collection.feature_image, collection.address, user.name AS user_name, user.profile_image
-                    FROM collection, user
-                    WHERE collection.address = user.address)
-                as g
-                WHERE g.address = "${address}";
-                `);
-            }
-            if (tab === "item") {
-                information = await this.itemRepository.query(`
-                SELECT *
-                FROM  (
-                SELECT item.*, user.name AS user_name
-                FROM item, user
-                WHERE item.owner = user.address
-                ) as g 
-                WHERE g.owner = "${address}"
-                `);
-            }
-            console.log(information);
-            // if (tab === "auction") {
-            // }
+    // async authorInfo(tab: string, address: string) {
+    //     try {
+    //         console.log(tab, address);
+    //         const userInfo = await this.userRepository.query(`
+    //         SELECT name, profile_image, banner_image
+    //         FROM user
+    //         WHERE user.address = "${address}"
+    //         `);
+    //         let information;
+    //         console.log(userInfo);
+    //         if (tab === "collection") {
+    //             information = await this.collectionRepository.query(`
+    //             SELECT *
+    //             FROM (
+    //                 SELECT collection.description, collection.name, collection.feature_image, collection.address, user.name AS user_name, user.profile_image
+    //                 FROM collection, user
+    //                 WHERE collection.address = user.address)
+    //             as g
+    //             WHERE g.address = "${address}";
+    //             `);
+    //         }
+    //         if (tab === "item") {
+    //             information = await this.itemRepository.query(`
+    //             SELECT *
+    //             FROM  (
+    //             SELECT item.*, user.name AS user_name
+    //             FROM item, user
+    //             WHERE item.owner = user.address
+    //             ) as g
+    //             WHERE g.owner = "${address}"
+    //             `);
+    //         }
+    //         console.log(information);
+    //         // if (tab === "auction") {
+    //         // }
 
-            return Object.assign({
-                statusCode: 200,
-                success: true,
-                statusMsg: "유저의 정보를 불러왓습니다.",
-                data: information,
-                userInfo,
-            });
-        } catch (error) {
-            console.log(error.message);
-        }
-    }
+    //         return Object.assign({
+    //             statusCode: 200,
+    //             success: true,
+    //             statusMsg: "유저의 정보를 불러왓습니다.",
+    //             data: information,
+    //             userInfo,
+    //         });
+    //     } catch (error) {
+    //         console.log(error.message);
+    //     }
+    // }
 }
