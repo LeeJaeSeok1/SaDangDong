@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository, TreeRepository } from "typeorm";
 import { Auction } from "src/auctions/entities/auction.entity";
@@ -74,33 +74,39 @@ export class OfferService {
                 this.biddingRepository.update(bidding.id, bidding),
             ]);
             return { bidding, newOffer };
-        } catch (error) {}
+        } catch (error) {
+            throw new BadRequestException(error.message);
+        }
     }
 
     async findAllOffer(address, auction_id) {
-        console.log(address, auction_id);
-        const [[auction], [bidding], offer] = await Promise.all([
-            this.auctionRepository.query(`
-            SELECT *
-            FROM auction
-            WHERE id = ${auction_id}
-            `),
-            this.biddingRepository.query(`
-            SELECT *
-            FROM Bidding
-            WHERE id = ${auction_id}
-            `),
-            this.offerRepository.query(`
-            SELECT *
-            FROM Offer
-            WHERE auctionId = ${auction_id}
-            `),
-        ]);
-        if (!auction) {
-            return "없는 경매입니다.";
-        }
+        try {
+            console.log(address, auction_id);
+            const [[auction], [bidding], offer] = await Promise.all([
+                this.auctionRepository.query(`
+                SELECT *
+                FROM auction
+                WHERE id = ${auction_id}
+                `),
+                this.biddingRepository.query(`
+                SELECT *
+                FROM Bidding
+                WHERE id = ${auction_id}
+                `),
+                this.offerRepository.query(`
+                SELECT *
+                FROM Offer
+                WHERE auctionId = ${auction_id}
+                `),
+            ]);
+            if (!auction) {
+                return "없는 경매입니다.";
+            }
 
-        return { auction, bidding, data: offer };
+            return { auction, bidding, data: offer };
+        } catch (error) {
+            throw new BadRequestException(error.message);
+        }
     }
 
     async joinRoom(data, clientId) {
