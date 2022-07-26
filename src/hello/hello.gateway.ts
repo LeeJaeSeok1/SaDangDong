@@ -21,11 +21,12 @@ import {
 import { Server, Socket } from "socket.io";
 import { Cache } from "cache-manager";
 import { onlineMap } from "./onlineMap";
-// import { HttpCacheInterceptor } from '../interceptor/http-cache.interceptor';
+import { HelloService } from "./hello.service";
 
 @Controller("api")
 @WebSocketGateway({ namespace: "/hello", cors: { origin: "*" } })
 export class HelloGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
+    constructor(private helloService: HelloService) {}
     @WebSocketServer() public server: Server;
 
     afterInit(server: Server): any {
