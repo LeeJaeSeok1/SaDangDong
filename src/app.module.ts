@@ -20,6 +20,7 @@ import { ChatModule } from "./chat/chat.module";
 import { AuthorUsersModule } from "./authorUsers/authorUsers.module";
 import { FavoritesModule } from "./favorites/favorites.module";
 import { OfferModule } from "./offer/offer.module";
+import { HelloModule } from "./hello/hello.module";
 
 @Module({
     imports: [
@@ -46,6 +47,7 @@ import { OfferModule } from "./offer/offer.module";
         ImagesModule,
         AuthorUsersModule,
         OfferModule,
+        HelloModule,
     ],
     controllers: [AppController],
     providers: [AppService, { provide: APP_PIPE, useClass: ValidationPipe }],
