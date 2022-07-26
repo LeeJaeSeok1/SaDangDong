@@ -26,7 +26,7 @@ export class SearchService {
             console.log(name);
             console.log(typeof name, "서비스 타입");
             console.log(_page, _limit);
-            let start = Offset(_page, _limit);
+            const start = Offset(_page, _limit);
             let information;
 
             if (tab === "collection") {
