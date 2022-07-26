@@ -25,7 +25,7 @@ export class OfferService {
         } catch (error) {}
     }
 
-    async createOffer(address, data, auction_id) {
+    async createOffer(address, price, mycoin, auction_id) {
         try {
             const [[auction], [bidding]] = await Promise.all([
                 this.auctionRepository.query(`
@@ -42,31 +42,31 @@ export class OfferService {
             if (!auction) {
                 return "없는 경매입니다.";
             }
-            if (bidding.price >= data.price) {
+            if (bidding.price >= price) {
                 return "현재 최고가보다 작습니다.";
             }
-            const price = await this.biddingRepository.query(`
+            const totalbidding = await this.biddingRepository.query(`
             SELECT bidding.*
             FROM bidding, auction
             WHERE auction.progress = true
             WHERE auction.id = bidding.auction_id
             WHERE Bidding.address = ${address}
             `);
-            let total = data.price;
-            for (let i = 0; i < price.length; i++) {
-                total += price[i].price;
+            let total = price;
+            for (let i = 0; i < totalbidding.length; i++) {
+                total += totalbidding[i].price;
             }
 
-            if (total > data.mycoin) {
+            if (total > mycoin) {
                 return "현재 지갑의 보유량보다 경매에 참여한 보유량이 더 많습니다.";
             }
 
             const newOffer = new Offer();
-            newOffer.price = data.price;
+            newOffer.price = price;
             newOffer.auctionId = auction_id;
             newOffer.address = address;
 
-            bidding.price = data.price;
+            bidding.price = price;
             bidding.address = address;
 
             await Promise.all([

@@ -18,10 +18,10 @@ export class OfferGateway implements OnGatewayInit, OnGatewayConnection, OnGatew
     @WebSocketServer() server: Server;
 
     @SubscribeMessage("sendOffer")
-    async handleSendMessage(client: Socket, { address, data, auction_id }): Promise<void> {
-        const newData = await this.offerService.createOffer(address, data, auction_id);
+    async handleSendMessage(client: Socket, { address, price, mycoin, auction_id }): Promise<void> {
+        const newData = await this.offerService.createOffer(address, price, mycoin, auction_id);
         // data : {price, mycoin}
-        await this.server.to(`${auction_id}`).emit("recMessage", newData);
+        await this.server.to(`${auction_id}`).emit("recOffer", newData);
     }
 
     @SubscribeMessage("joinRoom")
