@@ -54,7 +54,13 @@ export class OfferGateway implements OnGatewayInit, OnGatewayConnection, OnGatew
     async handleSendMessage(client: Socket, { address, data, auction_id }): Promise<void> {
         await this.offerService.createOffer(address, data, auction_id);
         // data : {price, mycoin}
-        this.server.emit("recMessage", data);
+        await this.server.to(auction_id).emit("recMessage", data);
+    }
+
+    @SubscribeMessage("joinRoom")
+    handleJoinRoom(client: Socket, room: string) {
+        client.join(room);
+        client.emit("joinedRoom", room);
     }
 
     afterInit(server: Server) {
