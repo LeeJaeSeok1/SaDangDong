@@ -69,7 +69,8 @@ export class ItemsService {
             item.collection_name, collection.description AS collection_description, 
             user.name AS user_name, user.profile_image, 
             favorites_relation.count AS favorites_count,
-            auction.progress AS auction_progress, auction.price AS auction_price, auction.ended_at AS auction_endedAt
+            auction.progress AS auction_progress, auction.price AS auction_price, auction.ended_at AS auction_endedAt,
+            auction.id AS auction_id
             FROM item, user, favorites_relation, collection, auction
             WHERE item.token_id = ${token_id}
             AND item.token_id = auction.token_id
