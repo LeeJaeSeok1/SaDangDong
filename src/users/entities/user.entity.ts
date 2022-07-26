@@ -18,7 +18,7 @@ export class User {
     @PrimaryColumn({ unique: true })
     address: string;
 
-    @Column({ nullable: true, default: "unnamed" })
+    @Column({ unique: true })
     name: string;
 
     @Column({

@@ -6,6 +6,7 @@ import { Item } from "src/items/entities/item.entity";
 import { Auction } from "src/auctions/entities/auction.entity";
 import { User } from "src/users/entities/user.entity";
 import { Offset } from "src/plug/pagination.function";
+import { date_calculate } from "src/plug/caculation.function";
 
 @Injectable()
 export class SearchService {
@@ -38,7 +39,7 @@ export class SearchService {
                 WHERE collection.address = user.address
                 AND collection.name like "%${name}%" 
                 ORDER BY collection.created_at DESC
-                LIMIT 100
+                LIMIT ${start}, ${_limit}
                 `);
                 console.log(information);
             }
@@ -66,8 +67,13 @@ export class SearchService {
                 AND auction.token_id = item.token_id
                 AND auction.progress = true
                 ORDER BY auction.started_at DESC
-                LIMIT 100
+                LIMIT ${start}, ${_limit}
                 `);
+                information.forEach((element) => {
+                    const remained_at = date_calculate(element.ended_at);
+                    element.remained_at = remained_at;
+                });
+
                 console.log(information);
             }
             return Object.assign({

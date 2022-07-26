@@ -8,6 +8,7 @@ import { ImageUpload } from "src/images/entities/image.entity";
 import { Favorites } from "src/favorites/entities/favorites.entity";
 import { Auction } from "src/auctions/entities/auction.entity";
 import { Offset } from "src/plug/pagination.function";
+import { userName } from "src/plug/userName.function";
 
 @Injectable()
 export class UsersService {
@@ -33,6 +34,7 @@ export class UsersService {
             if (!existUser) {
                 const user = new User();
                 user.address = address;
+                user.name = userName();
                 await this.userRepository.save(user);
                 return Object.assign({
                     statusCode: 201,
