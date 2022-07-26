@@ -57,8 +57,7 @@ export class ExploreService {
 
             if (tab === "item") {
                 information = await this.itemRepository.query(`
-                SELECT DISTINCT item.token_id, item.name, item.address, item.image, item.created_at,
-                user.name AS user_name, favorites_relation.count
+                SELECT DISTINCT item.token_id, item.name, item.address, item.image, item.created_at, user.name AS user_name, favorites_relation.count
                 FROM item, user, favorites_relation
                 WHERE item.address = user.address
                 AND item.token_id = favorites_relation.token_id
@@ -69,8 +68,7 @@ export class ExploreService {
 
             if (tab === "auction") {
                 information = await this.auctionRepository.query(`
-                SELECT DISTINCT item.token_id, item.name, item.address, item.image, auction.started_at,
-                user.name AS user_name, favorites_relation.count, auction.id AS auction_id, auction.ended_at
+                SELECT DISTINCT item.token_id, item.name, item.address, item.image, auction.started_at, user.name AS user_name, favorites_relation.count, auction.id AS auction_id, auction.ended_at
                 FROM auction, item, user, favorites_relation
                 WHERE item.address = user.address
                 AND item.token_id = favorites_relation.token_id
@@ -81,8 +79,8 @@ export class ExploreService {
                 `);
 
                 information.forEach((element) => {
-                    const remained_at = date_calculate(element.ended_at);
-                    element.remained_at = remained_at;
+                    const ended_at = date_calculate(element.ended_at);
+                    element.ended_at = ended_at;
                 });
             }
 

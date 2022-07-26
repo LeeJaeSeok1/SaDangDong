@@ -33,8 +33,7 @@ export class SearchService {
             if (tab === "collection" || tab === undefined) {
                 console.log(1);
                 information = await this.collectionRepository.query(`
-                SELECT collection.name, collection.description, collection.feature_image, collection.created_at,
-                user.name AS user_name, user.profile_image
+                SELECT collection.name, collection.description, collection.feature_image, collection.created_at, user.name AS user_name, user.profile_image
                 FROM collection, user
                 WHERE collection.address = user.address
                 AND collection.name like "%${name}%" 
@@ -46,7 +45,7 @@ export class SearchService {
 
             if (tab === "item") {
                 information = await this.itemRepository.query(`
-                SELECT item.name, item.address, item.image, item.created_at, user.name AS user_name, favorites_relation.count
+                SELECT DISTINCT item.name, item.address, item.image, item.created_at, user.name AS user_name, favorites_relation.count
                 FROM item, user, favorites_relation
                 WHERE item.address = user.address
                 AND item.name like '%${name}%' 
@@ -59,7 +58,7 @@ export class SearchService {
 
             if (tab === "auction") {
                 information = await this.auctionRepository.query(`
-                SELECT item.token_id, item.name, item.address, item.image, user.name AS user_name, favorites_relation.count, auction.id AS auction_id, auction.ended_at
+                SELECT DISTINCT item.token_id, item.name, item.address, item.image, user.name AS user_name, favorites_relation.count, auction.id AS auction_id, auction.ended_at, auction.started_at
                 FROM auction, item, user, favorites_relation
                 WHERE item.address = user.address
                 AND item.name like '%${name}%'
@@ -70,8 +69,8 @@ export class SearchService {
                 LIMIT ${start}, ${_limit}
                 `);
                 information.forEach((element) => {
-                    const remained_at = date_calculate(element.ended_at);
-                    element.remained_at = remained_at;
+                    const ended_at = date_calculate(element.ended_at);
+                    element.ended_at = ended_at;
                 });
 
                 console.log(information);
