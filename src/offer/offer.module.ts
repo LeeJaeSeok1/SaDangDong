@@ -6,11 +6,12 @@ import { OfferGateway } from "./offer.gateway";
 import { Auction } from "src/auctions/entities/auction.entity";
 import { OfferService } from "./offer.service";
 import { User } from "src/users/entities/user.entity";
+import { OfferController } from "./offer.controller";
 
 @Module({
     imports: [TypeOrmModule.forFeature([Offer, Bidding, Auction, User])],
     exports: [TypeOrmModule],
-    controllers: [],
-    providers: [OfferGateway, OfferService],
+    controllers: [OfferController],
+    providers: [OfferService, OfferGateway],
 })
 export class OfferModule {}
