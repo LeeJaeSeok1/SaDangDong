@@ -117,20 +117,22 @@ export class UsersService {
             let information;
             if (tab === "collection") {
                 information = await this.collectionRepository.query(`
-                SELECT DISTINCT collection.name, collection.description, collection.feature_image, collection.created_at,
+                SELECT collection.name, collection.description, collection.feature_image, collection.created_at,
                 user.name AS user_name, user.profile_image
                 FROM collection, user
                 WHERE collection.address = "${id}"
+                AND collection.address = user.address
                 ORDER BY collection.created_at DESC
                 LIMIT 100
                 `);
             }
             if (tab === "item") {
                 information = await this.itemRepository.query(`
-                SELECT DISTINCT item.token_id, item.name, item.address, item.image, user.name AS user_name,
+                SELECT item.token_id, item.name, item.address, item.image, user.name AS user_name,
                 favorites_relation.count, item.created_at
                 FROM item, user, favorites_relation
                 WHERE item.owner = "${id}"
+                AND item.owner = user.address
                 AND item.token_id = favorites_relation.token_id
                 ORDER BY item.created_at DESC
                 LIMIT ${start}, ${_limit}

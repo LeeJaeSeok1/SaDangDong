@@ -26,16 +26,17 @@ export class SearchService {
             console.log(name);
             console.log(typeof name, "서비스 타입");
             console.log(_page, _limit);
-            let start = Offset(_page, _limit);
+            const start = Offset(_page, _limit);
             let information;
 
-            if (tab === "collection") {
+            if (tab === "collection" || tab === undefined) {
+                console.log(1);
                 information = await this.collectionRepository.query(`
-                SELECT DISTINCT collection.name, collection.description, collection.feature_image, collection.created_at,
+                SELECT collection.name, collection.description, collection.feature_image, collection.created_at,
                 user.name AS user_name, user.profile_image
                 FROM collection, user
-                WHERE collection.name like "%${name}%" 
-                AND collection.address = user.address
+                WHERE collection.address = user.address
+                AND collection.name like "%${name}%" 
                 ORDER BY collection.created_at DESC
                 LIMIT 100
                 `);
@@ -44,11 +45,10 @@ export class SearchService {
 
             if (tab === "item") {
                 information = await this.itemRepository.query(`
-                SELECT DISTINCT item.name, item.address, item.image, item.created_at,
-                user.name AS user_name, favorites_relation.count
+                SELECT item.name, item.address, item.image, item.created_at, user.name AS user_name, favorites_relation.count
                 FROM item, user, favorites_relation
-                WHERE item.name like '%${name}%' 
-                AND item.address = user.address
+                WHERE item.address = user.address
+                AND item.name like '%${name}%' 
                 AND item.token_id = favorites_relation.token_id
                 ORDER BY item.created_at DESC
                 LIMIT ${start}, ${_limit}
@@ -60,8 +60,8 @@ export class SearchService {
                 information = await this.auctionRepository.query(`
                 SELECT item.token_id, item.name, item.address, item.image, user.name AS user_name, favorites_relation.count, auction.id AS auction_id, auction.ended_at
                 FROM auction, item, user, favorites_relation
-                WHERE item.name like '%${name}%'
-                AND item.address = user.address
+                WHERE item.address = user.address
+                AND item.name like '%${name}%'
                 AND item.token_id = favorites_relation.token_id
                 AND auction.token_id = item.token_id
                 AND auction.progress = true
