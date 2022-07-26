@@ -15,7 +15,7 @@ export class AuctionsController {
         description: "경매에 아이템 등록하기",
     })
     @Post(":token_id")
-    createAuction(@Param("token_id") token_id: string, @AuthToken() address: string, @Body() price) {
+    createAuction(@Param("token_id") token_id: string, @AuthToken() address: string, @Body() price: any) {
         console.log(price);
         console.log(typeof price);
         return this.auctionsService.startAuction(token_id, price, address);

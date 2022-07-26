@@ -22,7 +22,7 @@ export class AuctionsService {
         private biddingRepository: Repository<Bidding>,
     ) {}
 
-    async startAuction(token_id: string, price, address: string) {
+    async startAuction(token_id: string, price: any, address: string) {
         try {
             const NFTtoken = await this.itemRepository.query(`
             SELECT item.token_id
