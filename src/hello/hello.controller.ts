@@ -7,17 +7,8 @@ import { ApiOperation, ApiTags, ApiQuery } from "@nestjs/swagger";
 export class HelloController {
     constructor(private readonly helloService: HelloService) {}
 
-    // @ApiQuery({
-    //     name: "tab",
-    //     required: true,
-    //     description: "tab = collection, item, favorites",
-    // })
-    // @ApiOperation({
-    //     summary: "다른 유저 컬렉션 보기",
-    //     description: "다른 유저 컬렉션 보기 페이지",
-    // })
-    // @Get(":address")
-    // getAuthorInfo(@Param("address") address: string, @Query("tab") tab: string) {
-    //     return this.authorUsersService.authorInfo(tab, address);
-    // }
+    @Get(":auction_id")
+    findAllMessages(@Param(":auction_id") auction_id: number) {
+        return this.helloService.findAllMessages(auction_id);
+    }
 }
