@@ -28,13 +28,16 @@ export class HelloGateway implements OnGatewayInit, OnGatewayConnection, OnGatew
     @WebSocketServer() public server: Server;
 
     @SubscribeMessage("sendMessage")
-    async handleSendMessage(client: Socket, data: createMessageDto): Promise<void> {
-        await this.helloService.createMessage(data);
-        this.server.to(data.auction_id).emit("recMessage", data);
+    handleSendMessage(client: Socket, data: createMessageDto) {
+        console.log(data, "date");
+        this.helloService.createMessage(data);
+        this.server.to(`${data.auction_id}`).emit("recMessage", data);
     }
 
     @SubscribeMessage("joinRoom")
     joinRoom(client: Socket, room) {
+        console.log(room, "room");
+        console.log(typeof room);
         client.join(room);
     }
 
