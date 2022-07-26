@@ -3,7 +3,7 @@ import { HelloGateway } from "./hello.gateway";
 
 @Module({
     imports: [],
-    controllers: [],
-    providers: [HelloGateway],
+    controllers: [HelloGateway],
+    providers: [],
 })
 export class HelloModule {}
