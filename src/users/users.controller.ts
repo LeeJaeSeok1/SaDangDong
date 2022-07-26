@@ -67,6 +67,8 @@ export class UsersController {
     @UseInterceptors(FilesInterceptor("files", 2, { storage: storage }))
     @UsePipes(TransformInterceptor)
     async setting(@Body() userData, @AuthToken() address: string, @UploadedFiles() files: Express.Multer.File[]) {
+        console.log(userData);
+        console.log(files);
         return this.usersService.settingUser(userData, address, files);
     }
 

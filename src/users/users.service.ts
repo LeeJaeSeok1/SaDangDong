@@ -74,7 +74,7 @@ export class UsersService {
             if (existUser.address !== address) {
                 throw new NotFoundException(`본인만 수정 가능합니다.`);
             }
-            const json = userData.userInfo;
+            const json = userData.fileInfo;
             const obj = JSON.parse(json);
             // 이미지 저장
             const uploadeImages = [];
@@ -89,12 +89,8 @@ export class UsersService {
                     file.url = element.location;
                     uploadeImages.push(file);
 
-                    if (file.originalName === "profileImg") {
+                    if (file.originalName === "profile_Img") {
                         profileImage = file.url;
-                    }
-
-                    if (file.originalName === "bennerImg") {
-                        bennerImage = file.url;
                     }
                 }
             }
@@ -108,7 +104,7 @@ export class UsersService {
                 statusCode: 201,
                 success: true,
                 statusMsg: "수정이 완료 됐습니다.",
-                datea: existUser,
+                data: existUser,
             });
         } catch (error) {
             throw new BadRequestException(error.message);
