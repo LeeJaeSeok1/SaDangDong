@@ -8,6 +8,7 @@ import { User } from "src/users/entities/user.entity";
 import { Favorites_Relation } from "src/favorites/entities/favorites_relation.entity";
 import { Favorites } from "src/favorites/entities/favorites.entity";
 import { Offset } from "src/plug/pagination.function";
+import { date_calculate } from "src/plug/caculation.function";
 
 @Injectable()
 export class ExploreService {
@@ -78,8 +79,14 @@ export class ExploreService {
                 ORDER BY auction.started_at DESC
                 LIMIT ${start}, ${_limit}
                 `);
+
+                information.forEach((element) => {
+                    const remained_at = date_calculate(element.ended_at);
+                    element.remained_at = remained_at;
+                });
             }
-            // console.log(information);
+
+            console.log(information);
 
             return Object.assign({
                 statusCode: 200,
