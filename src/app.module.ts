@@ -17,7 +17,6 @@ import { UsersModule } from "./users/users.module";
 import { ItemsModule } from "./items/items.module";
 import { SellModule } from "./sell/sell.module";
 import { ChatModule } from "./chat/chat.module";
-import { AuthorUsersModule } from "./authorUsers/authorUsers.module";
 import { FavoritesModule } from "./favorites/favorites.module";
 import { OfferModule } from "./offer/offer.module";
 import { HelloModule } from "./hello/hello.module";
@@ -45,7 +44,6 @@ import { HelloModule } from "./hello/hello.module";
         FavoritesModule,
         // EventsModule,
         ImagesModule,
-        AuthorUsersModule,
         OfferModule,
         HelloModule,
     ],
