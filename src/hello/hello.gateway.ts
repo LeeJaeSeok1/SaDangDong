@@ -1,4 +1,13 @@
-import { Logger, CACHE_MANAGER, CacheTTL, UseInterceptors, HttpException, Inject, Injectable } from "@nestjs/common";
+import {
+    Logger,
+    CACHE_MANAGER,
+    CacheTTL,
+    UseInterceptors,
+    HttpException,
+    Inject,
+    Injectable,
+    Controller,
+} from "@nestjs/common";
 import {
     ConnectedSocket,
     MessageBody,
@@ -14,6 +23,7 @@ import { Cache } from "cache-manager";
 import { onlineMap } from "./onlineMap";
 // import { HttpCacheInterceptor } from '../interceptor/http-cache.interceptor';
 
+@Controller("api")
 @WebSocketGateway({ namespace: "/hello", cors: { origin: "*" } })
 export class HelloGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
     @WebSocketServer() public server: Server;
