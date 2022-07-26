@@ -23,7 +23,7 @@ export class AuthorUsersService {
     //     try {
     //         console.log(tab, address);
     //         const userInfo = await this.userRepository.query(`
-    //         SELECT name, profile_image, banner_image
+    //         SELECT name, profile_image
     //         FROM user
     //         WHERE user.address = "${address}"
     //         `);

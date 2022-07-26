@@ -27,9 +27,6 @@ export class User {
     })
     profile_image: string;
 
-    @Column({ nullable: true })
-    banner_image: string;
-
     @CreateDateColumn()
     createdAt: Date;
 

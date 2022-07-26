@@ -79,7 +79,6 @@ export class UsersService {
             // 이미지 저장
             const uploadeImages = [];
             let profileImage;
-            let bennerImage;
             let element;
             if (files) {
                 for (element of files) {
@@ -96,7 +95,6 @@ export class UsersService {
             }
 
             existUser.name = obj.name;
-            existUser.banner_image = bennerImage;
             existUser.profile_image = profileImage;
             await this.userRepository.save(existUser);
 
