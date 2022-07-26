@@ -1,6 +1,7 @@
 import { CacheModule, Module } from "@nestjs/common";
-import { ChatGateway } from "./chat.gateway";
+// import { ChatGateway } from "./chat.gateway";
 import * as redisStore from "cache-manager-ioredis";
+import { ChatGateway } from "./chat.controller";
 
 @Module({
     imports: [
@@ -12,7 +13,7 @@ import * as redisStore from "cache-manager-ioredis";
             }),
         }),
     ],
-    controllers: [],
-    providers: [ChatGateway],
+    controllers: [ChatGateway],
+    providers: [],
 })
 export class ChatModule {}
