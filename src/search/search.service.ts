@@ -23,25 +23,29 @@ export class SearchService {
     async searchInfo(tab: string, name: string, _page: number, _limit: number) {
         try {
             console.log(name, tab);
+            console.log(name);
+            console.log(typeof name, "서비스 타입");
             console.log(_page, _limit);
             let start = Offset(_page, _limit);
             let information;
 
             if (tab === "collection") {
                 information = await this.collectionRepository.query(`
-                SELECT collection.description, collection.name, collection.feature_image, user.name AS user_name, user.profile_image
+                SELECT DISTINCT collection.name, collection.description, collection.feature_image, collection.created_at,
+                user.name AS user_name, user.profile_image
                 FROM collection, user
                 WHERE collection.name like "%${name}%" 
                 AND collection.address = user.address
                 ORDER BY collection.created_at DESC
-                LIMIT ${start}, ${_limit}
+                LIMIT 100
                 `);
                 console.log(information);
             }
 
             if (tab === "item") {
                 information = await this.itemRepository.query(`
-                SELECT item.name, item.address, item.image, user.name AS user_name, favorites_relation.count
+                SELECT DISTINCT item.name, item.address, item.image, item.created_at,
+                user.name AS user_name, favorites_relation.count
                 FROM item, user, favorites_relation
                 WHERE item.name like '%${name}%' 
                 AND item.address = user.address
@@ -49,6 +53,7 @@ export class SearchService {
                 ORDER BY item.created_at DESC
                 LIMIT ${start}, ${_limit}
                 `);
+                console.log(information);
             }
 
             if (tab === "auction") {
@@ -61,10 +66,10 @@ export class SearchService {
                 AND auction.token_id = item.token_id
                 AND auction.progress = true
                 ORDER BY auction.started_at DESC
-                LIMIT ${start}, ${_limit}
+                LIMIT 100
                 `);
+                console.log(information);
             }
-            console.log(information);
             return Object.assign({
                 statusCode: 200,
                 success: true,

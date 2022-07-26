@@ -30,8 +30,9 @@ export class SearchController {
         @Query("_limit") _limit: number,
     ) {
         console.log(name, tab);
-        const stringTab = decodeURIComponent(tab);
-        const stringName = decodeURIComponent(name);
-        return this.searchService.searchInfo(stringTab, stringName, _page, _limit);
+        console.log(typeof name);
+        // const stringTab = decodeURIComponent(tab);
+        // const stringName = decodeURIComponent(name);
+        return this.searchService.searchInfo(tab, name, _page, _limit);
     }
 }
