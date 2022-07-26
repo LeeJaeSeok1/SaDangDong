@@ -8,16 +8,7 @@ import { User } from "src/users/entities/user.entity";
 
 @Injectable()
 export class HelloService {
-    constructor(
-        @InjectRepository(Collection)
-        private collectionRepository: Repository<Collection>,
-        @InjectRepository(Item)
-        private itemRepository: Repository<Item>,
-        @InjectRepository(Auction)
-        private auctionRepository: Repository<Auction>,
-        @InjectRepository(User)
-        private userRepository: Repository<User>,
-    ) {}
+    constructor() {} // private userRepository: Repository<User>, // @InjectRepository(User) // private auctionRepository: Repository<Auction>, // @InjectRepository(Auction) // private itemRepository: Repository<Item>, // @InjectRepository(Item) // private collectionRepository: Repository<Collection>, // @InjectRepository(Collection)
 
     // async authorInfo(tab: string, address: string) {
     //     try {
