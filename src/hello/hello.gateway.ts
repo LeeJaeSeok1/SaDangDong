@@ -33,6 +33,11 @@ export class HelloGateway implements OnGatewayInit, OnGatewayConnection, OnGatew
         this.server.to(data.auction_id).emit("recMessage", data);
     }
 
+    @SubscribeMessage("joinRoom")
+    joinRoom(client: Socket, room) {
+        client.join(room);
+    }
+
     afterInit(server: Server) {
         console.log(server);
         //Do stuffs
@@ -42,10 +47,9 @@ export class HelloGateway implements OnGatewayInit, OnGatewayConnection, OnGatew
         console.log(`Disconnected: ${client.id}`);
     }
 
-    @SubscribeMessage("joinRoom")
-    handleConnection(client: Socket, room) {
+    handleConnection(client: Socket, ...args: any[]) {
         console.log(`Connected ${client.id}`);
-        client.join(room);
+        //Do stuffs
     }
 
     // afterInit(server: Server): any {
