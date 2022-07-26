@@ -73,7 +73,9 @@ export class OfferService {
                 this.offerRepository.save(newOffer),
                 this.biddingRepository.update(bidding.id, bidding),
             ]);
-            return { bidding, newOffer };
+
+            const newData = { bidding, address };
+            return newData;
         } catch (error) {
             throw new BadRequestException(error.message);
         }
