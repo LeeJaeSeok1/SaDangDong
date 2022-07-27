@@ -59,9 +59,10 @@ export class ItemsService {
                 `);
             console.log(itemIpfsJson);
             const [auction] = await this.auctionRepository.query(`
-            SELECT *
+            SELECT auction
             FROM auction
-            WHERE progress = true
+            WHERE token_id = "${token_id}"
+            AND progress = true
             `);
             const limited_time = date_calculate(auction.ended_at);
 
