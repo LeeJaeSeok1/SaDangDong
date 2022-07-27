@@ -59,11 +59,31 @@ export class ItemsService {
                 `);
             console.log(itemIpfsJson);
             const auction = await this.auctionRepository.findOne({ where: { token_id } });
+            console.log(auction);
             const limited_time = date_calculate(auction.ended_at);
 
             const ipfsJson = itemIpfsJson.ipfsJson.split("//")[1];
             console.log(ipfsJson);
 
+            if (auction === null) {
+                const [item] = await this.itemRepository.query(`
+                SELECT DISTINCT item.token_id, item.name, item.description, item.address, item.image, item.ipfsImage,
+                item.collection_name, collection.description AS collection_description, 
+                user.name AS user_name, user.profile_image, 
+                favorites_relation.count AS favorites_count
+                FROM item, user, favorites_relation, collection
+                WHERE item.token_id = ${token_id}
+                AND item.collection_name = collection.name
+                AND item.owner = user.address
+                AND item.token_id = favorites_relation.token_id
+                `);
+                return Object.assign({
+                    statusCode: 200,
+                    success: true,
+                    statusMsg: "아이템을 불러 왔습니다.",
+                    data: item,
+                });
+            }
             const [item] = await this.itemRepository.query(`
             SELECT DISTINCT item.token_id, item.name, item.description, item.address, item.image, item.ipfsImage,
             item.collection_name, collection.description AS collection_description, 
@@ -80,6 +100,7 @@ export class ItemsService {
             `);
             item.ipfsJson = ipfsJson;
             item.ended_at = limited_time;
+
             console.log(item);
 
             return Object.assign({
@@ -89,6 +110,7 @@ export class ItemsService {
                 data: item,
             });
         } catch (error) {
+            console.log(error.message);
             throw new BadRequestException(error.message);
         }
     }
