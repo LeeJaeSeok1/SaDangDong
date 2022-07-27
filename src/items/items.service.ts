@@ -58,14 +58,17 @@ export class ItemsService {
                 WHERE item.token_id = "${token_id}"
                 `);
             console.log(itemIpfsJson);
-            const auction = await this.auctionRepository.findOne({ where: { token_id } });
-            console.log(auction);
+            const [auction] = await this.auctionRepository.query(`
+            SELECT *
+            FROM auction
+            WHERE progress = true
+            `);
             const limited_time = date_calculate(auction.ended_at);
 
             const ipfsJson = itemIpfsJson.ipfsJson.split("//")[1];
             console.log(ipfsJson);
 
-            if (auction === null) {
+            if (!auction) {
                 const [item] = await this.itemRepository.query(`
                 SELECT DISTINCT item.token_id, item.name, item.description, item.address, item.image, item.ipfsImage,
                 item.collection_name, collection.description AS collection_description, 
