@@ -38,7 +38,7 @@ export class OfferService {
                 this.biddingRepository.query(`
                 SELECT *
                 FROM bidding
-                WHERE id = ${auction_id}
+                WHERE auctionId = ${auction_id}
                 `),
             ]);
             console.log(2);
