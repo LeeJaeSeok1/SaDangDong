@@ -27,6 +27,8 @@ export class OfferService {
 
     async createOffer(address, price, mycoin, auction_id) {
         try {
+            console.log("address", address, "price", price, "mycoin", mycoin, "auction_id", auction_id);
+            console.log(1);
             const [[auction], [bidding]] = await Promise.all([
                 this.auctionRepository.query(`
                 SELECT *
@@ -39,12 +41,15 @@ export class OfferService {
                 WHERE id = ${auction_id}
                 `),
             ]);
+            console.log(2);
             if (!auction) {
                 return "없는 경매입니다.";
             }
+            console.log(3);
             if (bidding.price >= price) {
                 return "현재 최고가보다 작습니다.";
             }
+            console.log(4);
             const totalbidding = await this.biddingRepository.query(`
             SELECT bidding.*
             FROM bidding, auction
@@ -52,14 +57,16 @@ export class OfferService {
             WHERE auction.id = bidding.auction_id
             WHERE Bidding.address = ${address}
             `);
+            console.log(5);
             let total = price;
             for (let i = 0; i < totalbidding.length; i++) {
                 total += totalbidding[i].price;
             }
-
+            console.log(6);
             if (total > mycoin) {
                 return "현재 지갑의 보유량보다 경매에 참여한 보유량이 더 많습니다.";
             }
+            console.log(7);
 
             const newOffer = new Offer();
             newOffer.price = price;
@@ -68,12 +75,12 @@ export class OfferService {
 
             bidding.price = price;
             bidding.address = address;
-
+            console.log(8);
             await Promise.all([
                 this.offerRepository.save(newOffer),
                 this.biddingRepository.update(bidding.id, bidding),
             ]);
-
+            console.log(9);
             const newData = { bidding, address };
             return newData;
         } catch (error) {
