@@ -24,7 +24,7 @@ export class OfferGateway implements OnGatewayInit, OnGatewayConnection, OnGatew
         const newData = await this.offerService.createOffer(data);
         console.log(newData);
         // data : {price, mycoin}
-        this.server.to(`${auction_id}`).emit("recOffer", newData);
+        this.server.to(`${data.auction_id}`).emit("recOffer", newData);
     }
 
     @SubscribeMessage("joinRoom")
