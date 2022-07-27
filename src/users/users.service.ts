@@ -125,6 +125,7 @@ export class UsersService {
                 FROM collection, user
                 WHERE collection.address = "${id}"
                 AND collection.address = user.address
+                AND collection.archived = 0
                 ORDER BY collection.created_at DESC
                 LIMIT 100
                 `);
@@ -136,6 +137,7 @@ export class UsersService {
                 WHERE item.owner = "${id}"
                 AND item.owner = user.address
                 AND item.token_id = favorites_relation.token_id
+                AND item.archived = 0
                 ORDER BY item.created_at DESC
                 LIMIT ${start}, ${_limit}
                 `);

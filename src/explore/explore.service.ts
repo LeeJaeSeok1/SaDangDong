@@ -84,6 +84,7 @@ export class ExploreService {
                 user.name AS user_name, user.profile_image
                 FROM collection, user
                 WHERE collection.address = user.address
+                AND collection.archived = 0
                 ORDER BY collection.created_at DESC
                 LIMIT ${start}, ${_limit}
                 `);
@@ -99,6 +100,7 @@ export class ExploreService {
                 FROM item, user, favorites_relation
                 WHERE item.address = user.address
                 AND item.token_id = favorites_relation.token_id
+                AND item.archived = 0
                 ORDER BY item.created_at DESC
                 LIMIT ${start}, ${_limit}
                 `);

@@ -52,6 +52,7 @@ export class CollectionsService {
                     AND item.collection_name = collection.name
                     AND item.owner = user.address
                     AND item.token_id = favorites_relation.token_id
+                    AND item.archived = 0
                     ORDER BY item.created_at DESC
                     LIMIT ${start}, ${_limit}
                     `);
