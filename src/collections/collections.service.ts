@@ -1,8 +1,10 @@
 import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
+import { Auction } from "src/auctions/entities/auction.entity";
 import { ImageUpload } from "src/images/entities/image.entity";
 import { Item } from "src/items/entities/item.entity";
-import { User } from "src/users/entities/user.entity";
+import { date_calculate } from "src/plug/caculation.function";
+import { Offset } from "src/plug/pagination.function";
 import { Repository } from "typeorm";
 import { Collection } from "./entities/collection.entity";
 
@@ -11,8 +13,8 @@ export class CollectionsService {
     constructor(
         @InjectRepository(Collection)
         private collectionRepository: Repository<Collection>,
-        @InjectRepository(User)
-        private userRepository: Repository<User>,
+        @InjectRepository(Auction)
+        private auctionRepository: Repository<Auction>,
         @InjectRepository(Item)
         private itemRepository: Repository<Item>,
     ) {}
@@ -28,19 +30,64 @@ export class CollectionsService {
     }
 
     // 컬렉션 상새보기
-    async findOneCollection(id: string) {
-        // console.log("컬렉션 서비스 아이디", id);
-        const collectionInfo = await this.collectionRepository.findOne({ where: { name: id } });
-        const items = await this.itemRepository.find({ where: { collection_name: id } });
+    async findOneCollection(id: string, tab: string, _page: number, _limit: number) {
+        try {
+            const start = Offset(_page, _limit);
 
-        // return { collectionInfo, items };
-        return Object.assign({
-            statusCode: 200,
-            success: true,
-            statusMsg: "컬렉션을 불러왔습니다.",
-            data: collectionInfo,
-            items,
-        });
+            console.log("컬렉션 서비스 아이디", id);
+            // const collectionInfo = await this.collectionRepository.findOne({ where: { name: id } });
+            const [collectionInfo] = await this.collectionRepository.query(`
+            SELECT collection.name, collection.description, collection.feature_image, collection.created_at, user.name AS user_name, user.profile_image
+            FROM collection, user
+            WHERE collection.address = user.address
+            AND collection.name = "${id}"
+            `);
+
+            let information;
+            if (tab === "item") {
+                information = await this.itemRepository.query(`
+                SELECT DISTINCT item.token_id, item.name, item.owner, item.image, user.name AS user_name, favorites_relation.count, item.created_at
+                    FROM item, user, favorites_relation, collection
+                    WHERE item.collection_name = "${id}"
+                    AND item.collection_name = collection.name
+                    AND item.owner = user.address
+                    AND item.token_id = favorites_relation.token_id
+                    ORDER BY item.created_at DESC
+                    LIMIT ${start}, ${_limit}
+                    `);
+            }
+            if (tab === "auction") {
+                information = await this.auctionRepository.query(`
+                SELECT DISTINCT item.token_id, item.name, item.address, item.image, user.name AS user_name, favorites_relation.count, auction.id AS auction_id, auction.ended_at, auction.started_at
+                FROM auction, item, user, favorites_relation, collection
+                WHERE item.collection_name = "${id}"
+                AND item.owner = user.address
+                AND item.token_id = favorites_relation.token_id
+                AND auction.token_id = item.token_id
+                AND auction.progress = true
+                ORDER BY auction.started_at DESC
+                LIMIT ${start}, ${_limit}
+                `);
+                information.forEach((element) => {
+                    const ended_at = date_calculate(element.ended_at);
+                    element.ended_at = ended_at;
+                });
+            }
+            // const items = await this.itemRepository.find({ where: { collection_name: id } });
+
+            console.log("collection", collectionInfo, "information", information);
+            // return { collectionInfo, items };
+            return Object.assign({
+                statusCode: 200,
+                success: true,
+                statusMsg: "컬렉션을 불러왔습니다.",
+                data: collectionInfo,
+                information,
+            });
+        } catch (error) {
+            console.log(error.message);
+            throw new BadRequestException(error.message);
+        }
     }
 
     // 컬렉션 생성

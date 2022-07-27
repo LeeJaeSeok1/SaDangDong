@@ -12,6 +12,7 @@ import {
     UseInterceptors,
     UploadedFiles,
     UseFilters,
+    Query,
 } from "@nestjs/common";
 import { CollectionsService } from "./collections.service";
 import { ApiOperation, ApiTags } from "@nestjs/swagger";
@@ -34,9 +35,14 @@ export class CollectionsController {
 
     @ApiOperation({ summary: "컬렉션 상세보기" })
     @Get(":id")
-    findOneColleciton(@Param("id") id: string) {
+    findOneColleciton(
+        @Param("id") id: string,
+        @Query("tab") tab: string,
+        @Query("_page") _page: number,
+        @Query("_limit") _limit: number,
+    ) {
         // console.log("컨트롤러 컬렉션 아이디", id);
-        return this.collectionsService.findOneCollection(id);
+        return this.collectionsService.findOneCollection(id, tab, _page, _limit);
     }
 
     @ApiOperation({ summary: "컬렉셩 생성" })
