@@ -9,6 +9,7 @@ import {
     WebSocketServer,
 } from "@nestjs/websockets";
 import { Server, Socket } from "socket.io";
+import { CreateOfferDto } from "./dto/createoffer.dto";
 import { OfferService } from "./offer.service";
 
 @WebSocketGateway({ namespace: "offer", cors: { origin: "*" } })
@@ -18,9 +19,9 @@ export class OfferGateway implements OnGatewayInit, OnGatewayConnection, OnGatew
     @WebSocketServer() server: Server;
 
     @SubscribeMessage("sendOffer")
-    async handleSendMessage(client: Socket, { address, price, mycoin, auction_id }): Promise<void> {
-        console.log(address, price, mycoin, auction_id);
-        const newData = await this.offerService.createOffer(address, price, mycoin, auction_id);
+    async handleSendMessage(client: Socket, data: CreateOfferDto): Promise<void> {
+        console.log(data);
+        const newData = await this.offerService.createOffer(data);
         console.log(newData);
         // data : {price, mycoin}
         this.server.to(`${auction_id}`).emit("recOffer", newData);

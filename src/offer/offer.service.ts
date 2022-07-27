@@ -5,6 +5,7 @@ import { Auction } from "src/auctions/entities/auction.entity";
 import { Bidding } from "src/offer/entities/bidding.entity";
 import { Offer } from "./entities/offer.entity";
 import { User } from "src/users/entities/user.entity";
+import { CreateOfferDto } from "./dto/createoffer.dto";
 
 @Injectable()
 export class OfferService {
@@ -25,20 +26,20 @@ export class OfferService {
         } catch (error) {}
     }
 
-    async createOffer(address, price, mycoin, auction_id) {
+    async createOffer(data: CreateOfferDto) {
         try {
-            console.log("address", address, "price", price, "mycoin", mycoin, "auction_id", auction_id);
+            console.log(data);
             console.log(1);
             const [[auction], [bidding]] = await Promise.all([
                 this.auctionRepository.query(`
                 SELECT *
                 FROM auction
-                WHERE id = ${auction_id}
+                WHERE id = ${data.auction_id}
                 `),
                 this.biddingRepository.query(`
                 SELECT *
                 FROM bidding
-                WHERE auctionId = ${auction_id}
+                WHERE auctionId = ${data.auction_id}
                 `),
             ]);
             console.log(2);
@@ -46,7 +47,7 @@ export class OfferService {
                 return "없는 경매입니다.";
             }
             console.log(3);
-            if (bidding.price >= price) {
+            if (bidding.price >= data.price) {
                 return "현재 최고가보다 작습니다.";
             }
             console.log(4);
@@ -55,33 +56,33 @@ export class OfferService {
             FROM bidding, auction
             WHERE auction.progress = true
             AND auction.id = bidding.auctionId
-            AND Bidding.address = "${address}"
+            AND bidding.address = "${data.address}"
             `);
             console.log(5);
-            let total = price;
+            let total = data.price;
             for (let i = 0; i < totalbidding.length; i++) {
                 total += totalbidding[i].price;
             }
             console.log(6);
-            if (total > mycoin) {
+            if (total > data.mycoin) {
                 return "현재 지갑의 보유량보다 경매에 참여한 보유량이 더 많습니다.";
             }
             console.log(7);
 
             const newOffer = new Offer();
-            newOffer.price = price;
-            newOffer.auctionId = auction_id;
-            newOffer.address = address;
+            newOffer.price = data.price;
+            newOffer.auctionId = data.auction_id;
+            newOffer.address = data.address;
 
-            bidding.price = price;
-            bidding.address = address;
+            bidding.price = data.price;
+            bidding.address = data.address;
             console.log(8);
             await Promise.all([
                 this.offerRepository.save(newOffer),
                 this.biddingRepository.update(bidding.id, bidding),
             ]);
             console.log(9);
-            const newData = { bidding, address };
+            const newData = { bidding, address: data.address };
             return newData;
         } catch (error) {
             throw new BadRequestException(error.message);
