@@ -59,17 +59,18 @@ export class ItemsService {
                 `);
             console.log(itemIpfsJson);
             const [auction] = await this.auctionRepository.query(`
-            SELECT auction
+            SELECT *
             FROM auction
             WHERE token_id = "${token_id}"
             AND progress = true
             `);
-            const limited_time = date_calculate(auction.ended_at);
+            console.log(auction);
 
             const ipfsJson = itemIpfsJson.ipfsJson.split("//")[1];
             console.log(ipfsJson);
 
-            if (!auction) {
+            if (auction === undefined) {
+                console.log(1);
                 const [item] = await this.itemRepository.query(`
                 SELECT DISTINCT item.token_id, item.name, item.description, item.address, item.image, item.ipfsImage,
                 item.collection_name, collection.description AS collection_description, 
@@ -81,6 +82,8 @@ export class ItemsService {
                 AND item.owner = user.address
                 AND item.token_id = favorites_relation.token_id
                 `);
+                item.ipfsJson = ipfsJson;
+
                 return Object.assign({
                     statusCode: 200,
                     success: true,
@@ -88,6 +91,9 @@ export class ItemsService {
                     data: item,
                 });
             }
+
+            const limited_time = date_calculate(auction.ended_at);
+
             const [item] = await this.itemRepository.query(`
             SELECT DISTINCT item.token_id, item.name, item.description, item.address, item.image, item.ipfsImage,
             item.collection_name, collection.description AS collection_description, 
