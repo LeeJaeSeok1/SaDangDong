@@ -224,7 +224,9 @@ export class ItemsService {
             if (exisItem.owner !== address) {
                 throw new BadRequestException(`본인만 삭제 가능합니다.`);
             }
-            await this.itemRepository.delete(id);
+            await this.itemRepository.query(`
+            UPDATE item SET archived_at = NOW(), archived = 1 WHERE token_id = "${id}"
+            `);
             return Object.assign({
                 statusCode: 201,
                 success: true,

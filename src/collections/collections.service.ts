@@ -217,10 +217,9 @@ export class CollectionsService {
             }
             // await this.collectionRepository.query(`UPDATE collection SET archived = 1 WHERE name = "${id}";`);
             // await this.collectionRepository.delete(exisCollection);
-            await this.collectionRepository
-                .createQueryBuilder("collection")
-                .softDelete()
-                .where("name = :id", { id: id });
+            await this.collectionRepository.query(`
+            UPDATE collection SET archived_at = NOW(), archived = 1 WHERE name = "${id}"
+            `);
             return Object.assign({
                 statusCode: 201,
                 success: true,
