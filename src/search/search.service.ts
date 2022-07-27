@@ -82,6 +82,7 @@ export class SearchService {
                 data: information,
             });
         } catch (error) {
+            console.log(error.message);
             throw new BadRequestException(error.message);
         }
     }

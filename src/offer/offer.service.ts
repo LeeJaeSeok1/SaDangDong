@@ -47,7 +47,11 @@ export class OfferService {
                 return "없는 경매입니다.";
             }
             console.log(3);
+
+            console.log(data.price);
+            console.log(bidding.price);
             if (bidding.price >= data.price) {
+
                 return "현재 최고가보다 작습니다.";
             }
             console.log(4);
@@ -64,6 +68,9 @@ export class OfferService {
                 total += totalbidding[i].price;
             }
             console.log(6);
+            console.log(total);
+            
+
             if (total > data.mycoin) {
                 return "현재 지갑의 보유량보다 경매에 참여한 보유량이 더 많습니다.";
             }
