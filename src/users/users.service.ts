@@ -9,6 +9,7 @@ import { Favorites } from "src/favorites/entities/favorites.entity";
 import { Auction } from "src/auctions/entities/auction.entity";
 import { Offset } from "src/plug/pagination.function";
 import { userName } from "src/plug/userName.function";
+import { date_calculate } from "src/plug/caculation.function";
 
 @Injectable()
 export class UsersService {
@@ -165,6 +166,10 @@ export class UsersService {
                 AND auction.progress = true
                 ORDER BY auction.started_at DESC
                 `);
+                information.forEach((element) => {
+                    const ended_at = date_calculate(element.ended_at);
+                    element.ended_at = ended_at;
+                });
             }
 
             return Object.assign({
