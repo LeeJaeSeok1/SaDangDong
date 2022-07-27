@@ -65,7 +65,6 @@ export class ItemsService {
             AND progress = true
             `);
             console.log(auction);
-            const limited_time = date_calculate(auction.ended_at);
 
             const ipfsJson = itemIpfsJson.ipfsJson.split("//")[1];
             console.log(ipfsJson);
@@ -92,6 +91,9 @@ export class ItemsService {
                     data: item,
                 });
             }
+
+            const limited_time = date_calculate(auction.ended_at);
+
             const [item] = await this.itemRepository.query(`
             SELECT DISTINCT item.token_id, item.name, item.description, item.address, item.image, item.ipfsImage,
             item.collection_name, collection.description AS collection_description, 
