@@ -59,6 +59,7 @@ export class AuctionsService {
 
             const bidding = new Bidding();
             bidding.price = auction.price;
+            bidding.auctionId = auction.id;
 
             await this.biddingRepository.save(bidding);
 
