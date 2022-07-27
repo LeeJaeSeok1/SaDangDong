@@ -9,6 +9,7 @@ import { Favorites } from "src/favorites/entities/favorites.entity";
 import { Auction } from "src/auctions/entities/auction.entity";
 import { Offset } from "src/plug/pagination.function";
 import { userName } from "src/plug/userName.function";
+import { date_calculate } from "src/plug/caculation.function";
 
 @Injectable()
 export class UsersService {
@@ -124,25 +125,26 @@ export class UsersService {
                 FROM collection, user
                 WHERE collection.address = "${id}"
                 AND collection.address = user.address
+                AND collection.archived = 0
                 ORDER BY collection.created_at DESC
                 LIMIT 100
                 `);
             }
             if (tab === "item") {
                 information = await this.itemRepository.query(`
-                SELECT item.token_id, item.name, item.address, item.image, user.name AS user_name,
-                favorites_relation.count, item.created_at
+                SELECT DISTINCT item.token_id, item.name, item.address, item.image, user.name AS user_name, favorites_relation.count, item.created_at
                 FROM item, user, favorites_relation
                 WHERE item.owner = "${id}"
                 AND item.owner = user.address
                 AND item.token_id = favorites_relation.token_id
+                AND item.archived = 0
                 ORDER BY item.created_at DESC
                 LIMIT ${start}, ${_limit}
                 `);
             }
             if (tab === "favorites") {
                 information = await this.favoritesRepository.query(`
-                SELECT item.token_id, item.name, item.address, item.image,
+                SELECT DISTINCT item.token_id, item.name, item.address, item.image,
                 user.name AS user_name, favorites_relation.count
                 FROM item, user, favorites, favorites_relation
                 WHERE item.owner = "${id}"
@@ -157,14 +159,19 @@ export class UsersService {
 
             if (tab === "auction") {
                 information = await this.auctionRepository.query(`
-                SELECT item.token_id, item.name, item.address, item.image, user.name AS user_name, favorites_relation.count, auction.id AS auction_id, auction.ended_at
+                SELECT DISTINCT item.token_id, item.name, item.address, item.image, user.name AS user_name, favorites_relation.count, auction.id AS auction_id, auction.ended_at, auction.started_at
                 FROM auction, item, user, favorites_relation
                 WHERE item.address = "${id}"
+                AND item.owner = user.address
                 AND item.token_id = favorites_relation.token_id
                 AND auction.token_id = item.token_id
                 AND auction.progress = true
                 ORDER BY auction.started_at DESC
                 `);
+                information.forEach((element) => {
+                    const ended_at = date_calculate(element.ended_at);
+                    element.ended_at = ended_at;
+                });
             }
 
             return Object.assign({

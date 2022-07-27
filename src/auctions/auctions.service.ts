@@ -54,17 +54,20 @@ export class AuctionsService {
             auction.progress = true;
 
             console.log(auction);
+            console.log(auction.id);
 
             await this.auctionRepository.save(auction);
-
+            console.log(1);
             const bidding = new Bidding();
             bidding.price = auction.price;
             bidding.auctionId = auction.id;
-
+            bidding.address = address;
+            console.log(2);
             await this.biddingRepository.save(bidding);
 
             return { auction, bidding };
         } catch (error) {
+            console.log(error.message);
             throw new BadRequestException(error.message);
         }
     }

@@ -18,7 +18,7 @@ export class Bidding {
     price: number;
     // price 최고가
 
-    @Column()
+    @Column({ nullable: true })
     address: string;
     // 최고가 제안자 address
 
