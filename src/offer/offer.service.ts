@@ -54,7 +54,7 @@ export class OfferService {
             SELECT bidding.*
             FROM bidding, auction
             WHERE auction.progress = true
-            WHERE auction.id = bidding.auction_id
+            WHERE auction.id = bidding.auctionId
             WHERE Bidding.address = "${address}"
             `);
             console.log(5);
