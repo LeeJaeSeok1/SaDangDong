@@ -8,7 +8,7 @@ import {
     UpdateDateColumn,
 } from "typeorm";
 
-// @Entity()
+@Entity()
 export class Bidding {
     @PrimaryGeneratedColumn()
     id: number;
