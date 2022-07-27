@@ -9,6 +9,7 @@ import { Favorites_Relation } from "src/favorites/entities/favorites_relation.en
 import { Favorites } from "src/favorites/entities/favorites.entity";
 import { Offset } from "src/plug/pagination.function";
 import { date_calculate } from "src/plug/caculation.function";
+import { Sell } from "src/sell/entities/sell.entity";
 
 @Injectable()
 export class ExploreService {
@@ -25,10 +26,22 @@ export class ExploreService {
         private favoritesrelationRepository: Repository<Favorites_Relation>,
         @InjectRepository(Favorites)
         private favoritesRepository: Repository<Favorites>,
+        @InjectRepository(Sell)
+        private sellRepository: Repository<Sell>,
     ) {}
 
     async mainInfo() {
         try {
+            const auction = await this.auctionRepository.query(`
+            SELECT *
+            FROM auction
+            WHERE auction.progress = true
+            `);
+
+            const ranking = await this.sellRepository.query(`
+            SELECt *
+            FROM sell
+            `);
         } catch (error) {
             console.log(error.message);
         }
