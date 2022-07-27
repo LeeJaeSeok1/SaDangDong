@@ -61,7 +61,12 @@ export class ExploreService {
             LIMIT 5
             `);
 
-            return { auction, ranking };
+            return Object.assign({
+                statusCode: 200,
+                success: true,
+                statusMsg: `메인 정보를 불러왔습니다.`,
+                data: { auction, ranking },
+            });
         } catch (error) {
             console.log(error.message);
         }
