@@ -130,8 +130,7 @@ export class UsersService {
             }
             if (tab === "item") {
                 information = await this.itemRepository.query(`
-                SELECT item.token_id, item.name, item.address, item.image, user.name AS user_name,
-                favorites_relation.count, item.created_at
+                SELECT DISTINCT item.token_id, item.name, item.address, item.image, user.name AS user_name, favorites_relation.count, item.created_at
                 FROM item, user, favorites_relation
                 WHERE item.owner = "${id}"
                 AND item.owner = user.address
@@ -142,7 +141,7 @@ export class UsersService {
             }
             if (tab === "favorites") {
                 information = await this.favoritesRepository.query(`
-                SELECT item.token_id, item.name, item.address, item.image,
+                SELECT DISTINCT item.token_id, item.name, item.address, item.image,
                 user.name AS user_name, favorites_relation.count
                 FROM item, user, favorites, favorites_relation
                 WHERE item.owner = "${id}"
@@ -157,9 +156,10 @@ export class UsersService {
 
             if (tab === "auction") {
                 information = await this.auctionRepository.query(`
-                SELECT item.token_id, item.name, item.address, item.image, user.name AS user_name, favorites_relation.count, auction.id AS auction_id, auction.ended_at
+                SELECT DISTINCT item.token_id, item.name, item.address, item.image, user.name AS user_name, favorites_relation.count, auction.id AS auction_id, auction.ended_at, auction.started_at
                 FROM auction, item, user, favorites_relation
                 WHERE item.address = "${id}"
+                AND item.owner = user.address
                 AND item.token_id = favorites_relation.token_id
                 AND auction.token_id = item.token_id
                 AND auction.progress = true
