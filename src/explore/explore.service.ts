@@ -38,7 +38,7 @@ export class ExploreService {
             const start = Offset(_page, 4);
             const auction_item = await this.itemRepository.query(`
             SELECT item.token_id, item.image, item.name, auction.id,
-            auction.ended_at, user.name AS user_name, favorites_relation.count, 
+            auction.ended_at, user.name AS user_name, favorites_relation.count
             FROM item
                 LEFT JOIN auction
                 ON item.token_id = auction.token_id
