@@ -1,6 +1,7 @@
 import { Controller, Get, Query, UseFilters } from "@nestjs/common";
 import { SearchService } from "./search.service";
 import { ApiOperation, ApiQuery, ApiTags } from "@nestjs/swagger";
+import { AuthToken } from "src/config/auth.decorator";
 
 @ApiTags("Search")
 @Controller("api/search")
@@ -28,11 +29,12 @@ export class SearchController {
         @Query("name") name: string,
         @Query("_page") _page: number,
         @Query("_limit") _limit: number,
+        @AuthToken() address: string,
     ) {
-        console.log(name, tab);
+        console.log(name, tab, address);
         console.log(typeof name);
         // const stringTab = decodeURIComponent(tab);
         // const stringName = decodeURIComponent(name);
-        return this.searchService.searchInfo(tab, name, _page, _limit);
+        return this.searchService.searchInfo(tab, name, _page, _limit, address);
     }
 }

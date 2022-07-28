@@ -21,23 +21,33 @@ export class SearchService {
         private userRepository: Repository<User>,
     ) {}
 
-    async searchInfo(tab: string, name: string, _page: number, _limit: number) {
+    async searchInfo(tab: string, name: string, _page: number, _limit: number, address: string) {
         try {
-            console.log(name, tab);
-            console.log(name);
-            console.log(typeof name, "서비스 타입");
-            console.log(_page, _limit);
+            if (address == `"NOT DEFINED"`) {
+                console.log("유저가 없습니다.");
+                address = undefined;
+            }
             const start = Offset(_page, _limit);
             let information;
 
             if (tab === "collection" || tab === undefined) {
                 console.log(1);
                 information = await this.collectionRepository.query(`
-                SELECT collection.name, collection.description, collection.feature_image, collection.created_at,
-                user.name AS user_name, user.profile_image, user.address
-                FROM collection, user
-                WHERE collection.address = user.address
-                AND collection.name like "%${name}%" 
+                SELECT *
+                FROM
+                (SELECT collection.name, collection.description, collection.feature_image, collection.created_at,
+                collection.address, user.name AS user_name, user.profile_image
+                FROM collection
+                    LEFT JOIN user
+                    ON collection.address = user.address
+                WHERE collection.name like "%${name}%") 
+                UNION
+                (SELECT collection.name, collection.description, collection.feature_image, collection.created_at,
+                collection.address, user.name AS user_name, user.profile_image, user.address
+                FROM collection
+                    LEFT JOIN user
+                    ON collection.address = user.address
+                WHERE user.name like "%${name}%")
                 ORDER BY collection.created_at DESC
                 LIMIT ${start}, ${_limit}
                 `);

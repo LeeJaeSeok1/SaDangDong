@@ -132,7 +132,7 @@ export class ExploreService {
     async exploreInfo(tab: string, address: string, _page: number, _limit: number) {
         try {
             // 페이지 네이션 처리
-            if (tab == "NOT DEFINED") tab = "collection";
+            if (!tab) tab = "collection";
             if (address == `"NOT DEFINED"`) {
                 console.log("유저가 없습니다.");
                 address = undefined;
