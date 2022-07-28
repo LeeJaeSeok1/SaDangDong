@@ -27,8 +27,9 @@ export class SearchService {
                 console.log("유저가 없습니다.");
                 address = undefined;
             }
-            if (_page == NaN) _page = 0;
-            if (_limit == NaN) _limit = 12;
+            if (!_page) _page = 0;
+            if (!_limit) _limit = 12;
+            console.log(tab, name, _page, _limit, address);
             const start = Offset(_page, _limit);
             let information;
 
@@ -56,13 +57,26 @@ export class SearchService {
 
             if (tab === "item") {
                 information = await this.itemRepository.query(`
-                SELECT DISTINCT item.name, item.owner, item.image, item.created_at,
+                (SELECT item.token_id, item.name, item.owner, item.image, item.created_at,
                 user.name AS user_name, user.address, favorites_relation.count
-                FROM item, user, favorites_relation
-                WHERE item.address = user.address
-                AND item.name like '%${name}%' 
-                AND item.token_id = favorites_relation.token_id
-                ORDER BY item.created_at DESC
+                FROM item
+                    LEFT JOIN user
+                    ON item.address = user.address
+                    LEFT JOIN favorites_relation
+                    ON item.token_id = favorites_relation.token_id
+                WHERE item.archived = 0
+                AND item.name like '%${name}%')
+                UNION
+                (SELECT item.token_id, item.name, item.owner, item.image, item.created_at,
+                user.name AS user_name, user.address, favorites_relation.count
+                FROM item
+                    LEFT JOIN user
+                    ON item.address = user.address
+                    LEFT JOIN favorites_relation
+                    ON item.token_id = favorites_relation.token_id
+                WHERE item.archived = 0
+                AND user.name like '%${name}%')
+                ORDER BY created_at DESC
                 LIMIT ${start}, ${_limit}
                 `);
                 console.log(information);
