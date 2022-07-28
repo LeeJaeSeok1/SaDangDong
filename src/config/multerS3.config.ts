@@ -19,7 +19,7 @@ export const storage = multerS3({
     contentType: multerS3.AUTO_CONTENT_TYPE,
     acl: "public-read",
     key: function (req, file, cb) {
-        const fileName: string = `${Date.now().toString()}-${file.originalname}`;
+        const fileName = `${Date.now().toString()}-${file.originalname}`;
         cb(null, fileName);
     },
 });

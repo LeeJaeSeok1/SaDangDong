@@ -146,6 +146,7 @@ export class ItemsService {
     // 아이템 생성
     async createItem(files: Express.Multer.File[], itemData, address: string) {
         try {
+            console.log(1);
             const json = itemData.itemInfo;
             // console.log(json, "json");
             const obj = JSON.parse(json);
@@ -160,6 +161,10 @@ export class ItemsService {
                     uploadeImages.push(file);
                 }
             }
+            console.log(2);
+
+            console.log(obj);
+
             const createItem = new Item();
             createItem.token_id = obj.token_id;
             createItem.name = obj.name;
@@ -172,6 +177,7 @@ export class ItemsService {
             createItem.owner = address;
             await this.itemRepository.save(createItem);
 
+            console.log(3);
             // const newItem = await this.itemRepository.query(`
             // INSERT INTO item (token_id, name, description, collection_name, ipfsJson, ipfsImage, image, address, owner)
             // VALUES ("${obj.token_id}", "${obj.name}", "${obj.description}", "${obj.collection_name}", "${obj.ipfsJson}", "${obj.ipfsImage}", "${element.location}", "${address}", "${address}")
@@ -182,6 +188,7 @@ export class ItemsService {
             favoritesCount.count = 0;
             await this.favoritesRelationRepository.save(favoritesCount);
             // return createItem;
+            console.log(4);
 
             // 0xfb6c2f43d42d39b88fdb964856eb8ec00ff79016;
             // 0xa9f0571052289ed8d731d511ede36ece3df3d0d1;
