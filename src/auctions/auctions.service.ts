@@ -90,9 +90,9 @@ export class AuctionsService {
             return "없는 토큰입니다.";
         }
 
-        const ended_at = date_calculate(auction.ended_at);
+        const remained_at = date_calculate(auction.ended_at);
 
-        auction.ended_at = ended_at;
+        auction.remained_at = remained_at;
 
         return Object.assign({
             statusCode: 200,

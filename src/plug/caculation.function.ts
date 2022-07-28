@@ -45,7 +45,14 @@ export function parse_calculate(ended_at: Date) {
     const new_date = new Date(ended_at);
     const date = new_date.getMonth() + 1;
     const day = new_date.getDate();
-    const hour = new_date.getHours();
-    const minute = new_date.getMinutes();
-    return `${date}월${day}일${hour}:${minute}`;
+    let hour = new_date.getHours() + "";
+    if (hour.length == 1) {
+        hour = "0" + hour;
+    }
+    let minute = new_date.getMinutes() + "";
+    if (minute.length == 1) {
+        minute = "0" + minute;
+    }
+
+    return `${date}월 ${day}일 ${hour}:${minute}`;
 }
