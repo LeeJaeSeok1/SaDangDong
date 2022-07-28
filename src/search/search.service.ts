@@ -27,6 +27,8 @@ export class SearchService {
                 console.log("유저가 없습니다.");
                 address = undefined;
             }
+            if (_page == NaN) _page = 0;
+            if (_limit == NaN) _limit = 12;
             const start = Offset(_page, _limit);
             let information;
 
