@@ -130,6 +130,7 @@ export class SearchService {
                 WHERE item.archived = 0
                 AND user.name like '%${name}%')) AS g
                 WHERE g.progress = true
+                ORDER BY g.ended_at ASC
                 `);
                 // information = await this.auctionRepository.query(`
                 // SELECT DISTINCT item.token_id, item.name, item.address, item.image,
