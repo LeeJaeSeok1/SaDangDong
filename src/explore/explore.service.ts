@@ -8,7 +8,7 @@ import { User } from "src/users/entities/user.entity";
 import { Favorites_Relation } from "src/favorites/entities/favorites_relation.entity";
 import { Favorites } from "src/favorites/entities/favorites.entity";
 import { Offset } from "src/plug/pagination.function";
-import { date_calculate, create_date, now_date } from "src/plug/caculation.function";
+import { date_calculate, create_date, now_date, parse_calculate } from "src/plug/caculation.function";
 import { Sell } from "src/sell/entities/sell.entity";
 
 @Injectable()
@@ -122,8 +122,10 @@ export class ExploreService {
                 `);
 
                 information.forEach((element) => {
-                    const ended_at = date_calculate(element.ended_at);
-                    element.ended_at = ended_at;
+                    const remained_at = date_calculate(element.ended_at);
+                    const parse_end_at = parse_calculate(element.end_at);
+                    element.remained_at = remained_at;
+                    element.end_at = parse_end_at;
                 });
             }
 

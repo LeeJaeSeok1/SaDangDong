@@ -40,3 +40,11 @@ export function weekly_calculate() {
     const end_date = new Date(standard_end_date.setDate(standard_end_date.getDate() + 7 * multiple_week));
     return { start_date, end_date };
 }
+
+export function parse_calculate(ended_at: Date) {
+    const date = ended_at.getMonth() + 1;
+    const day = ended_at.getDate();
+    const hour = ended_at.getHours();
+    const minute = ended_at.getMinutes();
+    return `${date}월${day}일${hour}:${minute}`;
+}
