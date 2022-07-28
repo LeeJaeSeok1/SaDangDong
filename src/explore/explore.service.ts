@@ -39,9 +39,6 @@ export class ExploreService {
             if (!_page) {
                 _page = 0;
             }
-            if (!address) {
-                address = "noaddress";
-            }
             console.log(1);
             const start = Offset(_page, 4);
             console.log(3, start);
@@ -64,22 +61,32 @@ export class ExploreService {
                 const ended_at = parse_calculate(element.ended_at);
                 element.ended_at = ended_at;
 
-                const [result_favorties, result_bidding] = await Promise.all([
-                    this.favoritesRepository.query(`
-                    SELECT isFavorites
-                    FROM favorites             
-                    WHERE favorites.token_id = "${element.token_id}"
-                    AND favorites.address = "${address}"
-                    `),
-                    this.biddingRepository.query(`
-                    SELECT price
-                    FROM bidding
-                    WHERE auctionId = "${element.auction_id}"
-                    `),
-                ]);
+                if (!address) {
+                    const [result_bidding] = await this.biddingRepository.query(`
+                        SELECT price
+                        FROM bidding
+                        WHERE auctionId = "${element.auction_id}"
+                        `);
+                    element.isFavorites = false;
+                    element.price = result_bidding.price;
+                } else {
+                    const [result_favorties, result_bidding] = await Promise.all([
+                        this.favoritesRepository.query(`
+                        SELECT isFavorites
+                        FROM favorites             
+                        WHERE favorites.token_id = "${element.token_id}"
+                        AND favorites.address = "${address}"
+                        `),
+                        this.biddingRepository.query(`
+                        SELECT price
+                        FROM bidding
+                        WHERE auctionId = "${element.auction_id}"
+                        `),
+                    ]);
 
-                element.isFavorites = result_favorties.isFavorites;
-                element.price = result_bidding.price;
+                    element.isFavorites = result_favorties.isFavorites;
+                    element.price = result_bidding.price;
+                }
             });
 
             console.log(4);
