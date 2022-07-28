@@ -58,6 +58,7 @@ export class ExploreService {
                     ON  item.address = user.address
                     LEFT JOIN favorites_relation
                     ON  item.token_id = favorites_relation.token_id
+                ORDER BY auction.ended_at DESC
                 LIMIT ${start}, 4
             ) AS g
             WHERE g.progress = true
@@ -76,7 +77,7 @@ export class ExploreService {
                         FROM bidding
                         WHERE auctionId = "${element.auction_id}"
                         `);
-                    element.isFavorites = false;
+                    element.isFavorites = 0;
                     element.price = result_bidding.price;
                 } else {
                     console.log(1000);

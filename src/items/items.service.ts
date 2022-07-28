@@ -102,7 +102,6 @@ export class ItemsService {
                     data: item,
                 });
             }
-
             const remained_at = date_calculate(auction.ended_at);
 
             const [item] = await this.itemRepository.query(`
