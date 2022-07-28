@@ -62,6 +62,7 @@ export class ExploreService {
                 element.ended_at = ended_at;
 
                 if (!address) {
+                    console.log(100);
                     const [result_bidding] = await this.biddingRepository.query(`
                         SELECT price
                         FROM bidding
@@ -70,7 +71,8 @@ export class ExploreService {
                     element.isFavorites = false;
                     element.price = result_bidding.price;
                 } else {
-                    const [result_favorties, result_bidding] = await Promise.all([
+                    console.log(1000);
+                    const [[result_favorties], [result_bidding]] = await Promise.all([
                         this.favoritesRepository.query(`
                         SELECT isFavorites
                         FROM favorites             
