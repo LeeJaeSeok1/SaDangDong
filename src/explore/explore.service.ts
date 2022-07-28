@@ -39,6 +39,10 @@ export class ExploreService {
             if (!_page) {
                 _page = 0;
             }
+            if ((address = "NOT DEFINED")) {
+                console.log("어드레스가 없습니다.");
+                address = undefined;
+            }
             console.log(1);
             const start = Offset(_page, 4);
             console.log(3, start);
@@ -96,7 +100,7 @@ export class ExploreService {
             const nowdate = mysqlnow_date();
             console.log(auction_item);
             const ranking = await this.sellRepository.query(`
-            SELECT user.name, sell.count
+            SELECT user.name, sell.count, user.profile_image
             FROM sell, user
             WHERE sell.address = user.address
             AND sell.start_at <= ${nowdate}
