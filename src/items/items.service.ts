@@ -51,7 +51,7 @@ export class ItemsService {
     // 아이템 상세보기
     async itemDetail(token_id: string, address: string) {
         try {
-            console.log(token_id);
+            console.log(token_id, address);
             const [itemIpfsJson] = await this.itemRepository.query(`
                 SELECT item.ipfsJson
                 FROM item
@@ -67,25 +67,18 @@ export class ItemsService {
 
             const ipfsJson = itemIpfsJson.ipfsJson.split("//")[1];
             console.log(ipfsJson);
-            if (!address) {
-                const [favorites] = await this.userRepository.query(`
-                    SELECT user.address AS favoritesUser
-                    FROM user, favorites
-                    WHERE favorites.token_id = ${token_id}
-                    AND favorites.address = user.address
-                    AND favorites.address = "notLoginUser"
-                    AND favorites.isFavorites = true;
-                `);
-                return favorites;
+            const [favorites] = await this.favoritesRelationRepository.query(`
+            SELECT isFavorites
+            FROM favorites
+            WHERE favorites.token_id = "${token_id}"
+            AND favorites.address = "${address}"
+            `);
+            let isFavorites;
+            if (!favorites) {
+                isFavorites = false;
+            } else {
+                isFavorites = favorites.isFavorites;
             }
-            const [favorites] = await this.userRepository.query(`
-                    SELECT user.address AS favoritesUser
-                    FROM user, favorites
-                    WHERE favorites.token_id = ${token_id}
-                    AND favorites.address = user.address
-                    AND favorites.address = "${address}"
-                    AND favorites.isFavorites = true;
-                `);
 
             if (auction === undefined) {
                 console.log(1);
@@ -101,7 +94,7 @@ export class ItemsService {
                 AND item.token_id = favorites_relation.token_id
                 `);
                 item.ipfsJson = ipfsJson;
-                item.favorites = favorites;
+                item.favorites = isFavorites;
                 return Object.assign({
                     statusCode: 200,
                     success: true,
@@ -128,7 +121,7 @@ export class ItemsService {
             `);
             item.ipfsJson = ipfsJson;
             item.remained_at = remained_at;
-            item.favorites = favorites;
+            item.favorites = isFavorites;
             console.log(item);
 
             return Object.assign({

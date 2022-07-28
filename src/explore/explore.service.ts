@@ -47,16 +47,20 @@ export class ExploreService {
             const start = Offset(_page, 4);
             console.log(3, start);
             const auction_item = await this.itemRepository.query(`
-            SELECT item.token_id, item.image, item.name, auction.id AS auction_id,
-            auction.ended_at, user.name AS user_name, favorites_relation.count
-            FROM item
-                LEFT JOIN auction
-                ON item.token_id = auction.token_id
-                LEFT JOIN user
-                ON  item.address = user.address
-                LEFT JOIN favorites_relation
-                ON  item.token_id = favorites_relation.token_id
-            LIMIT ${start}, 4
+            SELECT *
+            FROM (
+                SELECT item.token_id, item.image, item.name, auction.id AS auction_id,
+                auction.ended_at, auction.progress, user.name AS user_name, favorites_relation.count
+                FROM item
+                    LEFT JOIN auction
+                    ON item.token_id = auction.token_id
+                    LEFT JOIN user
+                    ON  item.address = user.address
+                    LEFT JOIN favorites_relation
+                    ON  item.token_id = favorites_relation.token_id
+                LIMIT ${start}, 4
+            ) AS g
+            WHERE g.progress = true
             `);
             console.log(2);
             auction_item.forEach(async (element) => {
