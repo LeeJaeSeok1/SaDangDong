@@ -92,7 +92,7 @@ export class ItemsService {
                 });
             }
 
-            const limited_time = date_calculate(auction.ended_at);
+            const remained_at = date_calculate(auction.ended_at);
 
             const [item] = await this.itemRepository.query(`
             SELECT DISTINCT item.token_id, item.name, item.description, item.address, item.image, item.ipfsImage,
@@ -109,7 +109,7 @@ export class ItemsService {
             AND item.token_id = favorites_relation.token_id
             `);
             item.ipfsJson = ipfsJson;
-            item.ended_at = limited_time;
+            item.remained_at = remained_at;
 
             console.log(item);
 
