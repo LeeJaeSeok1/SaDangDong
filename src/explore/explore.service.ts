@@ -69,7 +69,7 @@ export class ExploreService {
                     SELECT isFavorites
                     FROM favorites             
                     WHERE favorites.token_id = "${element.token_id}"
-                    AND favorites.address = ${address}
+                    AND favorites.address = "${address}"
                     `),
                     this.biddingRepository.query(`
                     SELECT price
