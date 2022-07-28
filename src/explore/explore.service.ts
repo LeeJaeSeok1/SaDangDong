@@ -39,11 +39,14 @@ export class ExploreService {
             if (!_page) {
                 _page = 0;
             }
+            if (!address) {
+                address = "noaddress";
+            }
             console.log(1);
             const start = Offset(_page, 4);
             console.log(3, start);
             const auction_item = await this.itemRepository.query(`
-            SELECT item.token_id, item.image, item.name, auction.id,
+            SELECT item.token_id, item.image, item.name, auction.id AS auction_id,
             auction.ended_at, user.name AS user_name, favorites_relation.count
             FROM item
                 LEFT JOIN auction
@@ -66,7 +69,7 @@ export class ExploreService {
                     SELECT isFavorites
                     FROM favorites             
                     WHERE favorites.token_id = "${element.token_id}"
-                    AND favorites.address = "${address}"
+                    AND favorites.address = ${address}
                     `),
                     this.biddingRepository.query(`
                     SELECT price
@@ -92,6 +95,7 @@ export class ExploreService {
             ORDER BY sell.count DESC
             LIMIT 5
             `);
+            console.log(ranking);
             // 2022-07-28 17:56:32.480812
 
             return Object.assign({
