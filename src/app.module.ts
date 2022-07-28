@@ -16,7 +16,7 @@ import { ExploreModule } from "./explore/explore.module";
 import { UsersModule } from "./users/users.module";
 import { ItemsModule } from "./items/items.module";
 import { SellModule } from "./sell/sell.module";
-import { ChatModule } from "./chat/chat.module";
+// import { ChatModule } from "./chat/chat.module";
 import { FavoritesModule } from "./favorites/favorites.module";
 import { OfferModule } from "./offer/offer.module";
 import { HelloModule } from "./hello/hello.module";
@@ -33,7 +33,7 @@ import { HelloModule } from "./hello/hello.module";
             }),
         }),
         TypeOrmModule.forRoot(typeORMConfig),
-        ChatModule,
+        // ChatModule,
         UsersModule,
         CollectionsModule,
         ItemsModule,
