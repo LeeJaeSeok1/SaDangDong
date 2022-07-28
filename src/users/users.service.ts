@@ -121,7 +121,7 @@ export class UsersService {
             if (tab === "collection") {
                 information = await this.collectionRepository.query(`
                 SELECT collection.name, collection.description, collection.feature_image, collection.created_at,
-                user.name AS user_name, user.profile_image
+                user.name AS user_name, user.profile_image, user.address
                 FROM collection, user
                 WHERE collection.address = "${id}"
                 AND collection.address = user.address
@@ -132,7 +132,8 @@ export class UsersService {
             }
             if (tab === "item") {
                 information = await this.itemRepository.query(`
-                SELECT DISTINCT item.token_id, item.name, item.address, item.image, user.name AS user_name, favorites_relation.count, item.created_at
+                SELECT DISTINCT item.token_id, item.name, item.owner, item.image,
+                user.name AS user_name, user.address, favorites_relation.count, item.created_at
                 FROM item, user, favorites_relation
                 WHERE item.owner = "${id}"
                 AND item.owner = user.address
@@ -145,7 +146,7 @@ export class UsersService {
             if (tab === "favorites") {
                 information = await this.favoritesRepository.query(`
                 SELECT DISTINCT item.token_id, item.name, item.address, item.image,
-                user.name AS user_name, favorites_relation.count
+                user.name AS user_name, user.address, favorites_relation.count
                 FROM item, user, favorites, favorites_relation
                 WHERE item.owner = "${id}"
                 AND item.owner = user.address
@@ -159,7 +160,9 @@ export class UsersService {
 
             if (tab === "auction") {
                 information = await this.auctionRepository.query(`
-                SELECT DISTINCT item.token_id, item.name, item.address, item.image, user.name AS user_name, favorites_relation.count, auction.id AS auction_id, auction.ended_at, auction.started_at
+                SELECT DISTINCT item.token_id, item.name, item.address, item.image,
+                user.name AS user_name, user.address,
+                favorites_relation.count, auction.id AS auction_id, auction.ended_at, auction.started_at
                 FROM auction, item, user, favorites_relation
                 WHERE item.address = "${id}"
                 AND item.owner = user.address
