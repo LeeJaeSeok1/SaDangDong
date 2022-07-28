@@ -32,9 +32,7 @@ export class SearchService {
 
             if (tab === "collection" || tab === undefined) {
                 console.log(1);
-                information = await this.collectionRepository.query(`
-                SELECT *
-                FROM
+                information = await this.collectionRepository.query(` 
                 (SELECT collection.name, collection.description, collection.feature_image, collection.created_at,
                 collection.address, user.name AS user_name, user.profile_image
                 FROM collection
@@ -43,12 +41,12 @@ export class SearchService {
                 WHERE collection.name like "%${name}%") 
                 UNION
                 (SELECT collection.name, collection.description, collection.feature_image, collection.created_at,
-                collection.address, user.name AS user_name, user.profile_image, user.address
+                collection.address, user.name AS user_name, user.profile_image
                 FROM collection
                     LEFT JOIN user
                     ON collection.address = user.address
                 WHERE user.name like "%${name}%")
-                ORDER BY collection.created_at DESC
+                ORDER BY created_at DESC
                 LIMIT ${start}, ${_limit}
                 `);
                 console.log(information);
