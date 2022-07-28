@@ -42,9 +42,10 @@ export function weekly_calculate() {
 }
 
 export function parse_calculate(ended_at: Date) {
-    const date = ended_at.getMonth() + 1;
-    const day = ended_at.getDate();
-    const hour = ended_at.getHours();
-    const minute = ended_at.getMinutes();
+    const new_date = new Date(ended_at);
+    const date = new_date.getMonth() + 1;
+    const day = new_date.getDate();
+    const hour = new_date.getHours();
+    const minute = new_date.getMinutes();
     return `${date}월${day}일${hour}:${minute}`;
 }
