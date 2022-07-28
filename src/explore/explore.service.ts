@@ -81,7 +81,7 @@ export class ExploreService {
             if (tab === "collection") {
                 information = await this.collectionRepository.query(`
                 SELECT DISTINCT collection.name, collection.description, collection.feature_image, collection.created_at,
-                user.name AS user_name, user.profile_image
+                user.name AS user_name, user.profile_image, user.address
                 FROM collection, user
                 WHERE collection.address = user.address
                 AND collection.archived = 0
@@ -96,7 +96,8 @@ export class ExploreService {
 
             if (tab === "item") {
                 information = await this.itemRepository.query(`
-                SELECT DISTINCT item.token_id, item.name, item.address, item.image, item.created_at, user.name AS user_name, favorites_relation.count
+                SELECT DISTINCT item.token_id, item.name, item.owner, item.image, item.created_at,
+                user.name AS user_name, user.address, favorites_relation.count
                 FROM item, user, favorites_relation
                 WHERE item.address = user.address
                 AND item.token_id = favorites_relation.token_id
@@ -108,7 +109,9 @@ export class ExploreService {
 
             if (tab === "auction") {
                 information = await this.auctionRepository.query(`
-                SELECT DISTINCT item.token_id, item.name, item.address, item.image, auction.started_at, user.name AS user_name, favorites_relation.count, auction.id AS auction_id, auction.ended_at
+                SELECT DISTINCT item.token_id, item.name, item.owner, item.image, auction.started_at, 
+                user.name AS user_name, user.address, favorites_relation.count,
+                auction.id AS auction_id, auction.ended_at
                 FROM auction, item, user, favorites_relation
                 WHERE item.address = user.address
                 AND item.token_id = favorites_relation.token_id
