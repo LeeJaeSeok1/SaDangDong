@@ -67,7 +67,9 @@ export class ItemsService {
 
             const ipfsJson = itemIpfsJson.ipfsJson.split("//")[1];
             console.log(ipfsJson);
-
+            if (!address) {
+                address = "notLoginUser";
+            }
             const [favorites] = await this.userRepository.query(`
                 SELECT user.address AS favoritesUser
                 FROM user, favorites
