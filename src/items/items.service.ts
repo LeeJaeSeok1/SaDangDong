@@ -68,15 +68,24 @@ export class ItemsService {
             const ipfsJson = itemIpfsJson.ipfsJson.split("//")[1];
             console.log(ipfsJson);
             if (!address) {
-                address = "notLoginUser";
+                const [favorites] = await this.userRepository.query(`
+                    SELECT user.address AS favoritesUser
+                    FROM user, favorites
+                    WHERE favorites.token_id = ${token_id}
+                    AND favorites.address = user.address
+                    AND favorites.address = "notLoginUser"
+                    AND favorites.isFavorites = true;
+                `);
+                return favorites;
             }
             const [favorites] = await this.userRepository.query(`
-                SELECT user.address AS favoritesUser, favorites.isFavorites
-                FROM user, favorites
-                WHERE favorites.token_id = ${token_id}
-                AND favorites.address = user.address
-                AND favorites.address = "${address}"
-            `);
+                    SELECT user.address AS favoritesUser
+                    FROM user, favorites
+                    WHERE favorites.token_id = ${token_id}
+                    AND favorites.address = user.address
+                    AND favorites.address = "${address}"
+                    AND favorites.isFavorites = true;
+                `);
 
             if (auction === undefined) {
                 console.log(1);
