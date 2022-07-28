@@ -71,13 +71,11 @@ export class ItemsService {
                 address = "notLoginUser";
             }
             const [favorites] = await this.userRepository.query(`
-                SELECT user.address AS favoritesUser
+                SELECT user.address AS favoritesUser, favorites.isFavorites
                 FROM user, favorites
                 WHERE favorites.token_id = ${token_id}
                 AND favorites.address = user.address
                 AND favorites.address = "${address}"
-                AND favorites.isFavorites = true;
-
             `);
 
             if (auction === undefined) {
