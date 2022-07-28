@@ -116,6 +116,11 @@ export class UsersService {
     async userInfo(id: string, tab: string, _page: number, _limit: number) {
         try {
             const start = Offset(_page, _limit);
+            const [userInfo] = await this.userRepository.query(`
+            SELECT user.name, user.profile_image, user.address
+            FROM user
+            WHERE user.address = "${id}"
+            `);
 
             let information;
             if (tab === "collection") {
@@ -181,7 +186,8 @@ export class UsersService {
                 statusCode: 200,
                 success: true,
                 statusMsg: `유저의 ${tab} 목록을 불러왔습니다.`,
-                data: information,
+                data: userInfo,
+                information,
             });
         } catch (error) {
             throw new BadRequestException(error.message);
