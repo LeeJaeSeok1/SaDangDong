@@ -87,13 +87,13 @@ export class ExploreService {
                         this.favoritesRepository.query(`
                         SELECT isFavorites
                         FROM favorites             
-                        WHERE favorites.token_id = "${element.token_id}"
+                        WHERE favorites.token_id = ${element.token_id}
                         AND favorites.address = "${address}"
                         `),
                         this.biddingRepository.query(`
                         SELECT price
                         FROM bidding
-                        WHERE auctionId = "${element.auction_id}"
+                        WHERE auctionId = ${element.auction_id}
                         `),
                     ]);
 
@@ -183,7 +183,7 @@ export class ExploreService {
                         const [IsFavorites] = await this.favoritesRepository.query(`
                         SELECT isFavorites
                         FROM favorites             
-                        WHERE favorites.token_id = "${element.token_id}"
+                        WHERE favorites.token_id = ${element.token_id}
                         AND favorites.address = "${address}"
                         `);
                         element.isFavorites = IsFavorites.isFavorites;
@@ -222,7 +222,7 @@ export class ExploreService {
                         const [result_bidding] = await this.biddingRepository.query(`
                             SELECT price
                             FROM bidding
-                            WHERE auctionId = "${element.auction_id}"
+                            WHERE auctionId = ${element.auction_id}
                             `);
                         element.isFavorites = 0;
                         element.price = result_bidding.price;
@@ -231,13 +231,13 @@ export class ExploreService {
                             this.favoritesRepository.query(`
                             SELECT isFavorites
                             FROM favorites             
-                            WHERE favorites.token_id = "${element.token_id}"
+                            WHERE favorites.token_id = ${element.token_id}
                             AND favorites.address = "${address}"
                             `),
                             this.biddingRepository.query(`
                             SELECT price
                             FROM bidding
-                            WHERE auctionId = "${element.auction_id}"
+                            WHERE auctionId = ${element.auction_id}
                             `),
                         ]);
 
