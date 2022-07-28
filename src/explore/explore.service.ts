@@ -35,13 +35,15 @@ export class ExploreService {
 
     async mainInfo(_page, address) {
         try {
+            console.log(address);
             console.log("시작");
             if (!_page) {
+                console.log("page가 없습니다.");
                 _page = 0;
             }
-            if ((address = "NOT DEFINED")) {
+            if (address == `"NOT DEFINED"`) {
                 console.log("어드레스가 없습니다.");
-                address = undefined;
+                address = 0;
             }
             console.log(1);
             const start = Offset(_page, 4);
@@ -131,9 +133,13 @@ export class ExploreService {
         try {
             // 페이지 네이션 처리
             if (tab == "NOT DEFINED") tab = "collection";
-            if (address == "NOT DEFINED") address = undefined;
+            if (address == `"NOT DEFINED"`) {
+                console.log("유저가 없습니다.");
+                address = undefined;
+            }
             if (_page == NaN) _page = 0;
             if (_limit == NaN) _limit = 12;
+            console.log(tab, address, _page, _limit);
 
             const start = Offset(_page, _limit);
             let information;
@@ -159,7 +165,7 @@ export class ExploreService {
                 information = await this.itemRepository.query(`
                 SELECT item.token_id, item.name, item.owner, item.image, item.created_at,
                 user.name AS user_name, user.address, favorites_relation.count
-                FROM item, user, favorites_relation
+                FROM item
                     LEFT JOIN user
                     ON item.address = user.address
                     LEFT JOIN favorites_relation
@@ -171,6 +177,7 @@ export class ExploreService {
 
                 information.forEach(async (element) => {
                     if (!address) {
+                        console.log(address);
                         element.isFavorites = 0;
                     } else {
                         const [IsFavorites] = await this.favoritesRepository.query(`
