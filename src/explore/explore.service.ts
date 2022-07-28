@@ -90,7 +90,7 @@ export class ExploreService {
             SELECT user.name, sell.count
             FROM sell, user
             WHERE sell.address = user.address
-            AND sell.start_at < ${nowdate}
+            AND sell.start_at <= ${nowdate}
             AND sell.end_at > ${nowdate}
             ORDER BY sell.count DESC
             LIMIT 5

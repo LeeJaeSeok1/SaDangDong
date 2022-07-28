@@ -51,8 +51,8 @@ export function mysqlnow_date() {
     }
     const seconds = nowDate.getSeconds();
     console.log(year);
-
-    return `${year}-${date}-${day} ${hour}:${minute}:${seconds}`;
+    // return `${year}-${date}-${day} ${hour}:${minute}:${seconds}`;
+    return `${year}-${date}-${day}`;
     // 2022-07-28 17:56:32.480812
 }
 
