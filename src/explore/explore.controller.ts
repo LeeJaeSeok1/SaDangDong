@@ -13,9 +13,9 @@ export class ExploreController {
         description: "메인 패이지",
     })
     @Get("main")
-    getMainInfo(@Query("_page") _page: number) {
-        console.log(_page);
-        return this.exploreService.mainInfo(_page);
+    getMainInfo(@Query("_page") _page: number, @AuthToken() address: string) {
+        console.log(_page, address);
+        return this.exploreService.mainInfo(_page, address);
     }
 
     @ApiQuery({

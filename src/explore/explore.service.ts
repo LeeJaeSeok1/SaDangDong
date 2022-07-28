@@ -10,6 +10,7 @@ import { Favorites } from "src/favorites/entities/favorites.entity";
 import { Offset } from "src/plug/pagination.function";
 import { date_calculate, create_date, now_date, parse_calculate } from "src/plug/caculation.function";
 import { Sell } from "src/sell/entities/sell.entity";
+import { Bidding } from "src/offer/entities/bidding.entity";
 
 @Injectable()
 export class ExploreService {
@@ -28,25 +29,47 @@ export class ExploreService {
         private favoritesRepository: Repository<Favorites>,
         @InjectRepository(Sell)
         private sellRepository: Repository<Sell>,
+        @InjectRepository(Bidding)
+        private biddingRepository: Repository<Bidding>,
     ) {}
 
-    async mainInfo(_page) {
+    async mainInfo(_page, address) {
         try {
             const start = Offset(_page, 4);
-            const auction = await this.auctionRepository.query(`
-            SELECT auction.id, auction.ended_at, item.image, item.token_id, item.name, item.address, user.name, favorites_relation.count, bidding.price
-            FROM auction, item, favorites_relation, bidding
-            WHERE auction.progress = true
-            AND auction.token_id = item.token_id
-            AND item.address = user.address
-            AND item.token_id = favorites_relation.token_id
-            AND auction.id = bidding.auctionId
-            ORDER BY auction.ended_at DESC
+            const auction_item = await this.itemRepository.query(`
+            SELECT item.token_id, item.image, item.name, auction.id,
+            auction.ended_at, user.name AS user_name, favorites_relation.count, 
+            FROM item
+                LEFT JOIN auction
+                ON item.token_id = auction.token_id
+                LEFT JOIN user
+                ON  item.address = user.address
+                LEFT JOIN favorites_relation
+                ON  item.token_id = favorites_relation.token_id
             LIMIT ${start}, 4
             `);
-            auction.forEach((element) => {
+            auction_item.forEach(async (element) => {
                 const remained_at = date_calculate(element.ended_at);
                 element.remained_at = remained_at;
+                const ended_at = parse_calculate(element.ended_at);
+                element.ended_at = ended_at;
+
+                const [result_favorties, result_bidding] = await Promise.all([
+                    this.favoritesRepository.query(`
+                    SELECT isFavorites
+                    FROM favorites             
+                    WHERE favorites.token_id = "${element.token_id}"
+                    AND favorites.address = "${address}"
+                    `),
+                    this.biddingRepository.query(`
+                    SELECT price
+                    FROM bidding
+                    WHERE auctionId = "${element.auction_id}"
+                    `),
+                ]);
+
+                element.isFavorites = result_favorties.isFavorites;
+                element.price = result_bidding.price;
             });
 
             const nowdate = now_date();
@@ -65,7 +88,7 @@ export class ExploreService {
                 statusCode: 200,
                 success: true,
                 statusMsg: `메인 정보를 불러왔습니다.`,
-                data: { auction, ranking },
+                data: { auction_item, ranking },
             });
         } catch (error) {
             console.log(error.message);
