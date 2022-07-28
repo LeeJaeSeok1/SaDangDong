@@ -35,6 +35,9 @@ export class ExploreService {
 
     async mainInfo(_page, address) {
         try {
+            if (_page == NaN) {
+                _page = 0;
+            }
             const start = Offset(_page, 4);
             const auction_item = await this.itemRepository.query(`
             SELECT item.token_id, item.image, item.name, auction.id,
