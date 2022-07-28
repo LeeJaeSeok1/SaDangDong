@@ -8,7 +8,7 @@ import { User } from "src/users/entities/user.entity";
 import { Favorites_Relation } from "src/favorites/entities/favorites_relation.entity";
 import { Favorites } from "src/favorites/entities/favorites.entity";
 import { Offset } from "src/plug/pagination.function";
-import { date_calculate, create_date, now_date, parse_calculate } from "src/plug/caculation.function";
+import { date_calculate, create_date, now_date, parse_calculate, mysqlnow_date } from "src/plug/caculation.function";
 import { Sell } from "src/sell/entities/sell.entity";
 import { Bidding } from "src/offer/entities/bidding.entity";
 
@@ -78,12 +78,13 @@ export class ExploreService {
                 element.isFavorites = result_favorties.isFavorites;
                 element.price = result_bidding.price;
             });
+
             console.log(4);
 
-            const nowdate = now_date();
-
+            const nowdate = mysqlnow_date();
+            console.log(auction_item);
             const ranking = await this.sellRepository.query(`
-            SELECt user.name, sell.count
+            SELECT user.name, sell.count
             FROM sell, user
             WHERE sell.address = user.address
             AND sell.start_at < ${nowdate}
@@ -91,6 +92,7 @@ export class ExploreService {
             ORDER BY sell.count DESC
             LIMIT 5
             `);
+            // 2022-07-28 17:56:32.480812
 
             return Object.assign({
                 statusCode: 200,

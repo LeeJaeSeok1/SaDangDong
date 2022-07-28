@@ -32,7 +32,7 @@ export class FavoritesService {
                 );
                 return Object.assign({
                     success: true,
-                    statusMsg: "favorites에 추가 했습니다",
+                    statusMsg: "좋아요를 눌렀습니다.",
                     data: favorites,
                     count,
                 });
@@ -49,7 +49,7 @@ export class FavoritesService {
                 return Object.assign({
                     statusCode: 201,
                     success: true,
-                    statusMsg: "favortes에 추가 했습니다.",
+                    statusMsg: "좋아요를 눌렀습니다.",
                     data: updateFavotites,
                     favoritesCount,
                 });

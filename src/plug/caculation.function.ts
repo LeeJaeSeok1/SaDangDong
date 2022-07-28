@@ -24,6 +24,38 @@ export function now_date() {
     return nowDate;
 }
 
+export function mysqlnow_date() {
+    const UTC_date = new Date();
+    console.log(UTC_date);
+    const nowDate = new Date();
+    nowDate.setHours(UTC_date.getHours() + 9);
+    const year = nowDate.getFullYear();
+    let date = nowDate.getMonth() + 1 + "";
+    if (date.length == 1) {
+        date = "0" + date;
+    }
+
+    let day = nowDate.getDate() + "";
+    if (day.length == 1) {
+        day = "0" + day;
+    }
+
+    let hour = nowDate.getHours() + "";
+    if (hour.length == 1) {
+        hour = "0" + hour;
+    }
+
+    let minute = nowDate.getMinutes() + "";
+    if (minute.length == 1) {
+        minute = "0" + minute;
+    }
+    const seconds = nowDate.getSeconds();
+    console.log(year);
+
+    return `${year}-${date}-${day} ${hour}:${minute}:${seconds}`;
+    // 2022-07-28 17:56:32.480812
+}
+
 export function weekly_calculate() {
     const standard_date = new Date("2022-07-10T00:00:00");
     standard_date.setHours(standard_date.getHours() + 9);
