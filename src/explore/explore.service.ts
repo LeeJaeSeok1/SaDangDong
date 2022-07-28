@@ -35,6 +35,7 @@ export class ExploreService {
 
     async mainInfo(_page, address) {
         try {
+            console.log("시작");
             if (_page == NaN) {
                 _page = 0;
             }
