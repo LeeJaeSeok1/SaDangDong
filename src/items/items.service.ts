@@ -49,7 +49,7 @@ export class ItemsService {
     }
 
     // 아이템 상세보기
-    async itemDetail(token_id: string) {
+    async itemDetail(token_id: string, address: string) {
         try {
             console.log(token_id);
             const [itemIpfsJson] = await this.itemRepository.query(`
@@ -64,10 +64,19 @@ export class ItemsService {
             WHERE token_id = "${token_id}"
             AND progress = true
             `);
-            console.log(auction);
 
             const ipfsJson = itemIpfsJson.ipfsJson.split("//")[1];
             console.log(ipfsJson);
+
+            const [favorites] = await this.userRepository.query(`
+                SELECT user.address AS favoritesUser
+                FROM user, favorites
+                WHERE favorites.token_id = ${token_id}
+                AND favorites.address = user.address
+                AND favorites.address = "${address}"
+                AND favorites.isFavorites = true;
+
+            `);
 
             if (auction === undefined) {
                 console.log(1);
@@ -83,7 +92,7 @@ export class ItemsService {
                 AND item.token_id = favorites_relation.token_id
                 `);
                 item.ipfsJson = ipfsJson;
-
+                item.favorites = favorites;
                 return Object.assign({
                     statusCode: 200,
                     success: true,
@@ -110,7 +119,7 @@ export class ItemsService {
             `);
             item.ipfsJson = ipfsJson;
             item.remained_at = remained_at;
-
+            item.favorites = favorites;
             console.log(item);
 
             return Object.assign({

@@ -17,6 +17,7 @@ import { TransformInterceptor } from "src/config/transform.interceptor";
 import { FilesInterceptor } from "@nestjs/platform-express";
 import { storage } from "src/config/multerS3.config";
 import { AuthToken } from "src/config/auth.decorator";
+import { IsBtcAddress } from "class-validator";
 
 @ApiTags("Items")
 @Controller("api/items")
@@ -52,8 +53,8 @@ export class ItemsController {
     // 아이템 상세보기
     @ApiOperation({ summary: "아이템 상세보기", description: "아이템 상세보기 페이지" })
     @Get(":id")
-    findByIdItem(@Param("id") id: string) {
-        return this.itemsService.itemDetail(id);
+    findByIdItem(@Param("id") id: string, @AuthToken() address: string) {
+        return this.itemsService.itemDetail(id, address);
     }
 
     // 아이템 수정
