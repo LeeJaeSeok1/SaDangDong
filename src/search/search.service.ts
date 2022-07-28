@@ -7,6 +7,8 @@ import { Auction } from "src/auctions/entities/auction.entity";
 import { User } from "src/users/entities/user.entity";
 import { Offset } from "src/plug/pagination.function";
 import { date_calculate } from "src/plug/caculation.function";
+import { Favorites } from "src/favorites/entities/favorites.entity";
+import { Favorites_Relation } from "src/favorites/entities/favorites_relation.entity";
 
 @Injectable()
 export class SearchService {
@@ -19,6 +21,10 @@ export class SearchService {
         private auctionRepository: Repository<Auction>,
         @InjectRepository(User)
         private userRepository: Repository<User>,
+        @InjectRepository(Favorites)
+        private favoritesRepository: Repository<Favorites>,
+        @InjectRepository(Favorites_Relation)
+        private favoritesrelationRepository: Repository<Favorites_Relation>,
     ) {}
 
     async searchInfo(tab: string, name: string, _page: number, _limit: number, address: string) {
@@ -79,6 +85,21 @@ export class SearchService {
                 ORDER BY created_at DESC
                 LIMIT ${start}, ${_limit}
                 `);
+
+                information.forEach(async (element) => {
+                    if (!address) {
+                        console.log(address);
+                        element.isFavorites = 0;
+                    } else {
+                        const [IsFavorites] = await this.favoritesRepository.query(`
+                        SELECT isFavorites
+                        FROM favorites             
+                        WHERE favorites.token_id = "${element.token_id}"
+                        AND favorites.address = "${address}"
+                        `);
+                        element.isFavorites = IsFavorites.isFavorites;
+                    }
+                });
                 console.log(information);
             }
 
