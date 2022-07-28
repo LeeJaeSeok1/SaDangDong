@@ -73,32 +73,36 @@ export class AuctionsService {
     }
 
     async getOneAuction(token_id: string) {
-        console.log(token_id);
+        try {
+            console.log(token_id);
 
-        const [auction] = await this.auctionRepository.query(`
-        SELECT auction.price, auction.token_id, auction.ended_at,
-        item.collection_name, item.owner, item.name, item.description,
-        item.address, item.image
-        FROM auction, item
-        WHERE auction.token_id = "${token_id}" 
-        AND auction.token_id = item.token_id
-        AND auction.progress = true
-        `);
+            const [auction] = await this.auctionRepository.query(`
+            SELECT auction.price, auction.token_id, auction.ended_at,
+            item.collection_name, item.owner, item.name, item.description,
+            item.address, item.image
+            FROM auction, item
+            WHERE auction.token_id = "${token_id}" 
+            AND auction.token_id = item.token_id
+            AND auction.progress = true
+            `);
 
-        console.log(auction);
-        if (!auction) {
-            return "없는 토큰입니다.";
+            console.log(auction);
+            if (!auction) {
+                return "없는 토큰입니다.";
+            }
+
+            const remained_at = date_calculate(auction.ended_at);
+
+            auction.remained_at = remained_at;
+
+            return Object.assign({
+                statusCode: 200,
+                statusMsg: `${token_id} 옥션을 불러왔습니다.`,
+                data: auction,
+            });
+        } catch (error) {
+            throw new BadRequestException(error.message);
         }
-
-        const remained_at = date_calculate(auction.ended_at);
-
-        auction.remained_at = remained_at;
-
-        return Object.assign({
-            statusCode: 200,
-            statusMsg: `${token_id} 옥션을 불러왔습니다.`,
-            data: auction,
-        });
     }
 
     getAllAuction(): Promise<Auction[]> {

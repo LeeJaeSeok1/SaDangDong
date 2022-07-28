@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { BadRequestException, Injectable } from "@nestjs/common";
 import { Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Collection } from "src/collections/entities/collection.entity";
@@ -91,7 +91,7 @@ export class ExploreService {
                 data: { auction_item, ranking },
             });
         } catch (error) {
-            console.log(error.message);
+            throw new BadRequestException(error.message);
         }
     }
 
@@ -161,7 +161,7 @@ export class ExploreService {
                 data: information,
             });
         } catch (error) {
-            console.log(error.message);
+            throw new BadRequestException(error.message);
         }
     }
 }
