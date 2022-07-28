@@ -204,6 +204,7 @@ export class ExploreService {
                         ON  item.address = user.address
                         LEFT JOIN favorites_relation
                         ON  item.token_id = favorites_relation.token_id
+                    WHERE item.archived = 0
                     ORDER BY auction.ended_at DESC
                     LIMIT ${start}, ${_limit}
                 ) AS g
