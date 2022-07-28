@@ -38,7 +38,9 @@ export class ExploreService {
             if (_page == NaN) {
                 _page = 0;
             }
+            console.log(1);
             const start = Offset(_page, 4);
+            console.log(3, start);
             const auction_item = await this.itemRepository.query(`
             SELECT item.token_id, item.image, item.name, auction.id,
             auction.ended_at, user.name AS user_name, favorites_relation.count
@@ -51,6 +53,7 @@ export class ExploreService {
                 ON  item.token_id = favorites_relation.token_id
             LIMIT ${start}, 4
             `);
+            console.log(2);
             auction_item.forEach(async (element) => {
                 const remained_at = date_calculate(element.ended_at);
                 element.remained_at = remained_at;
@@ -74,6 +77,7 @@ export class ExploreService {
                 element.isFavorites = result_favorties.isFavorites;
                 element.price = result_bidding.price;
             });
+            console.log(4);
 
             const nowdate = now_date();
 
