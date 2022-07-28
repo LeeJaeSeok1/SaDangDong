@@ -123,9 +123,9 @@ export class ExploreService {
 
                 information.forEach((element) => {
                     const remained_at = date_calculate(element.ended_at);
-                    const parse_end_at = parse_calculate(element.end_at);
+                    const parse_end_at = parse_calculate(element.ended_at);
                     element.remained_at = remained_at;
-                    element.end_at = parse_end_at;
+                    element.ended_at = parse_end_at;
                 });
             }
 
