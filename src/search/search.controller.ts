@@ -31,7 +31,7 @@ export class SearchController {
         @Query("_limit") _limit: number,
         @AuthToken() address: string,
     ) {
-        console.log(name, tab, address);
+        console.log(name, tab, address, _page, _limit);
         console.log(typeof name);
         // const stringTab = decodeURIComponent(tab);
         // const stringName = decodeURIComponent(name);
