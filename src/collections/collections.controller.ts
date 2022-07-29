@@ -28,21 +28,22 @@ export class CollectionsController {
     constructor(private readonly collectionsService: CollectionsService) {}
 
     @ApiOperation({ summary: "컬렉션 보기" })
-    @Get()
-    findCollections(): Promise<Collection[]> {
-        return this.collectionsService.findCollection();
+    @Get(":name")
+    findCollections(@Param("name") name: string) {
+        return this.collectionsService.findByOneCollection(name);
     }
 
     @ApiOperation({ summary: "컬렉션 상세보기" })
-    @Get(":id")
+    @Get("/info/:name")
     findOneColleciton(
-        @Param("id") id: string,
+        @Param("name") name: string,
         @Query("tab") tab: string,
         @Query("_page") _page: number,
         @Query("_limit") _limit: number,
+        @AuthToken() address: string,
     ) {
         // console.log("컨트롤러 컬렉션 아이디", id);
-        return this.collectionsService.findOneCollection(id, tab, _page, _limit);
+        return this.collectionsService.findOneCollection(name, tab, _page, _limit, address);
     }
 
     @ApiOperation({ summary: "컬렉셩 생성" })
@@ -54,17 +55,6 @@ export class CollectionsController {
         @Body(ValidationPipe) collectionData,
         @AuthToken() address: string,
     ) {
-        // console.log("collectionData", collectionData);
-        // console.log("files", files);
-        // console.log("address", address);
-
-        // return Object.assign({
-        //     statusCode: 201,
-        //     statusMsg: "컬렉션을 생성했습니다.",
-        //     data: collectionData,
-        //     addressId,
-        //     files,
-        // });
         return this.collectionsService.newCollection(collectionData, files, address);
     }
 
