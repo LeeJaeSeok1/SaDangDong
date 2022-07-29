@@ -20,6 +20,7 @@ import { SellModule } from "./sell/sell.module";
 import { FavoritesModule } from "./favorites/favorites.module";
 import { OfferModule } from "./offer/offer.module";
 import { HelloModule } from "./hello/hello.module";
+import { TaskModule } from "./task/task.module";
 
 @Module({
     imports: [
@@ -46,6 +47,7 @@ import { HelloModule } from "./hello/hello.module";
         ImagesModule,
         OfferModule,
         HelloModule,
+        TaskModule,
     ],
     controllers: [AppController],
     providers: [AppService, { provide: APP_PIPE, useClass: ValidationPipe }],
