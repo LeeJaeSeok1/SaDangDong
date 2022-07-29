@@ -12,6 +12,7 @@ import { userName } from "src/plug/userName.function";
 import { date_calculate, parse_calculate } from "src/plug/caculation.function";
 import { Bidding } from "src/offer/entities/bidding.entity";
 import { Favorites_Relation } from "src/favorites/entities/favorites_relation.entity";
+import { EventListenerTypes } from "typeorm/metadata/types/EventListenerTypes";
 
 @Injectable()
 export class UsersService {
@@ -183,7 +184,11 @@ export class UsersService {
                         WHERE favorites.token_id = ${element.token_id}
                         AND favorites.address = "${address}"
                         `);
-                            element.isFavorites = IsFavorites.isFavorites;
+                            if (IsFavorites) {
+                                element.isFavorites = IsFavorites.isFavorites;
+                            } else {
+                                element.isFavorites = 0;
+                            }
                         }
                     }),
                 );
@@ -239,9 +244,13 @@ export class UsersService {
                             WHERE auctionId = ${element.auction_id}
                             `),
                             ]);
-
-                            element.isFavorites = result_favorties.isFavorites;
-                            element.price = result_bidding.price;
+                            if (result_favorties) {
+                                element.isFavorites = result_favorties.isFavorites;
+                                element.price = result_bidding.price;
+                            } else {
+                                element.isFavorites = 0;
+                                element.price = result_bidding.price;
+                            }
                         }
                     }),
                 );
@@ -267,9 +276,44 @@ export class UsersService {
                 `);
             }
 
-            if (tab === "buyNFT") {
+            if (tab === "buynft") {
+                console.log("buynft");
                 information = await this.itemRepository.query(`
+                SELECT item.token_id, item.name, item.owner, item.image, item.created_at, item.address,
+                user.name AS user_name, favorites_relation.count
+                FROM item
+                    LEFT JOIN user
+                    ON item.address = user.address
+                    LEFT JOIN favorites_relation
+                    ON item.token_id = favorites_relation.token_id
+                WHERE item.owner = "${address}"
+                AND item.owner != item.address
+                AND item.archived = 0
+                ORDER BY item.updated_at DESC
+                LIMIT ${start}, ${_limit}
                 `);
+                console.log(information);
+
+                await Promise.all(
+                    information.map(async (element) => {
+                        if (!address) {
+                            console.log(address);
+                            element.isFavorites = 0;
+                        } else {
+                            const [IsFavorites] = await this.favoritesRepository.query(`
+                        SELECT isFavorites
+                        FROM favorites             
+                        WHERE favorites.token_id = ${element.token_id}
+                        AND favorites.address = "${address}"
+                        `);
+                            if (IsFavorites) {
+                                element.isFavorites = IsFavorites.isFavorites;
+                            } else {
+                                element.isFavorites = 0;
+                            }
+                        }
+                    }),
+                );
             }
 
             if (tab === "complete") {
