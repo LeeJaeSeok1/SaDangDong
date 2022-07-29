@@ -59,19 +59,19 @@ export class CollectionsController {
     }
 
     @ApiOperation({ summary: "컬렉션 수정" })
-    @Put(":id")
+    @Put(":name")
     @UsePipes(TransformInterceptor)
     @UseInterceptors(FilesInterceptor("files", 3, { storage: storage }))
     updateCollection(
-        @Param("id") id: string,
+        @Param("name") name: string,
         @UploadedFiles() files: Express.Multer.File[],
         @Body(ValidationPipe) updateData,
         @AuthToken() address: string,
     ) {
         try {
             console.log("컬럼수정 컨트롤러 어드레스 오리진", address);
-            console.log("컬럼수정 컨트롤러 아이디 확인", id);
-            return this.collectionsService.updateCollection(id, updateData, address, files);
+            console.log("컬럼수정 컨트롤러 아이디 확인", name);
+            return this.collectionsService.updateCollection(name, updateData, address, files);
         } catch (error) {
             console.log("에러메세지", error.message);
             throw new BadRequestException(error.message);
@@ -79,12 +79,12 @@ export class CollectionsController {
     }
 
     @ApiOperation({ summary: "컬렉션 삭제" })
-    @Delete(":id")
-    deleteCollection(@Param("id") id: string, @AuthToken() address: string) {
+    @Delete(":name")
+    deleteCollection(@Param("name") name: string, @AuthToken() address: string) {
         try {
             console.log("컬럼삭세 컨트롤러 어드레스 오리진", address);
-            console.log("컬럼삭제 컨트롤러 아이디 확인", id);
-            return this.collectionsService.deleteCollection(id, address);
+            console.log("컬럼삭제 컨트롤러 아이디 확인", name);
+            return this.collectionsService.deleteCollection(name, address);
         } catch (error) {
             console.log("컨트롤러 캐치 에러", error.message);
             throw new BadRequestException(error.message);

@@ -39,9 +39,11 @@ export class CollectionsService {
         try {
             console.log(name);
             const [collection] = await this.collectionRepository.query(`
-            SELECT *
+            SELECT collection.*, user.name AS user_name, user.profile_image
             FROM collection
-            WHERE name = ${name}
+                LEFT JOIN user
+                ON collection.address = user.address
+            WHERE collection.name = "${name}"
             `);
             return Object.assign({
                 statusCode: 200,
@@ -63,7 +65,7 @@ export class CollectionsService {
             }
             if (!_page) _page = 0;
             if (!_limit) _limit = 12;
-            if (!tab) tab = "item";
+            if (!tab) tab = "auction";
             console.log(name, tab, _page, _limit);
 
             const start = Offset(_page, _limit);
@@ -81,6 +83,7 @@ export class CollectionsService {
                     LEFT JOIN favorites_relation
                     ON item.token_id = favorites_relation.token_id
                 WHERE item.archived = 0
+                AND collection.name ="${name}"
                 ORDER BY item.created_at DESC
                 LIMIT ${start}, ${_limit}
                 `);
@@ -122,6 +125,7 @@ export class CollectionsService {
                         LEFT JOIN favorites_relation
                         ON  item.token_id = favorites_relation.token_id
                     WHERE item.archived = 0
+                    AND collection.name ="${name}"
                     ORDER BY auction.ended_at DESC
                 ) AS g
                 WHERE g.progress = true
@@ -245,12 +249,12 @@ export class CollectionsService {
     }
 
     // 컬렉션 수정
-    async updateCollection(id: string, updateData, address: string, files: Express.Multer.File[]) {
+    async updateCollection(name: string, updateData, address: string, files: Express.Multer.File[]) {
         try {
             const [exisCollection] = await this.collectionRepository.query(`
             SELECT *
             FROM collection
-            WHERE name = ${id}
+            WHERE name = ${name}
             `);
             console.log(exisCollection);
             if (exisCollection.address !== address) {
@@ -291,7 +295,7 @@ export class CollectionsService {
             exisCollection.name = obj.name;
             exisCollection.description = obj.desc;
             exisCollection.commission = obj.commission;
-            await this.collectionRepository.update(id, exisCollection);
+            await this.collectionRepository.update(name, exisCollection);
 
             return Object.assign({
                 statusCode: 201,
@@ -305,14 +309,14 @@ export class CollectionsService {
     }
 
     // 컬렉션 삭제
-    async deleteCollection(id: string, address: string) {
+    async deleteCollection(name: string, address: string) {
         try {
             console.log("서비스 아이디 확인", address);
-            console.log("컬럼삭제 서비스 아이디 확인", id);
+            console.log("컬럼삭제 서비스 아이디 확인", name);
             const [exisCollection] = await this.collectionRepository.query(`
             SELECT *
             FROM collection
-            WHERE name = ${id}
+            WHERE name = ${name}
             `);
             console.log("서비스, 컬럼확인", exisCollection);
             if (exisCollection.address !== address) {
@@ -321,7 +325,7 @@ export class CollectionsService {
             // await this.collectionRepository.query(`UPDATE collection SET archived = 1 WHERE name = "${id}";`);
             // await this.collectionRepository.delete(exisCollection);
             await this.collectionRepository.query(`
-            UPDATE collection SET archived_at = NOW(), archived = 1 WHERE name = "${id}"
+            UPDATE collection SET archived_at = NOW(), archived = 1 WHERE name = "${name}"
             `);
             return Object.assign({
                 statusCode: 201,
