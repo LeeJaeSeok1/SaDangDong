@@ -206,8 +206,7 @@ export class ItemsService {
                 statusCode: 201,
                 success: true,
                 statusMsg: "민팅을 성공 했습니다.",
-                data: createItem,
-                favoritesCount,
+                data: { createItem, favoritesCount },
             });
         } catch (error) {
             console.log("아이템 생성 서비스 에러", error.message);

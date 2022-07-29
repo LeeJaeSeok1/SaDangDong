@@ -186,8 +186,7 @@ export class UsersService {
                 statusCode: 200,
                 success: true,
                 statusMsg: `유저의 ${tab} 목록을 불러왔습니다.`,
-                data: userInfo,
-                information,
+                data: { userInfo, information },
             });
         } catch (error) {
             throw new BadRequestException(error.message);

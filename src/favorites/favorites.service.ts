@@ -50,8 +50,7 @@ export class FavoritesService {
                     statusCode: 201,
                     success: true,
                     statusMsg: "좋아요를 눌렀습니다.",
-                    data: updateFavotites,
-                    favoritesCount,
+                    data: { updateFavotites, favoritesCount },
                 });
             }
 
@@ -65,8 +64,7 @@ export class FavoritesService {
                 statusCode: 201,
                 success: true,
                 statusMsg: "좋아요를 취소 했습니다.",
-                data: disfavorites,
-                disfavoritesCount,
+                data: { disfavorites, disfavoritesCount },
             });
         } catch (error) {
             throw new BadRequestException(error.message);

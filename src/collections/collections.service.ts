@@ -37,8 +37,7 @@ export class CollectionsService {
             console.log("컬렉션 서비스 아이디", id);
             // const collectionInfo = await this.collectionRepository.findOne({ where: { name: id } });
             const [collectionInfo] = await this.collectionRepository.query(`
-            SELECT collection.name, collection.description, collection.banner_image, collection.created_at,
-            user.name AS user_name, user.profile_image
+            SELECT collection.*, user.name AS user_name, user.profile_image
             FROM collection, user
             WHERE collection.address = user.address
             AND collection.name = "${id}"
@@ -83,8 +82,7 @@ export class CollectionsService {
                 statusCode: 200,
                 success: true,
                 statusMsg: "컬렉션을 불러왔습니다.",
-                data: collectionInfo,
-                information,
+                data: { collectionInfo, information },
             });
         } catch (error) {
             console.log(error.message);
