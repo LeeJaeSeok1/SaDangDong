@@ -66,41 +66,43 @@ export class ExploreService {
             WHERE g.progress = true
             `);
             console.log(2);
-            auction_item.forEach(async (element) => {
-                const remained_at = date_calculate(element.ended_at);
-                element.remained_at = remained_at;
-                const ended_at = parse_calculate(element.ended_at);
-                element.ended_at = ended_at;
+            await Promise.all(
+                auction_item.map(async (element) => {
+                    const remained_at = date_calculate(element.ended_at);
+                    element.remained_at = remained_at;
+                    const ended_at = parse_calculate(element.ended_at);
+                    element.ended_at = ended_at;
 
-                if (!address) {
-                    console.log(100);
-                    const [result_bidding] = await this.biddingRepository.query(`
+                    if (!address) {
+                        console.log(100);
+                        const [result_bidding] = await this.biddingRepository.query(`
                         SELECT price
                         FROM bidding
                         WHERE auctionId = "${element.auction_id}"
                         `);
-                    element.isFavorites = 0;
-                    element.price = result_bidding.price;
-                } else {
-                    console.log(1000);
-                    const [[result_favorties], [result_bidding]] = await Promise.all([
-                        this.favoritesRepository.query(`
+                        element.isFavorites = 0;
+                        element.price = result_bidding.price;
+                    } else {
+                        console.log(1000);
+                        const [[result_favorties], [result_bidding]] = await Promise.all([
+                            this.favoritesRepository.query(`
                         SELECT isFavorites
                         FROM favorites             
                         WHERE favorites.token_id = ${element.token_id}
                         AND favorites.address = "${address}"
                         `),
-                        this.biddingRepository.query(`
+                            this.biddingRepository.query(`
                         SELECT price
                         FROM bidding
                         WHERE auctionId = ${element.auction_id}
                         `),
-                    ]);
+                        ]);
 
-                    element.isFavorites = result_favorties.isFavorites;
-                    element.price = result_bidding.price;
-                }
-            });
+                        element.isFavorites = result_favorties.isFavorites;
+                        element.price = result_bidding.price;
+                    }
+                }),
+            );
 
             console.log(4);
 

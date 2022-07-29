@@ -40,11 +40,11 @@ export class SearchService {
             if (!_limit) _limit = 12;
             console.log(tab, name, _page, _limit, address);
             const start = Offset(_page, _limit);
-            let information;
+            let informations;
 
             if (tab === "collection" || tab === undefined) {
                 console.log(1);
-                information = await this.collectionRepository.query(` 
+                informations = await this.collectionRepository.query(` 
                 (SELECT collection.name, collection.description, collection.feature_image, collection.created_at,
                 collection.address, user.name AS user_name, user.profile_image
                 FROM collection
@@ -63,11 +63,11 @@ export class SearchService {
                 ORDER BY created_at DESC
                 LIMIT ${start}, ${_limit}
                 `);
-                console.log(information);
+                console.log(informations);
             }
 
             if (tab === "item") {
-                information = await this.itemRepository.query(`
+                informations = await this.itemRepository.query(`
                 (SELECT item.token_id, item.name, item.owner, item.image, item.created_at,
                 user.name AS user_name, user.address, favorites_relation.count
                 FROM item
@@ -91,7 +91,7 @@ export class SearchService {
                 LIMIT ${start}, ${_limit}
                 `);
 
-                information.forEach(async (element) => {
+                informations.forEach(async (element) => {
                     if (!address) {
                         console.log(address);
                         element.isFavorites = 0;
@@ -105,11 +105,11 @@ export class SearchService {
                         element.isFavorites = IsFavorites.isFavorites;
                     }
                 });
-                console.log(information);
+                console.log(informations);
             }
 
             if (tab === "auction") {
-                information = await this.itemRepository.query(`
+                informations = await this.itemRepository.query(`
                 SELECT *
                 FROM ((SELECT item.token_id, item.image, item.name, auction.id AS auction_id,
                 auction.ended_at, auction.progress, user.name AS user_name, favorites_relation.count
@@ -137,7 +137,8 @@ export class SearchService {
                 WHERE g.progress = true
                 ORDER BY g.ended_at ASC
                 `);
-                information.forEach(async (element) => {
+
+                informations.foreach(async (element) => {
                     const remained_at = date_calculate(element.ended_at);
                     element.remained_at = remained_at;
                     const ended_at = parse_calculate(element.ended_at);
@@ -150,9 +151,11 @@ export class SearchService {
                             FROM bidding
                             WHERE auctionId = ${element.auction_id}
                             `);
+                        console.log(result_bidding.price);
                         element.isFavorites = 0;
                         element.price = result_bidding.price;
                     } else {
+                        console.log(1000);
                         const [[result_favorties], [result_bidding]] = await Promise.all([
                             this.favoritesRepository.query(`
                             SELECT isFavorites
@@ -172,13 +175,13 @@ export class SearchService {
                     }
                 });
 
-                console.log(information);
+                console.log(informations);
             }
             return Object.assign({
                 statusCode: 200,
                 success: true,
                 statusMsg: `${tab}의 검색 목록을 불러왔습니다.`,
-                data: information,
+                data: informations,
             });
         } catch (error) {
             console.log(error.message);
