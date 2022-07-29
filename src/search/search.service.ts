@@ -138,6 +138,7 @@ export class SearchService {
                 AND user.name like '%${name}%')) AS g
                 WHERE g.progress = true
                 ORDER BY g.ended_at ASC
+                LIMIT ${start}, ${_limit}
                 `);
 
                 await Promise.all(
