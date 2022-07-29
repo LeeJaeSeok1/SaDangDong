@@ -12,7 +12,7 @@ import {
 } from "typeorm";
 
 @Entity()
-export class Hello {
+export class Chat {
     @PrimaryGeneratedColumn()
     id: number;
 

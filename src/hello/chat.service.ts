@@ -4,28 +4,28 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Auction } from "src/auctions/entities/auction.entity";
 import { User } from "src/users/entities/user.entity";
 import { createMessageDto } from "./dto/createMessage.dto";
-import { Hello } from "./entities/hello.entity";
+import { Chat } from "./entities/chat.entity";
 
 @Injectable()
-export class HelloService {
+export class ChatService {
     constructor(
         @InjectRepository(Auction)
         private auctionRepository: Repository<Auction>,
         @InjectRepository(User)
         private userRepository: Repository<User>,
-        @InjectRepository(Hello)
-        private helloRepository: Repository<Hello>,
+        @InjectRepository(Chat)
+        private chatRepository: Repository<Chat>,
     ) {} // private userRepository: Repository<User>, // @InjectRepository(User) // private auctionRepository: Repository<Auction>, // @InjectRepository(Auction) // private itemRepository: Repository<Item>, // @InjectRepository(Item) // private collectionRepository: Repository<Collection>, // @InjectRepository(Collection)
 
     async createMessage(data: createMessageDto) {
         //todo
         try {
-            const myMessage = new Hello();
+            const myMessage = new Chat();
             myMessage.address = data.address;
             myMessage.auction_id = data.auction_id;
             myMessage.message = data.message;
 
-            await this.helloRepository.save(myMessage);
+            await this.chatRepository.save(myMessage);
 
             return "성공했습니다.";
         } catch (error) {
@@ -35,11 +35,11 @@ export class HelloService {
 
     async findAllMessages(auction_id: number) {
         try {
-            const AllMessages = await this.helloRepository.query(`
-            SELECT hello.*, user.name
-            FROM hello, user
-            WHERE hello.auction_id = ${auction_id}
-            WHERE user.address = hello.address
+            const AllMessages = await this.chatRepository.query(`
+            SELECT chat.*, user.name
+            FROM chat, user
+            WHERE chat.auction_id = ${auction_id}
+            AND user.address = chat.address
             `);
 
             return AllMessages;

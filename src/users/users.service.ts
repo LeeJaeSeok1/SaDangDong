@@ -13,6 +13,7 @@ import { date_calculate, parse_calculate } from "src/plug/caculation.function";
 import { Bidding } from "src/offer/entities/bidding.entity";
 import { Favorites_Relation } from "src/favorites/entities/favorites_relation.entity";
 import { EventListenerTypes } from "typeorm/metadata/types/EventListenerTypes";
+import { Offer } from "src/offer/entities/offer.entity";
 
 @Injectable()
 export class UsersService {
@@ -31,6 +32,8 @@ export class UsersService {
         private biddingRepository: Repository<Bidding>,
         @InjectRepository(Favorites_Relation)
         private favoritesrelationRepository: Repository<Favorites_Relation>,
+        @InjectRepository(Offer)
+        private offerRepository: Repository<Offer>,
     ) {}
 
     // sign 페이지
@@ -316,12 +319,20 @@ export class UsersService {
                 );
             }
 
-            if (tab === "complete") {
-                //  TODO:
+            if (tab === "progress") {
+                information = await this.userRepository.query(`
+                    SELECT auction.*
+                    FROM auction
+                        INNER JOIN item
+                        ON auction.token_id = item.token_id
+                        INNER JOIN offer
+                        ON auction.id = offer.auctionId
+                    WHERE auction.progress = true
+                `);
             }
 
-            if (tab === "progress") {
-                // TODO:
+            if (tab === "complete") {
+                //  TODO:
             }
 
             return Object.assign({

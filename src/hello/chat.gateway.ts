@@ -19,18 +19,18 @@ import {
     WebSocketServer,
 } from "@nestjs/websockets";
 import { Server, Socket } from "socket.io";
-import { HelloService } from "./hello.service";
+import { ChatService } from "./chat.service";
 import { createMessageDto } from "./dto/createMessage.dto";
 
-@WebSocketGateway({ namespace: "/hello", cors: { origin: "*" } })
-export class HelloGateway implements OnGatewayInit {
-    constructor(private helloService: HelloService) {}
+@WebSocketGateway({ namespace: "/chat", cors: { origin: "*" } })
+export class ChatGateway implements OnGatewayInit {
+    constructor(private chatService: ChatService) {}
     @WebSocketServer() public server: Server;
 
     @SubscribeMessage("sendMessage")
     handleSendMessage(client: Socket, data: createMessageDto) {
         console.log(data, "date");
-        this.helloService.createMessage(data);
+        this.chatService.createMessage(data);
         this.server.to(`${data.auction_id}`).emit("recMessage", data);
     }
 

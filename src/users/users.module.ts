@@ -10,6 +10,7 @@ import { Favorites } from "src/favorites/entities/favorites.entity";
 import { Auction } from "src/auctions/entities/auction.entity";
 import { Bidding } from "src/offer/entities/bidding.entity";
 import { Favorites_Relation } from "src/favorites/entities/favorites_relation.entity";
+import { Offer } from "src/offer/entities/offer.entity";
 
 @Module({
     imports: [
@@ -22,6 +23,7 @@ import { Favorites_Relation } from "src/favorites/entities/favorites_relation.en
             Auction,
             Bidding,
             Favorites_Relation,
+            Offer,
         ]),
     ],
     exports: [TypeOrmModule],
