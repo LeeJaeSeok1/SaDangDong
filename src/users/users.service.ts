@@ -335,6 +335,7 @@ export class UsersService {
                 INNER JOIN item
                 ON auction.token_id = item.token_id
                 WHERE progress = true
+                ORDER BY auction.ended_at DESC
                 `);
             }
 
