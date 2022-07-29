@@ -136,7 +136,7 @@ export class ExploreService {
             // 페이지 네이션 처리
             if (!tab) tab = "collection";
             if (address == `"NOT DEFINED"`) {
-                console.log("유저가 없습니다.");
+                console.log("로그인 한 유저가 없습니다..");
                 address = undefined;
             }
             if (!_page) _page = 0;
@@ -165,8 +165,8 @@ export class ExploreService {
 
             if (tab === "item") {
                 information = await this.itemRepository.query(`
-                SELECT item.token_id, item.name, item.owner, item.image, item.created_at,
-                user.name AS user_name, user.address, favorites_relation.count
+                SELECT item.token_id, item.address,item.name, item.owner, item.image, item.created_at,
+                user.name AS user_name, favorites_relation.count
                 FROM item
                     LEFT JOIN user
                     ON item.address = user.address
@@ -185,7 +185,7 @@ export class ExploreService {
                         } else {
                             const [IsFavorites] = await this.favoritesRepository.query(`
                         SELECT isFavorites
-                        FROM favorites             
+                        FROM favorites
                         WHERE favorites.token_id = ${element.token_id}
                         AND favorites.address = "${address}"
                         `);
@@ -199,7 +199,7 @@ export class ExploreService {
                 information = await this.itemRepository.query(`
                 SELECT *
                 FROM (
-                    SELECT item.token_id, item.image, item.name, auction.id AS auction_id,
+                    SELECT item.token_id, item.address,item.image, item.name, auction.id AS auction_id,
                     auction.ended_at, auction.progress, user.name AS user_name, favorites_relation.count
                     FROM item
                         LEFT JOIN auction
@@ -210,9 +210,9 @@ export class ExploreService {
                         ON  item.token_id = favorites_relation.token_id
                     WHERE item.archived = 0
                     ORDER BY auction.ended_at DESC
-                    LIMIT ${start}, ${_limit}
                 ) AS g
                 WHERE g.progress = true
+                LIMIT ${start}, ${_limit}
                 `);
 
                 await Promise.all(

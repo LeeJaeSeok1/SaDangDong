@@ -9,7 +9,9 @@ import { Favorites } from "src/favorites/entities/favorites.entity";
 import { Auction } from "src/auctions/entities/auction.entity";
 import { Offset } from "src/plug/pagination.function";
 import { userName } from "src/plug/userName.function";
-import { date_calculate } from "src/plug/caculation.function";
+import { date_calculate, parse_calculate } from "src/plug/caculation.function";
+import { Bidding } from "src/offer/entities/bidding.entity";
+import { Favorites_Relation } from "src/favorites/entities/favorites_relation.entity";
 
 @Injectable()
 export class UsersService {
@@ -24,6 +26,10 @@ export class UsersService {
         private favoritesRepository: Repository<Favorites>,
         @InjectRepository(Auction)
         private auctionRepository: Repository<Auction>,
+        @InjectRepository(Bidding)
+        private biddingRepository: Repository<Bidding>,
+        @InjectRepository(Favorites_Relation)
+        private favoritesrelationRepository: Repository<Favorites_Relation>,
     ) {}
 
     // sign 페이지
@@ -113,41 +119,123 @@ export class UsersService {
     }
 
     // 회원 페이지
-    async userInfo(id: string, tab: string, _page: number, _limit: number) {
+    async userInfo(id: string, tab: string, _page: number, _limit: number, address: string) {
         try {
+            if (address == `"NOT DEFINED"`) {
+                console.log("로그인 한 유저가 없습니다..");
+                address = undefined;
+            }
+            if (!_page) _page = 0;
+            if (!_limit) _limit = 12;
+            if (!tab) tab == "collection";
             const start = Offset(_page, _limit);
-            const [userInfo] = await this.userRepository.query(`
-            SELECT user.name, user.profile_image, user.address
-            FROM user
-            WHERE user.address = "${id}"
-            `);
 
             let information;
             if (tab === "collection") {
                 information = await this.collectionRepository.query(`
                 SELECT collection.name, collection.description, collection.feature_image, collection.created_at,
-                user.name AS user_name, user.profile_image, user.address
-                FROM collection, user
+                collection.address, user.name AS user_name, user.profile_image
+                FROM collection
+                    LEFT JOIN user
+                    ON collection.address = user.address
                 WHERE collection.address = "${id}"
-                AND collection.address = user.address
                 AND collection.archived = 0
                 ORDER BY collection.created_at DESC
                 LIMIT 100
                 `);
+                // LIMIT ${start}, ${_limit}
             }
             if (tab === "item") {
                 information = await this.itemRepository.query(`
-                SELECT DISTINCT item.token_id, item.name, item.owner, item.image,
-                user.name AS user_name, user.address, favorites_relation.count, item.created_at
-                FROM item, user, favorites_relation
+                SELECT item.token_id, item.name, item.owner, item.image, item.created_at, item.address
+                user.name AS user_name, user.address, favorites_relation.count
+                FROM item
+                    LEFT JOIN user
+                    ON item.address = user.address
+                    LEFT JOIN favorites_relation
+                    ON item.token_id = favorites_relation.token_id
                 WHERE item.owner = "${id}"
-                AND item.owner = user.address
-                AND item.token_id = favorites_relation.token_id
                 AND item.archived = 0
                 ORDER BY item.created_at DESC
                 LIMIT ${start}, ${_limit}
                 `);
+
+                await Promise.all(
+                    information.map(async (element) => {
+                        if (!address) {
+                            console.log(address);
+                            element.isFavorites = 0;
+                        } else {
+                            const [IsFavorites] = await this.favoritesRepository.query(`
+                        SELECT isFavorites
+                        FROM favorites             
+                        WHERE favorites.token_id = ${element.token_id}
+                        AND favorites.address = "${address}"
+                        `);
+                            element.isFavorites = IsFavorites.isFavorites;
+                        }
+                    }),
+                );
             }
+
+            if (tab === "auction") {
+                information = await this.auctionRepository.query(`
+                SELECT *
+                FROM (
+                    SELECT item.token_id, item.image, item.name, item.address, item.owner, auction.id AS auction_id,
+                    auction.ended_at, auction.progress, user.name AS user_name, favorites_relation.count
+                    FROM item
+                        LEFT JOIN auction
+                        ON item.token_id = auction.token_id
+                        LEFT JOIN user
+                        ON  item.address = user.address
+                        LEFT JOIN favorites_relation
+                        ON  item.token_id = favorites_relation.token_id
+                    WHERE item.archived = 0
+                    AND item.owner = "${id}"
+                    ORDER BY auction.ended_at DESC         
+                ) AS g
+                WHERE g.progress = true
+                LIMIT ${start}, ${_limit}
+                `);
+                await Promise.all(
+                    information.map(async (element) => {
+                        const remained_at = date_calculate(element.ended_at);
+                        element.remained_at = remained_at;
+                        const ended_at = parse_calculate(element.ended_at);
+                        element.ended_at = ended_at;
+
+                        if (!address) {
+                            console.log(100);
+                            const [result_bidding] = await this.biddingRepository.query(`
+                            SELECT price
+                            FROM bidding
+                            WHERE auctionId = ${element.auction_id}
+                            `);
+                            element.isFavorites = 0;
+                            element.price = result_bidding.price;
+                        } else {
+                            const [[result_favorties], [result_bidding]] = await Promise.all([
+                                this.favoritesRepository.query(`
+                            SELECT isFavorites
+                            FROM favorites             
+                            WHERE favorites.token_id = ${element.token_id}
+                            AND favorites.address = "${address}"
+                            `),
+                                this.biddingRepository.query(`
+                            SELECT price
+                            FROM bidding
+                            WHERE auctionId = ${element.auction_id}
+                            `),
+                            ]);
+
+                            element.isFavorites = result_favorties.isFavorites;
+                            element.price = result_bidding.price;
+                        }
+                    }),
+                );
+            }
+
             if (tab === "favorites") {
                 information = await this.favoritesRepository.query(`
                 SELECT DISTINCT item.token_id, item.name, item.address, item.image,
@@ -163,30 +251,11 @@ export class UsersService {
                 `);
             }
 
-            if (tab === "auction") {
-                information = await this.auctionRepository.query(`
-                SELECT DISTINCT item.token_id, item.name, item.address, item.image,
-                user.name AS user_name, user.address,
-                favorites_relation.count, auction.id AS auction_id, auction.ended_at, auction.started_at
-                FROM auction, item, user, favorites_relation
-                WHERE item.address = "${id}"
-                AND item.owner = user.address
-                AND item.token_id = favorites_relation.token_id
-                AND auction.token_id = item.token_id
-                AND auction.progress = true
-                ORDER BY auction.started_at DESC
-                `);
-                information.forEach((element) => {
-                    const ended_at = date_calculate(element.ended_at);
-                    element.ended_at = ended_at;
-                });
-            }
-
             return Object.assign({
                 statusCode: 200,
                 success: true,
                 statusMsg: `유저의 ${tab} 목록을 불러왔습니다.`,
-                data: { userInfo, information },
+                data: information,
             });
         } catch (error) {
             throw new BadRequestException(error.message);

@@ -57,8 +57,9 @@ export class UsersController {
         @Query("tab") tab: string,
         @Query("_page") _page: number,
         @Query("_limit") _limit: number,
+        @AuthToken() address: string,
     ) {
-        return this.usersService.userInfo(id, tab, _page, _limit);
+        return this.usersService.userInfo(id, tab, _page, _limit, address);
     }
 
     @ApiOperation({ summary: "회원수정 페이지" })
