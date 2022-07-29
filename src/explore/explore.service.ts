@@ -177,20 +177,22 @@ export class ExploreService {
                 LIMIT ${start}, ${_limit}
                 `);
 
-                information.forEach(async (element) => {
-                    if (!address) {
-                        console.log(address);
-                        element.isFavorites = 0;
-                    } else {
-                        const [IsFavorites] = await this.favoritesRepository.query(`
+                await Promise.all(
+                    information.map(async (element) => {
+                        if (!address) {
+                            console.log(address);
+                            element.isFavorites = 0;
+                        } else {
+                            const [IsFavorites] = await this.favoritesRepository.query(`
                         SELECT isFavorites
                         FROM favorites             
                         WHERE favorites.token_id = ${element.token_id}
                         AND favorites.address = "${address}"
                         `);
-                        element.isFavorites = IsFavorites.isFavorites;
-                    }
-                });
+                            element.isFavorites = IsFavorites.isFavorites;
+                        }
+                    }),
+                );
             }
 
             if (tab === "auction") {
@@ -213,40 +215,42 @@ export class ExploreService {
                 WHERE g.progress = true
                 `);
 
-                information.forEach(async (element) => {
-                    const remained_at = date_calculate(element.ended_at);
-                    element.remained_at = remained_at;
-                    const ended_at = parse_calculate(element.ended_at);
-                    element.ended_at = ended_at;
+                Promise.all(
+                    information.map(async (element) => {
+                        const remained_at = date_calculate(element.ended_at);
+                        element.remained_at = remained_at;
+                        const ended_at = parse_calculate(element.ended_at);
+                        element.ended_at = ended_at;
 
-                    if (!address) {
-                        console.log(100);
-                        const [result_bidding] = await this.biddingRepository.query(`
+                        if (!address) {
+                            console.log(100);
+                            const [result_bidding] = await this.biddingRepository.query(`
                             SELECT price
                             FROM bidding
                             WHERE auctionId = ${element.auction_id}
                             `);
-                        element.isFavorites = 0;
-                        element.price = result_bidding.price;
-                    } else {
-                        const [[result_favorties], [result_bidding]] = await Promise.all([
-                            this.favoritesRepository.query(`
+                            element.isFavorites = 0;
+                            element.price = result_bidding.price;
+                        } else {
+                            const [[result_favorties], [result_bidding]] = await Promise.all([
+                                this.favoritesRepository.query(`
                             SELECT isFavorites
                             FROM favorites             
                             WHERE favorites.token_id = ${element.token_id}
                             AND favorites.address = "${address}"
                             `),
-                            this.biddingRepository.query(`
+                                this.biddingRepository.query(`
                             SELECT price
                             FROM bidding
                             WHERE auctionId = ${element.auction_id}
                             `),
-                        ]);
+                            ]);
 
-                        element.isFavorites = result_favorties.isFavorites;
-                        element.price = result_bidding.price;
-                    }
-                });
+                            element.isFavorites = result_favorties.isFavorites;
+                            element.price = result_bidding.price;
+                        }
+                    }),
+                );
             }
             console.log(information);
 
