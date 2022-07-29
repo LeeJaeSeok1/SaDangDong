@@ -254,7 +254,7 @@ export class CollectionsService {
             const [exisCollection] = await this.collectionRepository.query(`
             SELECT *
             FROM collection
-            WHERE name = ${name}
+            WHERE name = "${name}"
             `);
             console.log(exisCollection);
             if (exisCollection.address !== address) {
@@ -316,7 +316,7 @@ export class CollectionsService {
             const [exisCollection] = await this.collectionRepository.query(`
             SELECT *
             FROM collection
-            WHERE name = ${name}
+            WHERE name = "${name}"
             `);
             console.log("서비스, 컬럼확인", exisCollection);
             if (exisCollection.address !== address) {
