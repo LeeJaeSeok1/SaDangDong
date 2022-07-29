@@ -20,7 +20,7 @@ import { SellModule } from "./sell/sell.module";
 import { FavoritesModule } from "./favorites/favorites.module";
 import { OfferModule } from "./offer/offer.module";
 import { TaskModule } from "./task/task.module";
-import { ChatModule } from "./hello/chat.module";
+import { ChatModule } from "./chat/chat.module";
 
 @Module({
     imports: [
