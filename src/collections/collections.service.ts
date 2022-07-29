@@ -126,7 +126,7 @@ export class CollectionsService {
                         ON  item.token_id = favorites_relation.token_id
                     WHERE item.archived = 0
                     AND collection.name ="${name}"
-                    ORDER BY auction.ended_at DESC
+                    ORDER BY auction.ended_at ASC
                 ) AS g
                 WHERE g.progress = true
                 LIMIT ${start}, ${_limit}
