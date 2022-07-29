@@ -103,7 +103,11 @@ export class SearchService {
                         WHERE favorites.token_id = "${element.token_id}"
                         AND favorites.address = "${address}"
                         `);
-                            element.isFavorites = IsFavorites.isFavorites;
+                            if (IsFavorites) {
+                                element.isFavorites = IsFavorites.isFavorites;
+                            } else {
+                                element.isFavorites = 0;
+                            }
                         }
                     }),
                 );
@@ -174,8 +178,13 @@ export class SearchService {
                             `),
                             ]);
 
-                            element.isFavorites = result_favorties.isFavorites;
-                            element.price = result_bidding.price;
+                            if (result_favorties) {
+                                element.isFavorites = result_favorties.isFavorites;
+                                element.price = result_bidding.price;
+                            } else {
+                                element.isFavorites = 0;
+                                element.price = result_bidding.price;
+                            }
                         }
                     }),
                 );

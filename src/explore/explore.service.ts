@@ -60,10 +60,11 @@ export class ExploreService {
                     ON  item.address = user.address
                     LEFT JOIN favorites_relation
                     ON  item.token_id = favorites_relation.token_id
+                WHERE item.archived = 0
                 ORDER BY auction.ended_at DESC
-                LIMIT ${start}, 4
             ) AS g
             WHERE g.progress = true
+            LIMIT ${start}, 4
             `);
             console.log(2);
             await Promise.all(
@@ -98,8 +99,13 @@ export class ExploreService {
                         `),
                         ]);
 
-                        element.isFavorites = result_favorties.isFavorites;
-                        element.price = result_bidding.price;
+                        if (result_favorties) {
+                            element.isFavorites = result_favorties.isFavorites;
+                            element.price = result_bidding.price;
+                        } else {
+                            element.isFavorites = 0;
+                            element.price = result_bidding.price;
+                        }
                     }
                 }),
             );
@@ -184,12 +190,16 @@ export class ExploreService {
                             element.isFavorites = 0;
                         } else {
                             const [IsFavorites] = await this.favoritesRepository.query(`
-                        SELECT isFavorites
-                        FROM favorites
-                        WHERE favorites.token_id = ${element.token_id}
-                        AND favorites.address = "${address}"
-                        `);
-                            element.isFavorites = IsFavorites.isFavorites;
+                            SELECT isFavorites
+                            FROM favorites
+                            WHERE favorites.token_id = ${element.token_id}
+                            AND favorites.address = "${address}"
+                            `);
+                            if (IsFavorites) {
+                                element.isFavorites = IsFavorites.isFavorites;
+                            } else {
+                                element.isFavorites = 0;
+                            }
                         }
                     }),
                 );
@@ -246,8 +256,13 @@ export class ExploreService {
                             `),
                             ]);
 
-                            element.isFavorites = result_favorties.isFavorites;
-                            element.price = result_bidding.price;
+                            if (result_favorties) {
+                                element.isFavorites = result_favorties.isFavorites;
+                                element.price = result_bidding.price;
+                            } else {
+                                element.isFavorites = 0;
+                                element.price = result_bidding.price;
+                            }
                         }
                     }),
                 );
