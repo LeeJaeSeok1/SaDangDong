@@ -320,19 +320,25 @@ export class UsersService {
             }
 
             if (tab === "progress") {
-                information = await this.userRepository.query(`
-                    SELECT auction.*
-                    FROM auction
-                        INNER JOIN item
-                        ON auction.token_id = item.token_id
-                        INNER JOIN offer
-                        ON auction.id = offer.auctionId
-                    WHERE auction.progress = true
+                information = await this.auctionRepository.query(`
+                SELECT auction.id, auction.token_id, auction.started_at, auction.ended_at, item.image, 
+                item.name, bidding.price AS bidding_price, max_offer.user_offer
+                FROM auction
+                INNER JOIN
+                (SELECT offer.auctionId, max(offer.price) as user_offer
+                FROM offer
+                WHERE offer.address = "${address}"
+                GROUP BY auctionId) AS max_offer
+                ON auction.id = max_offer.auctionId
+                INNER JOIN bidding
+                ON auction.id = bidding.auctionId
+                INNER JOIN item
+                ON auction.token_id = item.token_id
+                WHERE progress = true
                 `);
             }
 
             if (tab === "complete") {
-                //  TODO:
             }
 
             return Object.assign({

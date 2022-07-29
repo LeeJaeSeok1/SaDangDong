@@ -6,10 +6,9 @@ import { Favorites } from "src/favorites/entities/favorites.entity";
 import { Favorites_Relation } from "src/favorites/entities/favorites_relation.entity";
 import { Item } from "src/items/entities/item.entity";
 import { Bidding } from "src/offer/entities/bidding.entity";
-import { mysqlnow_date } from "src/plug/caculation.function";
 import { Sell } from "src/sell/entities/sell.entity";
 import { User } from "src/users/entities/user.entity";
-import { Repository, TreeRepository } from "typeorm";
+import { Repository } from "typeorm";
 
 @Injectable()
 export class TaskService {
