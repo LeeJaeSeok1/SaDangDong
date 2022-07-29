@@ -126,6 +126,7 @@ export class OfferService {
                     INNER JOIN user
                     ON offer.address = user.address
                 WHERE offer.auctionId = ${auction_id}
+                ORDER BY created_at ASC
             `);
 
             return Object.assign({
