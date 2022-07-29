@@ -61,16 +61,6 @@ export class UsersService {
         }
     }
 
-    async getUser(address: string) {
-        const user = await this.userRepository.findOne({ where: { address } });
-        console.log(user);
-        return Object.assign({
-            statusCode: 200,
-            statusMsg: "유저 정보를 불러왔습니다.",
-            data: user,
-        });
-    }
-
     findByUser(address: string) {
         return this.userRepository.findOne({ where: { address } });
     }
@@ -118,6 +108,27 @@ export class UsersService {
         }
     }
 
+    async getUser(id: string, address: string) {
+        try {
+            if (address == `"NOT DEFINED"`) {
+                console.log("로그인 한 유저가 없습니다..");
+                address = undefined;
+            }
+            const [user] = await this.userRepository.query(`
+            SELECT *
+            FROM user
+            WHERE address = "${id}"
+            `);
+            return Object.assign({
+                statusCode: 200,
+                statusMsg: "유저 정보를 불러왔습니다.",
+                data: user,
+            });
+        } catch (error) {
+            throw new BadRequestException(error.message);
+        }
+    }
+
     // 회원 페이지
     async userInfo(id: string, tab: string, _page: number, _limit: number, address: string) {
         try {
@@ -147,8 +158,8 @@ export class UsersService {
             }
             if (tab === "item") {
                 information = await this.itemRepository.query(`
-                SELECT item.token_id, item.name, item.owner, item.image, item.created_at, item.address
-                user.name AS user_name, user.address, favorites_relation.count
+                SELECT item.token_id, item.name, item.owner, item.image, item.created_at, item.address,
+                user.name AS user_name, favorites_relation.count
                 FROM item
                     LEFT JOIN user
                     ON item.address = user.address
@@ -179,7 +190,7 @@ export class UsersService {
             }
 
             if (tab === "auction") {
-                information = await this.auctionRepository.query(`
+                information = await this.itemRepository.query(`
                 SELECT *
                 FROM (
                     SELECT item.token_id, item.image, item.name, item.address, item.owner, auction.id AS auction_id,
@@ -237,18 +248,36 @@ export class UsersService {
             }
 
             if (tab === "favorites") {
-                information = await this.favoritesRepository.query(`
-                SELECT DISTINCT item.token_id, item.name, item.address, item.image,
-                user.name AS user_name, user.address, favorites_relation.count
-                FROM item, user, favorites, favorites_relation
-                WHERE item.owner = "${id}"
-                AND item.owner = user.address
-                AND item.token_id = favorites.token_id
-                AND item.token_id = favorites_relation.token_id
-                AND favorites.address = "${id}"
+                information = await this.itemRepository.query(`
+                SELECT g.*, favorites.isFavorites
+                FROM (SELECT item.token_id, item.name, item.owner, item.image, item.created_at, item.address,
+                user.name AS user_name, favorites_relation.count
+                FROM item
+                    LEFT JOIN user
+                    ON item.address = user.address
+                    LEFT JOIN favorites_relation
+                    ON item.token_id = favorites_relation.token_id
+                WHERE item.archived = 0) AS g
+                    INNER JOIN favorites
+                    ON g.token_id = favorites.token_id
+                WHERE favorites.address = "${address}"
                 AND favorites.isFavorites = true
-                ORDER BY item.created_at DESC
+                ORDER BY favorites.updated_at DESC
+                LIMIT ${start}, ${_limit}
                 `);
+            }
+
+            if (tab === "buyNFT") {
+                information = await this.itemRepository.query(`
+                `);
+            }
+
+            if (tab === "complete") {
+                //  TODO:
+            }
+
+            if (tab === "progress") {
+                // TODO:
             }
 
             return Object.assign({
@@ -262,7 +291,4 @@ export class UsersService {
         }
     }
     // 모든 유저 조회
-    async findAll(): Promise<User[]> {
-        return this.userRepository.find();
-    }
 }

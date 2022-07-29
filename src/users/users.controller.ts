@@ -34,11 +34,17 @@ export class UsersController {
         return this.usersService.sign(address);
     }
 
+    @ApiOperation({ summary: "유저확인" })
+    @Get("me")
+    async test(@AuthToken() address: string) {
+        return this.usersService.findByUser(address);
+    }
+
     @ApiOperation({ summary: "메인페이지 유저 정보" })
-    @Get("info")
-    async getUser(@AuthToken() address: string) {
-        console.log("address", address);
-        return this.usersService.getUser(address);
+    @Get("info/:id")
+    async getUser(@Param("id") id: string, @AuthToken() address: string) {
+        console.log("address", address, "id", id);
+        return this.usersService.getUser(id, address);
     }
 
     // 회원 페이지
@@ -71,11 +77,5 @@ export class UsersController {
         console.log(userData);
         console.log(files);
         return this.usersService.settingUser(userData, address, files);
-    }
-
-    @ApiOperation({ summary: "유저확인" })
-    @Post("me")
-    async test(@AuthToken() address: string) {
-        return this.usersService.findByUser(address);
     }
 }
