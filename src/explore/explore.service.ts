@@ -215,7 +215,7 @@ export class ExploreService {
                 WHERE g.progress = true
                 `);
 
-                Promise.all(
+                await Promise.all(
                     information.map(async (element) => {
                         const remained_at = date_calculate(element.ended_at);
                         element.remained_at = remained_at;
