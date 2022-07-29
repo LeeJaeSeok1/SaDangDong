@@ -88,3 +88,33 @@ export function parse_calculate(ended_at: Date) {
 
     return `${date}월 ${day}일 ${hour}:${minute}`;
 }
+
+export function parse_Kcalculate(UTC: Date) {
+    const UTC_date = new Date(UTC);
+    console.log(UTC_date);
+    const new_date = new Date();
+    new_date.setHours(UTC_date.getHours() + 9);
+    const year = new_date.getFullYear();
+    let date = new_date.getMonth() + 1 + "";
+    if (date.length == 1) {
+        date = "0" + date;
+    }
+
+    let day = new_date.getDate() + "";
+    if (day.length == 1) {
+        day = "0" + day;
+    }
+
+    let hour = new_date.getHours() + "";
+    if (hour.length == 1) {
+        hour = "0" + hour;
+    }
+
+    let minute = new_date.getMinutes() + "";
+    if (minute.length == 1) {
+        minute = "0" + minute;
+    }
+    const seconds = new_date.getSeconds();
+
+    return `${year}-${date}-${day} ${hour}:${minute}:${seconds}`;
+}

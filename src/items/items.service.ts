@@ -95,6 +95,7 @@ export class ItemsService {
                 `);
                 item.ipfsJson = ipfsJson;
                 item.favorites = isFavorites;
+                item.auction_id = 0;
                 return Object.assign({
                     statusCode: 200,
                     success: true,

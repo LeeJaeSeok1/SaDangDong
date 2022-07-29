@@ -21,7 +21,7 @@ export class OfferController {
     constructor(private readonly offerService: OfferService) {}
 
     @Get(":auction_id")
-    findAllOffer(@Param(":auction_id") auction_id: number, @AuthToken() address: string) {
+    findAllOffer(@Param("auction_id") auction_id: number, @AuthToken() address: string) {
         return this.offerService.findAllOffer(address, auction_id);
     }
 }

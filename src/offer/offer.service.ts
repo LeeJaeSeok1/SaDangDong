@@ -6,7 +6,7 @@ import { Bidding } from "src/offer/entities/bidding.entity";
 import { Offer } from "./entities/offer.entity";
 import { User } from "src/users/entities/user.entity";
 import { CreateOfferDto } from "./dto/createoffer.dto";
-import { now_date } from "src/plug/caculation.function";
+import { now_date, parse_Kcalculate } from "src/plug/caculation.function";
 
 @Injectable()
 export class OfferService {
@@ -92,15 +92,15 @@ export class OfferService {
             console.log("hello");
             console.log(name);
 
-            const date = now_date();
+            const date = new Date();
+            const Kdate = parse_Kcalculate(date);
             const newData = {
                 name: name.name,
-                date,
+                created_at: Kdate,
                 price: data.price,
-                auction_id: data.auction_id,
+                auctionId: data.auction_id,
                 address: data.address,
             };
-
             console.log(newData);
 
             console.log("newData", newData);
@@ -128,6 +128,10 @@ export class OfferService {
                 WHERE offer.auctionId = ${auction_id}
                 ORDER BY created_at ASC
             `);
+            offers.forEach((element) => {
+                const Kdate = parse_Kcalculate(element.created_at);
+                element.created_at = Kdate;
+            });
 
             return Object.assign({
                 statusCode: 200,
