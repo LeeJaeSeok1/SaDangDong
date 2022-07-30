@@ -9,6 +9,7 @@ import { Item } from "./entities/item.entity";
 import { Auction } from "src/auctions/entities/auction.entity";
 import { date_calculate, parse_Kcalculate } from "src/plug/caculation.function";
 import { Offer } from "src/offer/entities/offer.entity";
+import { Bidding } from "src/offer/entities/bidding.entity";
 
 @Injectable()
 export class ItemsService {
@@ -25,6 +26,8 @@ export class ItemsService {
         private auctionRepository: Repository<Auction>,
         @InjectRepository(Offer)
         private offerRepository: Repository<Offer>,
+        @InjectRepository(Bidding)
+        private biddingRepository: Repository<Bidding>,
     ) {}
 
     // 모든 아이템 보기
@@ -115,7 +118,7 @@ export class ItemsService {
             const remained_at = date_calculate(auction.ended_at);
 
             const [item] = await this.itemRepository.query(`
-            SELECT DISTINCT item.token_id, item.name, item.description, item.address, item.image, item.ipfsImage,
+            SELECT item.token_id, item.name, item.description, item.address, item.image, item.ipfsImage,
             item.collection_name, collection.description AS collection_description, 
             user.name AS user_name, user.profile_image, 
             favorites_relation.count AS favorites_count,
@@ -127,10 +130,17 @@ export class ItemsService {
             AND item.collection_name = collection.name
             AND item.owner = user.address
             AND item.token_id = favorites_relation.token_id
+            AND auction.progress = true
             `);
             item.ipfsJson = ipfsJson;
             item.remained_at = remained_at;
             item.favorites = isFavorites;
+
+            const [bidding] = await this.biddingRepository.query(`
+            SELECT *
+            FROM bidding
+            WHERE auctionId = ${auction.id}
+            `);
 
             console.log(item);
 
@@ -148,8 +158,8 @@ export class ItemsService {
                 const Kdate = parse_Kcalculate(element.created_at);
                 element.created_at = Kdate;
             });
+            item.bidding_price = bidding.price;
             item.offers = offers;
-            console.log(offers);
 
             return Object.assign({
                 statusCode: 200,

@@ -342,6 +342,92 @@ export class UsersService {
             if (tab === "complete") {
             }
 
+            // front-end 요청
+            // 4가지 목록을 한번에 주길 바람
+            if (tab === "activity") {
+                const [[user], information1, information2, information3] = await Promise.all([
+                    this.userRepository.query(`
+                    SELECT *
+                    FROM user
+                    WHERE address = "${address}"
+                    `),
+
+                    this.itemRepository.query(`
+                    SELECT g.*, favorites.isFavorites
+                    FROM (SELECT item.token_id, item.name, item.owner, item.image, item.created_at, item.address,
+                    user.name AS user_name, favorites_relation.count
+                    FROM item
+                        LEFT JOIN user
+                        ON item.address = user.address
+                        LEFT JOIN favorites_relation
+                        ON item.token_id = favorites_relation.token_id
+                    WHERE item.archived = 0) AS g
+                        INNER JOIN favorites
+                        ON g.token_id = favorites.token_id
+                    WHERE favorites.address = "${address}"
+                    AND favorites.isFavorites = true
+                    ORDER BY favorites.updated_at DESC
+                    LIMIT ${start}, ${_limit}
+                    `),
+
+                    this.itemRepository.query(`
+                    SELECT item.token_id, item.name, item.owner, item.image, item.created_at, item.address,
+                    user.name AS user_name, favorites_relation.count
+                    FROM item
+                        LEFT JOIN user
+                        ON item.address = user.address
+                        LEFT JOIN favorites_relation
+                        ON item.token_id = favorites_relation.token_id
+                    WHERE item.owner = "${address}"
+                    AND item.owner != item.address
+                    AND item.archived = 0
+                    ORDER BY item.updated_at DESC
+                    LIMIT ${start}, ${_limit}
+                    `),
+
+                    this.auctionRepository.query(`
+                    SELECT auction.id, auction.token_id, auction.started_at, auction.ended_at, item.image, 
+                    item.name, bidding.price AS bidding_price, max_offer.user_offer
+                    FROM auction
+                    INNER JOIN
+                    (SELECT offer.auctionId, max(offer.price) as user_offer
+                    FROM offer
+                    WHERE offer.address = "${address}"
+                    GROUP BY auctionId) AS max_offer
+                    ON auction.id = max_offer.auctionId
+                    INNER JOIN bidding
+                    ON auction.id = bidding.auctionId
+                    INNER JOIN item
+                    ON auction.token_id = item.token_id
+                    WHERE progress = true
+                    ORDER BY auction.ended_at DESC
+                    `),
+                ]);
+
+                await Promise.all(
+                    information2.map(async (element) => {
+                        if (!address) {
+                            console.log(address);
+                            element.isFavorites = 0;
+                        } else {
+                            const [IsFavorites] = await this.favoritesRepository.query(`
+                        SELECT isFavorites
+                        FROM favorites             
+                        WHERE favorites.token_id = ${element.token_id}
+                        AND favorites.address = "${address}"
+                        `);
+                            if (IsFavorites) {
+                                element.isFavorites = IsFavorites.isFavorites;
+                            } else {
+                                element.isFavorites = 0;
+                            }
+                        }
+                    }),
+                );
+
+                information = { user: user, favorites: information1, buynft: information2, progress: information3 };
+            }
+
             return Object.assign({
                 statusCode: 200,
                 success: true,
