@@ -6,7 +6,7 @@ import { Favorites } from "src/favorites/entities/favorites.entity";
 import { Favorites_Relation } from "src/favorites/entities/favorites_relation.entity";
 import { Item } from "src/items/entities/item.entity";
 import { Bidding } from "src/offer/entities/bidding.entity";
-import { Sell } from "src/sell/entities/sell.entity";
+import { Sell_Relation } from "src/sell/entities/sell_relation.entity";
 import { User } from "src/users/entities/user.entity";
 import { Repository } from "typeorm";
 
@@ -25,8 +25,8 @@ export class TaskService {
         private favoritesrelationRepository: Repository<Favorites_Relation>,
         @InjectRepository(Favorites)
         private favoritesRepository: Repository<Favorites>,
-        @InjectRepository(Sell)
-        private sellRepository: Repository<Sell>,
+        @InjectRepository(Sell_Relation)
+        private sellrelationRepository: Repository<Sell_Relation>,
         @InjectRepository(Bidding)
         private biddingRepository: Repository<Bidding>,
     ) {}

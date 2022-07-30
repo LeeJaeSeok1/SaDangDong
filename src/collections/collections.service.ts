@@ -8,7 +8,7 @@ import { Item } from "src/items/entities/item.entity";
 import { Bidding } from "src/offer/entities/bidding.entity";
 import { date_calculate, parse_calculate } from "src/plug/caculation.function";
 import { Offset } from "src/plug/pagination.function";
-import { Sell } from "src/sell/entities/sell.entity";
+import { Sell_Relation } from "src/sell/entities/sell_relation.entity";
 import { User } from "src/users/entities/user.entity";
 import { Repository } from "typeorm";
 import { Collection } from "./entities/collection.entity";
@@ -28,8 +28,8 @@ export class CollectionsService {
         private favoritesrelationRepository: Repository<Favorites_Relation>,
         @InjectRepository(Favorites)
         private favoritesRepository: Repository<Favorites>,
-        @InjectRepository(Sell)
-        private sellRepository: Repository<Sell>,
+        @InjectRepository(Sell_Relation)
+        private sellrelationRepository: Repository<Sell_Relation>,
         @InjectRepository(Bidding)
         private biddingRepository: Repository<Bidding>,
     ) {}

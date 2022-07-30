@@ -3,6 +3,7 @@ import { JsonRpcController } from "./jsonrpc.controller";
 import { JsonRpcService } from "./jsonrpc.service";
 
 @Module({
+    imports: [],
     controllers: [JsonRpcController],
     providers: [JsonRpcService],
 })

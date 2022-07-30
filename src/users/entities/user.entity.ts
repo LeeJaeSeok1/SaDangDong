@@ -1,7 +1,6 @@
 import { isNotEmpty } from "class-validator";
 import { Collection } from "src/collections/entities/collection.entity";
 import { Item } from "src/items/entities/item.entity";
-import { Sell } from "src/sell/entities/sell.entity";
 import {
     Column,
     CreateDateColumn,
@@ -32,22 +31,4 @@ export class User {
 
     @UpdateDateColumn()
     updatedAt: Date;
-
-    // @OneToMany((type) => Collection, (collection) => collection.user, { eager: true })
-    // collection: Collection[];
-
-    // @OneToMany((type) => Item, (item) => item.user, { eager: true })
-    // item: Item[];
-
-    // @OneToOne((type) => Sell, (sell) => sell.user)
-    // sell: Sell;
-
-    // @OneToMany((type) => Like, (like) => like.user)
-    // like: Like;
-
-    // @ManyToMany((type) => Offer, (offer) => offer.user)
-    // offer: Offer[];
-
-    // @ManyToMany((type) => Chat, (chat) => chat.user)
-    // chat: Chat[];
 }

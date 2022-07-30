@@ -9,13 +9,13 @@ import { User } from "src/users/entities/user.entity";
 import { Repository } from "typeorm";
 import { CreateSellDto } from "./dto/create-sell.dto";
 import { UpdateSellDto } from "./dto/update-sell.dto";
-import { Sell } from "./entities/sell.entity";
+import { Sell_Relation } from "./entities/sell_relation.entity";
 
 @Injectable()
 export class SellService {
     constructor(
-        @InjectRepository(Sell)
-        private sellRepository: Repository<Sell>,
+        @InjectRepository(Sell_Relation)
+        private sellrelationRepository: Repository<Sell_Relation>,
         @InjectRepository(User)
         private userRepository: Repository<User>,
         @InjectRepository(Bidding)
@@ -61,9 +61,9 @@ export class SellService {
                 return "경매를 하지 않았습니다.";
             }
 
-            const [SellCount] = await this.sellRepository.query(`
+            const [SellCount] = await this.sellrelationRepository.query(`
             SELECT *
-            FROM sell
+            FROM sell_relation
             WHERE address = ${bidding.address}
             AND start_at <= ${nowDate}
             AND ${nowDate} < end_at
@@ -75,20 +75,20 @@ export class SellService {
             if (SellCount) {
                 SellCount.count++;
                 await Promise.all([
-                    this.sellRepository.update(SellCount.id, SellCount),
+                    this.sellrelationRepository.update(SellCount.id, SellCount),
                     this.auctionRepository.update(auction.id, auction),
                     this.itemRepository.update(item.token_id, item),
                 ]);
             } else {
                 const { start_date, end_date } = weekly_calculate();
-                const newSellCount = new Sell();
+                const newSellCount = new Sell_Relation();
                 newSellCount.count = 0;
                 newSellCount.address = bidding.address;
                 newSellCount.start_at = start_date;
                 newSellCount.end_at = end_date;
 
                 await Promise.all([
-                    this.sellRepository.save(newSellCount),
+                    this.sellrelationRepository.save(newSellCount),
                     this.auctionRepository.update(auction.id, auction),
                     this.itemRepository.update(item.token_id, item),
                 ]);

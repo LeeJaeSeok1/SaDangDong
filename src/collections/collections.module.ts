@@ -8,12 +8,21 @@ import { Item } from "src/items/entities/item.entity";
 import { Auction } from "src/auctions/entities/auction.entity";
 import { Favorites_Relation } from "src/favorites/entities/favorites_relation.entity";
 import { Favorites } from "src/favorites/entities/favorites.entity";
-import { Sell } from "src/sell/entities/sell.entity";
+import { Sell_Relation } from "src/sell/entities/sell_relation.entity";
 import { Bidding } from "src/offer/entities/bidding.entity";
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([Collection, Item, Auction, User, Favorites_Relation, Favorites, Sell, Bidding]),
+        TypeOrmModule.forFeature([
+            Collection,
+            Item,
+            Auction,
+            User,
+            Favorites_Relation,
+            Favorites,
+            Sell_Relation,
+            Bidding,
+        ]),
     ],
     exports: [TypeOrmModule],
     controllers: [CollectionsController],

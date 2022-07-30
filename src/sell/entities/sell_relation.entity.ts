@@ -1,7 +1,7 @@
 import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
-export class Sell {
+export class Sell_Relation {
     @PrimaryGeneratedColumn()
     id: number;
 
@@ -16,8 +16,4 @@ export class Sell {
 
     @Column()
     address: string;
-
-    // @OneToOne((type) => User, (user) => user.sell)
-    // // @JoinColumn({ name: "sell_id" })
-    // user: User;
 }

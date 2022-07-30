@@ -9,7 +9,7 @@ import { Favorites_Relation } from "src/favorites/entities/favorites_relation.en
 import { Favorites } from "src/favorites/entities/favorites.entity";
 import { Offset } from "src/plug/pagination.function";
 import { date_calculate, create_date, now_date, parse_calculate, mysqlnow_date } from "src/plug/caculation.function";
-import { Sell } from "src/sell/entities/sell.entity";
+import { Sell_Relation } from "src/sell/entities/sell_relation.entity";
 import { Bidding } from "src/offer/entities/bidding.entity";
 
 @Injectable()
@@ -27,8 +27,8 @@ export class ExploreService {
         private favoritesrelationRepository: Repository<Favorites_Relation>,
         @InjectRepository(Favorites)
         private favoritesRepository: Repository<Favorites>,
-        @InjectRepository(Sell)
-        private sellRepository: Repository<Sell>,
+        @InjectRepository(Sell_Relation)
+        private sellrelationRepository: Repository<Sell_Relation>,
         @InjectRepository(Bidding)
         private biddingRepository: Repository<Bidding>,
     ) {}
@@ -114,13 +114,13 @@ export class ExploreService {
 
             const nowdate = mysqlnow_date();
             console.log(auction_item);
-            const ranking = await this.sellRepository.query(`
-            SELECT user.name, sell.count, user.profile_image
-            FROM sell, user
-            WHERE sell.address = user.address
-            AND sell.start_at <= ${nowdate}
-            AND sell.end_at > ${nowdate}
-            ORDER BY sell.count DESC
+            const ranking = await this.sellrelationRepository.query(`
+            SELECT user.name, sell_relation.count, user.profile_image
+            FROM sell_relation, user
+            WHERE sell_relation.address = user.address
+            AND sell_relation.start_at <= ${nowdate}
+            AND sell_relation.end_at > ${nowdate}
+            ORDER BY sell_relation.count DESC
             LIMIT 5
             `);
             console.log(ranking);
