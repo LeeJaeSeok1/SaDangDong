@@ -21,12 +21,6 @@ export class OfferService {
         private userRepository: Repository<User>,
     ) {}
 
-    indentify(auction_id: string, clientId: string) {
-        try {
-            return clientId;
-        } catch (error) {}
-    }
-
     async createOffer(data: CreateOfferDto) {
         try {
             data.price = Number(data.price);

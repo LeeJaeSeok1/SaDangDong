@@ -21,6 +21,7 @@ import { FavoritesModule } from "./favorites/favorites.module";
 import { OfferModule } from "./offer/offer.module";
 import { TaskModule } from "./task/task.module";
 import { ChatModule } from "./chat/chat.module";
+import { JsonRpcModule } from "./jsonrpc/jsonrpc.module";
 
 @Module({
     imports: [
@@ -43,7 +44,7 @@ import { ChatModule } from "./chat/chat.module";
         ExploreModule,
         SellModule,
         FavoritesModule,
-        // EventsModule,
+        JsonRpcModule,
         ImagesModule,
         OfferModule,
         ChatModule,
