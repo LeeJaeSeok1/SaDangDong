@@ -155,7 +155,7 @@ export class ItemsService {
                 ORDER BY created_at ASC
             `);
             offers.forEach((element) => {
-                const Kdate = parse_Kcalculate(element.created_at);
+                const Kdate = parse_Kcalculate(element.created_at, 9);
                 element.created_at = Kdate;
             });
             item.bidding_price = bidding.price;

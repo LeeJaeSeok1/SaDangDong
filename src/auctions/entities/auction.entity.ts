@@ -21,6 +21,9 @@ export class Auction {
     @Column()
     progress: boolean;
 
+    @Column()
+    transaction: boolean;
+
     // @OneToOne((type) => Item, (item) => item.auction)
     // @JoinColumn()
     // item: Item;

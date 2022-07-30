@@ -87,7 +87,7 @@ export class OfferService {
             console.log(name);
 
             const date = new Date();
-            const Kdate = parse_Kcalculate(date);
+            const Kdate = parse_Kcalculate(date, 9);
             const newData = {
                 name: name.name,
                 created_at: Kdate,
@@ -123,7 +123,7 @@ export class OfferService {
                 ORDER BY created_at ASC
             `);
             offers.forEach((element) => {
-                const Kdate = parse_Kcalculate(element.created_at);
+                const Kdate = parse_Kcalculate(element.created_at, 9);
                 element.created_at = Kdate;
             });
 

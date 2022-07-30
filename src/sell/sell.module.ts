@@ -8,9 +8,10 @@ import { Bidding } from "src/offer/entities/bidding.entity";
 import { Offer } from "src/offer/entities/offer.entity";
 import { User } from "src/users/entities/user.entity";
 import { Sell_Relation } from "./entities/sell_relation.entity";
+import { Sell } from "./entities/sell.entity";
 
 @Module({
-    imports: [TypeOrmModule.forFeature([Offer, Bidding, Auction, User, Item, Sell_Relation])],
+    imports: [TypeOrmModule.forFeature([Offer, Bidding, Auction, User, Item, Sell_Relation, Sell])],
     exports: [TypeOrmModule],
     controllers: [SellController],
     providers: [SellService],

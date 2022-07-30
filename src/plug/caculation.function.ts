@@ -13,7 +13,8 @@ export function create_date() {
     const start = new Date();
     start.setHours(UTC_date.getHours() + 9);
     const end = new Date(start);
-    end.setDate(start.getDate() + 1);
+    // end.setDate(start.getDate() + 1);
+    end.setMinutes(start.getMinutes() + 20);
     return { start, end };
 }
 
@@ -89,9 +90,9 @@ export function parse_calculate(ended_at: Date) {
     return `${date}월 ${day}일 ${hour}:${minute}`;
 }
 
-export function parse_Kcalculate(UTC: Date) {
+export function parse_Kcalculate(UTC: Date, hours) {
     const new_date = new Date(UTC);
-    new_date.setHours(new_date.getHours() + 9);
+    new_date.setHours(new_date.getHours() + hours);
     const year = new_date.getFullYear();
     let date = new_date.getMonth() + 1 + "";
     if (date.length == 1) {

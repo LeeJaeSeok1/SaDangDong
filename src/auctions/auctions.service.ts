@@ -52,6 +52,7 @@ export class AuctionsService {
             auction.started_at = start;
             auction.ended_at = end;
             auction.progress = true;
+            auction.transaction = false;
 
             console.log(auction);
             console.log(auction.id);

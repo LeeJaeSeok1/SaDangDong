@@ -9,7 +9,7 @@ import { Favorites } from "src/favorites/entities/favorites.entity";
 import { Auction } from "src/auctions/entities/auction.entity";
 import { Offset } from "src/plug/pagination.function";
 import { userName } from "src/plug/userName.function";
-import { date_calculate, parse_calculate } from "src/plug/caculation.function";
+import { date_calculate, parse_calculate, parse_Kcalculate } from "src/plug/caculation.function";
 import { Bidding } from "src/offer/entities/bidding.entity";
 import { Favorites_Relation } from "src/favorites/entities/favorites_relation.entity";
 import { EventListenerTypes } from "typeorm/metadata/types/EventListenerTypes";
@@ -340,6 +340,45 @@ export class UsersService {
             }
 
             if (tab === "complete") {
+                information = await this.auctionRepository.query(`
+                SELECT auction.id, auction.transaction, auction.token_id, auction.started_at, auction.ended_at, item.image, 
+                item.name, bidding.price AS bidding_price, max_offer.user_offer
+                FROM auction
+                INNER JOIN
+                (SELECT offer.auctionId, max(offer.price) as user_offer
+                FROM offer
+                WHERE offer.address = "${address}"
+                GROUP BY auctionId) AS max_offer
+                ON auction.id = max_offer.auctionId
+                INNER JOIN bidding
+                ON auction.id = bidding.auctionId
+                INNER JOIN item
+                ON auction.token_id = item.token_id
+                WHERE progress = false
+                ORDER BY auction.ended_at DESC
+                `);
+                console.log(information);
+
+                information.map((element) => {
+                    if (element.transaction == 0) {
+                        if (element.bidding_price == element.user_offer) {
+                            const Kdate = parse_Kcalculate(element.ended_at, 15);
+                            element.message = "경매에 성공했습니다.";
+                            element.remained_at = Kdate;
+                        } else {
+                            element.message = "아쉽게 낙찰되었습니다.";
+                            element.remained_at = 0;
+                        }
+                    } else {
+                        if (element.bidding_price == element.user_offer) {
+                            element.message = "거래를 완료했습니다.";
+                            element.remained_at = 0;
+                        } else {
+                            element.message = "아쉽게 낙찰되었습니다.";
+                            element.remained_at = 0;
+                        }
+                    }
+                });
             }
 
             return Object.assign({
