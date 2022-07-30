@@ -24,27 +24,39 @@ export class AuctionsService {
 
     async startAuction(token_id: string, price: any, address: string) {
         try {
-            const NFTtoken = await this.itemRepository.query(`
-            SELECT item.token_id
-            FROM item
-            WHERE item.token_id ="${token_id}" AND item.owner = "${address}"
-            `);
+            const [[NFTtoken], [Check_auction]] = await Promise.all([
+                this.itemRepository.query(`
+                SELECT item.token_id
+                FROM item
+                WHERE item.token_id ="${token_id}" 
+                AND item.owner = "${address}"
+                `),
+                this.auctionRepository.query(`
+                SELECT *
+                FROM auction
+                WHERE auction.token_id = "${token_id}"
+                AND transaction_at > ADDTIME(now(),'9:0:0.000000')
+                `),
+            ]);
 
-            if (NFTtoken.length === 0) {
-                return "없는 token 입니다.";
+            if (!NFTtoken) {
+                return Object.assign({
+                    statusCode: 400,
+                    statusMsg: `없는 토큰입니다.`,
+                });
             }
 
-            const Check_auction = await this.auctionRepository.query(`
-            SELECT *
-            FROM auction
-            WHERE auction.token_id = "${token_id}" AND auction.progress = true
-            `);
-
-            if (Check_auction.length !== 0) {
-                return "이미 경매중입니다.";
+            if (Check_auction) {
+                return Object.assign({
+                    statusCode: 400,
+                    statusMsg: `경매중입니다.`,
+                });
             }
 
             const { start, end } = create_date();
+
+            const new_date = new Date(end);
+            new_date.setHours(new_date.getHours() + 6);
 
             const auction = new Auction();
             auction.price = price.price;
@@ -53,8 +65,7 @@ export class AuctionsService {
             auction.ended_at = end;
             auction.progress = true;
             auction.transaction = false;
-
-            console.log(auction);
+            auction.transaction_at = new_date;
             console.log(auction.id);
 
             await this.auctionRepository.save(auction);
@@ -66,7 +77,11 @@ export class AuctionsService {
             console.log(2);
             await this.biddingRepository.save(bidding);
 
-            return { auction, bidding };
+            return Object.assign({
+                statusCode: 200,
+                statusMsg: `옥션을 불러왔습니다.`,
+                data: auction,
+            });
         } catch (error) {
             console.log(error.message);
             throw new BadRequestException(error.message);

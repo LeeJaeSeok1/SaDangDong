@@ -90,7 +90,7 @@ export function parse_calculate(ended_at: Date) {
     return `${date}월 ${day}일 ${hour}:${minute}`;
 }
 
-export function parse_Kcalculate(UTC: Date, hours) {
+export function parse_Kcalculate(UTC, hours) {
     const new_date = new Date(UTC);
     new_date.setHours(new_date.getHours() + hours);
     const year = new_date.getFullYear();

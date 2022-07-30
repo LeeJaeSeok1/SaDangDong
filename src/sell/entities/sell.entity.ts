@@ -23,5 +23,14 @@ export class Sell {
     updated_at: Date;
 
     @Column()
-    address: string;
+    to_address: string;
+
+    @Column()
+    from_address: string;
+
+    @Column()
+    price: number;
+
+    @Column()
+    token_id: number;
 }

@@ -341,8 +341,8 @@ export class UsersService {
 
             if (tab === "complete") {
                 information = await this.auctionRepository.query(`
-                SELECT auction.id, auction.transaction, auction.token_id, auction.started_at, auction.ended_at, item.image, 
-                item.name, bidding.price AS bidding_price, max_offer.user_offer
+                SELECT auction.id, auction.transaction_at ,auction.transaction, auction.token_id, auction.started_at, 
+                auction.ended_at, item.image, item.name, bidding.price AS bidding_price, max_offer.user_offer
                 FROM auction
                 INNER JOIN
                 (SELECT offer.auctionId, max(offer.price) as user_offer
@@ -362,20 +362,18 @@ export class UsersService {
                 information.map((element) => {
                     if (element.transaction == 0) {
                         if (element.bidding_price == element.user_offer) {
-                            const Kdate = parse_Kcalculate(element.ended_at, 15);
+                            console.log(element.ended_at);
+                            const Kdate = parse_Kcalculate(element.ended_at, 6);
+                            console.log(Kdate);
                             element.message = "경매에 성공했습니다.";
-                            element.remained_at = Kdate;
                         } else {
                             element.message = "아쉽게 낙찰되었습니다.";
-                            element.remained_at = 0;
                         }
                     } else {
                         if (element.bidding_price == element.user_offer) {
                             element.message = "거래를 완료했습니다.";
-                            element.remained_at = 0;
                         } else {
                             element.message = "아쉽게 낙찰되었습니다.";
-                            element.remained_at = 0;
                         }
                     }
                 });

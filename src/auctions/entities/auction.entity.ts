@@ -19,18 +19,11 @@ export class Auction {
     ended_at: Date;
 
     @Column()
+    transaction_at: Date;
+
+    @Column()
     progress: boolean;
 
     @Column()
     transaction: boolean;
-
-    // @OneToOne((type) => Item, (item) => item.auction)
-    // @JoinColumn()
-    // item: Item;
-
-    // @OneToOne((type) => Offer, (offer) => offer.auction)
-    // offer: Offer;
-
-    // @OneToOne((type) => Chat, (chat) => chat.auction)
-    // chat: Chat;
 }
