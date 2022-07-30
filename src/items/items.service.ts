@@ -7,7 +7,8 @@ import { ImageUpload } from "src/images/entities/image.entity";
 import { User } from "src/users/entities/user.entity";
 import { Item } from "./entities/item.entity";
 import { Auction } from "src/auctions/entities/auction.entity";
-import { date_calculate } from "src/plug/caculation.function";
+import { date_calculate, parse_Kcalculate } from "src/plug/caculation.function";
+import { Offer } from "src/offer/entities/offer.entity";
 
 @Injectable()
 export class ItemsService {
@@ -22,6 +23,8 @@ export class ItemsService {
         private userRepository: Repository<User>,
         @InjectRepository(Auction)
         private auctionRepository: Repository<Auction>,
+        @InjectRepository(Offer)
+        private offerRepository: Repository<Offer>,
     ) {}
 
     // 모든 아이템 보기
@@ -51,6 +54,11 @@ export class ItemsService {
     // 아이템 상세보기
     async itemDetail(token_id: string, address: string) {
         try {
+            if (address == `"NOT DEFINED"`) {
+                console.log("로그인 한 유저가 없습니다..");
+                address = undefined;
+            }
+
             console.log(token_id, address);
             const [itemIpfsJson] = await this.itemRepository.query(`
                 SELECT item.ipfsJson
@@ -96,6 +104,7 @@ export class ItemsService {
                 item.ipfsJson = ipfsJson;
                 item.favorites = isFavorites;
                 item.auction_id = 0;
+                item.offers = [];
                 return Object.assign({
                     statusCode: 200,
                     success: true,
@@ -122,7 +131,25 @@ export class ItemsService {
             item.ipfsJson = ipfsJson;
             item.remained_at = remained_at;
             item.favorites = isFavorites;
+
             console.log(item);
+
+            const offers = await this.offerRepository.query(`
+                SELECT offer.price, offer.created_at, offer.auctionId, offer.address, user.name  
+                FROM offer
+                    INNER JOIN auction
+                    ON offer.auctionId = auction.id
+                    INNER JOIN user
+                    ON offer.address = user.address
+                WHERE offer.auctionId = ${auction.id}
+                ORDER BY created_at ASC
+            `);
+            offers.forEach((element) => {
+                const Kdate = parse_Kcalculate(element.created_at);
+                element.created_at = Kdate;
+            });
+            item.offers = offers;
+            console.log(offers);
 
             return Object.assign({
                 statusCode: 200,

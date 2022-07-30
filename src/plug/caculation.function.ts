@@ -90,10 +90,8 @@ export function parse_calculate(ended_at: Date) {
 }
 
 export function parse_Kcalculate(UTC: Date) {
-    const UTC_date = new Date(UTC);
-    console.log(UTC_date);
-    const new_date = new Date();
-    new_date.setHours(UTC_date.getHours() + 9);
+    const new_date = new Date(UTC);
+    new_date.setHours(new_date.getHours() + 9);
     const year = new_date.getFullYear();
     let date = new_date.getMonth() + 1 + "";
     if (date.length == 1) {
@@ -114,7 +112,10 @@ export function parse_Kcalculate(UTC: Date) {
     if (minute.length == 1) {
         minute = "0" + minute;
     }
-    const seconds = new_date.getSeconds();
+    let seconds = new_date.getSeconds() + "";
+    if (seconds.length == 1) {
+        seconds = "0" + seconds;
+    }
 
     return `${year}-${date}-${day} ${hour}:${minute}:${seconds}`;
 }

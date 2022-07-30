@@ -111,7 +111,7 @@ export class OfferService {
         }
     }
 
-    async findAllOffer(address, auction_id) {
+    async findAllOffer(address: string, auction_id: number) {
         try {
             console.log(address, auction_id);
             if (address == `"NOT DEFINED"`) {

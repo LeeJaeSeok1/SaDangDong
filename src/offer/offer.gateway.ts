@@ -23,8 +23,13 @@ export class OfferGateway implements OnGatewayInit, OnGatewayConnection, OnGatew
         console.log(data);
         const newData = await this.offerService.createOffer(data);
         console.log(newData);
+
+        if (typeof newData === "string") {
+            this.server.to(`${data.auction_id}`).emit("error", newData);
+        } else {
+            this.server.to(`${data.auction_id}`).emit("recOffer", newData);
+        }
         // data : {price, mycoin}
-        this.server.to(`${data.auction_id}`).emit("recOffer", newData);
     }
 
     @SubscribeMessage("joinRoom")
@@ -32,6 +37,13 @@ export class OfferGateway implements OnGatewayInit, OnGatewayConnection, OnGatew
         console.log(room);
         client.join(room);
         client.emit("joinRoom", room);
+    }
+
+    @SubscribeMessage("leaveRoom")
+    handleErrorRoom(client: Socket, room: string) {
+        console.log(room);
+        client.leave(room);
+        client.emit("leaveRoom", room);
     }
 
     afterInit(server: Server) {

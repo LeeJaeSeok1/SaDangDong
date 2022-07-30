@@ -7,9 +7,10 @@ import { Collection } from "src/collections/entities/collection.entity";
 import { User } from "src/users/entities/user.entity";
 import { Favorites_Relation } from "src/favorites/entities/favorites_relation.entity";
 import { Auction } from "src/auctions/entities/auction.entity";
+import { Offer } from "src/offer/entities/offer.entity";
 
 @Module({
-    imports: [TypeOrmModule.forFeature([Item, Collection, User, Favorites_Relation, Auction])],
+    imports: [TypeOrmModule.forFeature([Item, Collection, User, Favorites_Relation, Auction, Offer])],
     exports: [TypeOrmModule],
     controllers: [ItemsController],
     providers: [ItemsService],
