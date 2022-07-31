@@ -63,12 +63,14 @@ export class ItemsService {
             }
 
             console.log(token_id, address);
+
             const [itemIpfsJson] = await this.itemRepository.query(`
                 SELECT item.ipfsJson
                 FROM item
                 WHERE item.token_id = "${token_id}"
                 `);
             console.log(itemIpfsJson);
+
             const [auction] = await this.auctionRepository.query(`
             SELECT *
             FROM auction
@@ -92,22 +94,44 @@ export class ItemsService {
             }
 
             if (auction === undefined) {
-                console.log(1);
+                const [check_auction] = await this.auctionRepository.query(`
+                SELECT *
+                FROM auction
+                WHERE auction.token_id = ${token_id}
+                ORDER BY transaction_at DESC
+                `);
+
                 const [item] = await this.itemRepository.query(`
                 SELECT DISTINCT item.token_id, item.name, item.description, item.address, item.image, item.ipfsImage,
                 item.collection_name, collection.description AS collection_description, 
-                user.name AS user_name, user.profile_image, 
+                user.name AS user_name, user.profile_image, item.owner,
                 favorites_relation.count AS favorites_count
                 FROM item, user, favorites_relation, collection
                 WHERE item.token_id = ${token_id}
                 AND item.collection_name = collection.name
-                AND item.owner = user.address
+                AND item.address = user.address
                 AND item.token_id = favorites_relation.token_id
                 `);
+
+                const [owner_user] = await this.userRepository.query(`
+                SELECT *
+                FROM user
+                WHERE user.address = "${item.owner}"
+                `);
+
                 item.ipfsJson = ipfsJson;
                 item.favorites = isFavorites;
                 item.auction_id = 0;
+                item.owner_name = owner_user.name;
                 item.offers = [];
+                if (check_auction) {
+                    item.transaction_at = check_auction.transaction_at;
+                    item.transaction = check_auction.transaction;
+                } else {
+                    item.transaction_at = new Date();
+                    item.transaction = 1;
+                }
+
                 return Object.assign({
                     statusCode: 200,
                     success: true,
@@ -119,8 +143,8 @@ export class ItemsService {
 
             const [item] = await this.itemRepository.query(`
             SELECT item.token_id, item.name, item.description, item.address, item.image, item.ipfsImage,
-            item.collection_name, collection.description AS collection_description, 
-            user.name AS user_name, user.profile_image, 
+            item.collection_name, collection.description AS collection_description, item.owner,
+            user.name AS user_name, user.profile_image, auction.transaction_at, auction.transaction,
             favorites_relation.count AS favorites_count,
             auction.progress AS auction_progress, auction.price AS auction_price, auction.ended_at AS auction_endedAt,
             auction.id AS auction_id
@@ -128,10 +152,17 @@ export class ItemsService {
             WHERE item.token_id = ${token_id}
             AND item.token_id = auction.token_id
             AND item.collection_name = collection.name
-            AND item.owner = user.address
+            AND item.address = user.address
             AND item.token_id = favorites_relation.token_id
             AND auction.progress = true
             `);
+
+            const [owner_user] = await this.userRepository.query(`
+            SELECT *
+            FROM user
+            WHERE user.address = "${item.owner}"
+            `);
+            item.owner_name = owner_user.name;
             item.ipfsJson = ipfsJson;
             item.remained_at = remained_at;
             item.favorites = isFavorites;

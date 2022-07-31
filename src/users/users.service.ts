@@ -295,7 +295,7 @@ export class UsersService {
                 ORDER BY item.updated_at DESC
                 LIMIT ${start}, ${_limit}
                 `);
-                console.log(information);
+                console.log(information, "buyNFT");
 
                 await Promise.all(
                     information.map(async (element) => {

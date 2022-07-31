@@ -44,6 +44,10 @@ export class OfferService {
                 return "없는 경매입니다.";
             }
 
+            if (auction.address == data.address) {
+                return "본인 경매에 본인이 가격 제시 못합니다.";
+            }
+
             if (bidding.price >= data.price) {
                 return "현재 최고가보다 작습니다.";
             }

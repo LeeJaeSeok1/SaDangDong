@@ -6,8 +6,10 @@ import { Favorites_Relation } from "src/favorites/entities/favorites_relation.en
 import { ImageUpload } from "src/images/entities/image.entity";
 import { Item } from "src/items/entities/item.entity";
 import { Bidding } from "src/offer/entities/bidding.entity";
+import { Offer } from "src/offer/entities/offer.entity";
 import { date_calculate, parse_calculate } from "src/plug/caculation.function";
 import { Offset } from "src/plug/pagination.function";
+import { Sell } from "src/sell/entities/sell.entity";
 import { Sell_Relation } from "src/sell/entities/sell_relation.entity";
 import { User } from "src/users/entities/user.entity";
 import { Repository } from "typeorm";
@@ -32,19 +34,61 @@ export class CollectionsService {
         private sellrelationRepository: Repository<Sell_Relation>,
         @InjectRepository(Bidding)
         private biddingRepository: Repository<Bidding>,
+        @InjectRepository(Offer)
+        private offerRepository: Repository<Offer>,
+        @InjectRepository(Sell)
+        private sellRepository: Repository<Sell>,
     ) {}
 
     // 특정 컬렉션 보기
     async findByOneCollection(name: string) {
         try {
             console.log(name);
-            const [collection] = await this.collectionRepository.query(`
-            SELECT collection.*, user.name AS user_name, user.profile_image
-            FROM collection
-                LEFT JOIN user
-                ON collection.address = user.address
-            WHERE collection.name = "${name}"
-            `);
+            const [[collection], [leastoffer], myitem, buyuser] = await Promise.all([
+                this.collectionRepository.query(`
+                SELECT collection.*, user.name AS user_name, user.profile_image
+                FROM collection
+                    INNER JOIN user
+                    ON collection.address = user.address
+                WHERE collection.name = "${name}"
+                `),
+                this.collectionRepository.query(`
+                SELECT min(sell.price) AS least_price
+                FROM collection
+                    INNER JOIN item
+                    ON collection.name = item.collection_name
+                    INNER JOIN sell
+                    ON item.token_id = sell.token_id
+                WHERE collection.name = "${name}"
+                GROUP BY collection.name
+                `),
+                this.itemRepository.query(`
+                SELECT *
+                FROM item
+                    INNER JOIN collection
+                    ON item.collection_name = collection.name
+                WHERE collection.name = "${name}"
+                `),
+                this.itemRepository.query(`
+                SELECT min(item.token_id)
+                FROM item
+                    INNER JOIN collection
+                    ON item.collection_name = collection.name
+                WHERE collection.name = "${name}"
+                AND item.address != item.owner
+                GROUP BY item.owner
+                `),
+            ]);
+
+            collection.item_count = myitem.length;
+            collection.buyuser_count = buyuser.length;
+
+            if (leastoffer) {
+                collection.least_offer = leastoffer.least_price;
+            } else {
+                collection.least_offer = 0;
+            }
+
             return Object.assign({
                 statusCode: 200,
                 success: true,

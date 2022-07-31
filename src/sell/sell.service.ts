@@ -122,7 +122,7 @@ export class SellService {
             auction.transaction = true;
             auction.transaction_at = nowDate;
 
-            if (SellCount.length > 0) {
+            if (SellCount) {
                 SellCount.count++;
                 await Promise.all([
                     this.sellRepository.save(newSell),

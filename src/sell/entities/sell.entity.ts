@@ -28,7 +28,7 @@ export class Sell {
     @Column()
     from_address: string;
 
-    @Column()
+    @Column({ type: "decimal", precision: 7, scale: 4, default: 0 })
     price: number;
 
     @Column()

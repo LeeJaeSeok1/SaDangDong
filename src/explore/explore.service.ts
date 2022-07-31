@@ -110,20 +110,16 @@ export class ExploreService {
                 }),
             );
 
-            console.log(4);
-
-            const nowdate = mysqlnow_date();
-            console.log(auction_item);
             const ranking = await this.sellrelationRepository.query(`
             SELECT user.name, sell_relation.count, user.profile_image
             FROM sell_relation, user
             WHERE sell_relation.address = user.address
-            AND sell_relation.start_at <= ${nowdate}
-            AND sell_relation.end_at > ${nowdate}
+            AND sell_relation.start_at <= ADDTIME(now(),'9:0:0.000000')
+            AND sell_relation.end_at > ADDTIME(now(),'9:0:0.000000')
             ORDER BY sell_relation.count DESC
             LIMIT 5
             `);
-            console.log(ranking);
+
             // 2022-07-28 17:56:32.480812
 
             return Object.assign({
