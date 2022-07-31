@@ -53,7 +53,6 @@ export class ItemsService {
             throw new BadRequestException(error.message);
         }
     }
-
     // 아이템 상세보기
     async itemDetail(token_id: string, address: string) {
         try {

@@ -11,9 +11,20 @@ import {
     UploadedFiles,
     Put,
 } from "@nestjs/common";
+import { AuthToken } from "src/config/auth.decorator";
 import { JsonRpcService } from "./jsonrpc.service";
 
 @Controller("api/json")
 export class JsonRpcController {
     constructor(private readonly jsonrpcService: JsonRpcService) {}
+
+    // ethereum 받기
+    @Get("getETH")
+    getethereum(@AuthToken() address: string) {
+        return this.jsonrpcService.getethereumcoin(address);
+    }
+    @Get("hello")
+    hello() {
+        return this.jsonrpcService.hellofunction();
+    }
 }
