@@ -173,10 +173,7 @@ export class CollectionsService {
                     }),
                 );
             }
-            // const items = await this.itemRepository.find({ where: { collection_name: id } });
 
-            console.log("information", information);
-            // return { collectionInfo, items };
             return Object.assign({
                 statusCode: 200,
                 success: true,
@@ -192,16 +189,9 @@ export class CollectionsService {
     // 컬렉션 생성
     async newCollection(collectionData, files: Express.Multer.File[], address: string) {
         try {
-            // console.log("서비스 컬렉션 데이터", collectionData);
-            // console.log("files", files);
-            // console.log("서비스 address", address);
-
             const json = collectionData.fileInfo;
-            // console.log(1);
-            // console.log(json, "json");
 
             const obj = JSON.parse(json);
-            // console.log(obj, "obj");
 
             const uploadeImages = [];
 
@@ -262,11 +252,9 @@ export class CollectionsService {
             }
 
             const json = updateData.fileInfo;
-            // console.log(1);
-            // console.log(json, "json");
 
             const obj = JSON.parse(json);
-            // console.log("obj", obj);
+
             const uploadeImages = [];
 
             let featureImage;
@@ -322,11 +310,11 @@ export class CollectionsService {
             if (exisCollection.address !== address) {
                 throw new NotFoundException(`본인만 삭제 가능합니다.`);
             }
-            // await this.collectionRepository.query(`UPDATE collection SET archived = 1 WHERE name = "${id}";`);
-            // await this.collectionRepository.delete(exisCollection);
+
             await this.collectionRepository.query(`
             UPDATE collection SET archived_at = NOW(), archived = 1 WHERE name = "${name}"
             `);
+
             return Object.assign({
                 statusCode: 201,
                 success: true,

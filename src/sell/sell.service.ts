@@ -28,9 +28,10 @@ export class SellService {
         @InjectRepository(Auction)
         private auctionRepository: Repository<Auction>,
     ) {}
-    async SellComplete(price: number, auction_id: number, address: string) {
+    async SellComplete(data, auction_id: number, address: string) {
         try {
-            console.log(price, auction_id, address);
+            console.log(data.price, auction_id, address);
+            const price = Number(data.price);
 
             const [[auction], [bidding]] = await Promise.all([
                 this.auctionRepository.query(`
@@ -46,22 +47,42 @@ export class SellService {
                 `),
             ]);
             if (bidding.price != price) {
-                return "요구 가격이 아닙니다.";
+                return Object.assign({
+                    statusCode: 400,
+                    success: false,
+                    statusMsg: `요구 가격이 아닙니다.`,
+                });
             }
             if (!auction) {
-                return "경매를 하지 않았거나 종료되었습니다.";
+                return Object.assign({
+                    statusCode: 400,
+                    success: false,
+                    statusMsg: `경매를 하지 않았거나 종료되었습니다.`,
+                });
             }
             const nowDate = now_date();
             if (auction.ended_at > nowDate) {
-                return "아직 경매가 끝나지 않았습니다.";
+                return Object.assign({
+                    statusCode: 400,
+                    success: false,
+                    statusMsg: `아직 경매가 끝나지 않았습니다.`,
+                });
             }
 
             if (auction.transaction_at < nowDate) {
-                return "시간 내에 거래하지 못했습니다.";
+                return Object.assign({
+                    statusCode: 400,
+                    success: false,
+                    statusMsg: `시간 내에 거래하지 못했습니다.`,
+                });
             }
 
             if (!bidding) {
-                return "최고 가격 요청자가 아닙니다.";
+                return Object.assign({
+                    statusCode: 400,
+                    success: false,
+                    statusMsg: `최고 가격 요청자가 아닙니다.`,
+                });
             }
 
             const [[item], [SellCount]] = await Promise.all([
@@ -80,7 +101,11 @@ export class SellService {
             ]);
 
             if (!item) {
-                return "없는 아이템입니다.";
+                return Object.assign({
+                    statusCode: 400,
+                    success: false,
+                    statusMsg: `없는 아이템입니다.`,
+                });
             }
 
             const from_address = item.owner;
@@ -97,7 +122,7 @@ export class SellService {
             auction.transaction = true;
             auction.transaction_at = nowDate;
 
-            if (SellCount) {
+            if (SellCount.length > 0) {
                 SellCount.count++;
                 await Promise.all([
                     this.sellRepository.save(newSell),

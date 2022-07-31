@@ -9,8 +9,8 @@ export class SellController {
     constructor(private readonly sellService: SellService) {}
 
     @Post(":auction_id")
-    SellComplete(@Body() price: number, @Param("auction_id") auction_id: number, @AuthToken() address: string) {
-        return this.sellService.SellComplete(price, auction_id, address);
+    SellComplete(@Body() data, @Param("auction_id") auction_id: number, @AuthToken() address: string) {
+        return this.sellService.SellComplete(data, auction_id, address);
     }
 
     @Get()

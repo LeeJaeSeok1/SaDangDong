@@ -26,4 +26,7 @@ export class Auction {
 
     @Column()
     transaction: boolean;
+
+    @Column()
+    address: string;
 }

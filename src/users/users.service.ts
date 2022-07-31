@@ -304,11 +304,11 @@ export class UsersService {
                             element.isFavorites = 0;
                         } else {
                             const [IsFavorites] = await this.favoritesRepository.query(`
-                        SELECT isFavorites
-                        FROM favorites             
-                        WHERE favorites.token_id = ${element.token_id}
-                        AND favorites.address = "${address}"
-                        `);
+                            SELECT isFavorites
+                            FROM favorites             
+                            WHERE favorites.token_id = ${element.token_id}
+                            AND favorites.address = "${address}"
+                            `);
                             if (IsFavorites) {
                                 element.isFavorites = IsFavorites.isFavorites;
                             } else {

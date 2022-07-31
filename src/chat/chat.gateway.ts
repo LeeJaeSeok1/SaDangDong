@@ -29,23 +29,14 @@ export class ChatGateway implements OnGatewayInit {
 
     @SubscribeMessage("sendMessage")
     handleSendMessage(client: Socket, data: createMessageDto) {
-        console.log(data, "date");
-        this.chatService.createMessage(data);
+        // this.chatService.createMessage(data);
         this.server.to(`${data.auction_id}`).emit("recMessage", data);
     }
 
     @SubscribeMessage("joinRoom")
     handleJoinRoom(client: Socket, room: string) {
-        console.log(room);
         client.join(room);
         client.emit("joinRoom", room);
-    }
-
-    @SubscribeMessage("leaveRoom")
-    handleLeaveRoom(client: Socket, room: string) {
-        console.log(room);
-        client.leave(room);
-        client.emit("leaveRoom", room);
     }
 
     afterInit(server: Server) {

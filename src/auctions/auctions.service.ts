@@ -66,6 +66,7 @@ export class AuctionsService {
             auction.progress = true;
             auction.transaction = false;
             auction.transaction_at = new_date;
+            auction.address = address;
             console.log(auction.id);
 
             await this.auctionRepository.save(auction);
