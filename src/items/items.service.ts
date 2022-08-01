@@ -209,7 +209,8 @@ export class ItemsService {
             const collection = await this.collectionRepository.query(`
             SELECT collection.name
             FROM collection
-            WHERE collection.address = "${address}"`);
+            WHERE collection.address = "${address}"
+            AND collection.archived = 0`);
             return Object.assign({
                 statusCode: 200,
                 success: true,
