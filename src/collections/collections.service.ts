@@ -243,6 +243,11 @@ export class CollectionsService {
             const json = collectionData.fileInfo;
 
             const obj = JSON.parse(json);
+            const [exisCollection] = await this.collectionRepository.find();
+
+            if (exisCollection.name === obj.name) {
+                throw new BadRequestException(`${obj.name}은 이미 있는 컬렉션 입니다.`);
+            }
 
             const uploadeImages = [];
 
