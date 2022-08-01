@@ -111,27 +111,54 @@ export class JsonRpcService {
         }
     }
 
-    async hellofunction() {
-        const url = process.env.BLOCKCHAIN_SERVER;
-        const data = {
-            jsonrpc: "2.0",
-            method: "eth_sendTransaction",
-            params: [
-                {
-                    jsonrpc: "2.0",
-                    method: "miner_stop",
-                    params: [],
+    async transactioncomplete(hashdata) {
+        try {
+            console.log(hashdata);
+            const url = process.env.BLOCKCHAIN_SERVER;
+            const data = {
+                jsonrpc: "2.0",
+                method: "eth_getTransactionReceipt",
+                params: [`${hashdata.hashdata}`],
+                id: 1,
+            };
+            const option = {
+                headers: {
+                    "Content-Type": "application/json",
                 },
-            ],
-            id: 1,
-        };
-        const option = {
-            headers: {
-                "Content-Type": "application/json",
-            },
-        };
-        const response = await this.httpService.get(url, data);
-        console.log(response);
-        return response;
+            };
+
+            const result = await lastValueFrom(
+                this.httpService.post(url, data, option).pipe(
+                    map((response) => {
+                        console.log(response);
+                        return response.data;
+                    }),
+                ),
+            );
+
+            if (result.error) {
+                return Object.assign({
+                    statusCode: 400,
+                    success: false,
+                    statusMsg: `트랜잭션간 에러가 발생했습니다.`,
+                });
+            }
+
+            if (result === null) {
+                return Object.assign({
+                    statusCode: 200,
+                    success: true,
+                    statusMsg: `민팅에 성공했습니다. 블록체인에 올라갈려면 5~10초정도 소요됩니다.`,
+                });
+            }
+
+            return Object.assign({
+                statusCode: 200,
+                success: true,
+                statusMsg: `민팅에 성공했습니다.`,
+            });
+        } catch (error) {
+            throw new BadRequestException(error);
+        }
     }
 }

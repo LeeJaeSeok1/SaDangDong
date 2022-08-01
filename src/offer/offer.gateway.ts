@@ -9,6 +9,7 @@ import {
     WebSocketServer,
 } from "@nestjs/websockets";
 import { Server, Socket } from "socket.io";
+import { parse_Kcalculate } from "src/plug/caculation.function";
 import { CreateOfferDto } from "./dto/createoffer.dto";
 import { OfferService } from "./offer.service";
 
@@ -20,7 +21,17 @@ export class OfferGateway implements OnGatewayInit, OnGatewayConnection, OnGatew
 
     @SubscribeMessage("sendOffer")
     async handleSendMessage(client: Socket, data: CreateOfferDto) {
-        this.server.to(`${data.auction_id}`).emit("recOffer", data);
+        const date = new Date();
+        const Kdate = parse_Kcalculate(date, 9);
+        const newData = {
+            name: data.name,
+            created_at: Kdate,
+            price: data.price,
+            auctionId: data.auction_id,
+            address: data.address,
+        };
+
+        this.server.to(`${data.auction_id}`).emit("recOffer", newData);
         // data : {price, mycoin}
     }
 

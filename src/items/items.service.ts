@@ -143,7 +143,7 @@ export class ItemsService {
             user.name AS user_name, user.profile_image, auction.transaction_at, auction.transaction,
             favorites_relation.count AS favorites_count,
             auction.progress AS auction_progress, auction.price AS auction_price, auction.ended_at AS auction_endedAt,
-            auction.id AS auction_id
+            auction.id AS auction_id, item.hashdata
             FROM item, user, favorites_relation, collection, auction
             WHERE item.token_id = ${token_id}
             AND item.token_id = auction.token_id
@@ -252,6 +252,7 @@ export class ItemsService {
             createItem.image = element.location;
             createItem.address = address;
             createItem.owner = address;
+            createItem.hashdata = obj.hashdata;
             await this.itemRepository.save(createItem);
 
             const favoritesCount = new Favorites_Relation();

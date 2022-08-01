@@ -23,6 +23,13 @@ export class OfferService {
 
     async createOffer(auction_id, address, data) {
         try {
+            if (address == `"NOT DEFINED"`) {
+                return Object.assign({
+                    statusCode: 400,
+                    success: true,
+                    statusMsg: `메타마스크에 연결하십시오.`,
+                });
+            }
             data.price = Number(data.price);
             data.mycoin = Number(data.mycoin);
 
@@ -98,31 +105,10 @@ export class OfferService {
                 this.biddingRepository.update(bidding.id, bidding),
             ]);
 
-            const [name] = await this.userRepository.query(`
-            SELECT name
-            FROM user
-            WHERE address  = "${bidding.address}"
-            `);
-            console.log("hello");
-            console.log(name);
-
-            const date = new Date();
-            const Kdate = parse_Kcalculate(date, 9);
-            const newData = {
-                name: name.name,
-                created_at: Kdate,
-                price: data.price,
-                auctionId: auction_id,
-                address: address,
-            };
-            console.log(newData);
-
-            console.log("newData", newData);
-
             return Object.assign({
                 statusCode: 200,
                 success: true,
-                statusMsg: `제안을 성공습니다.`,
+                statusMsg: `제안을 성공하였습니다.`,
             });
         } catch (error) {
             throw new BadRequestException(error.message);

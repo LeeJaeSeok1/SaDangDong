@@ -23,8 +23,9 @@ export class JsonRpcController {
     getethereum(@AuthToken() address: string) {
         return this.jsonrpcService.getethereumcoin(address);
     }
-    @Get("hello")
-    hello() {
-        return this.jsonrpcService.hellofunction();
+
+    @Get("/transaction/:hashdata")
+    checktransaction(@Param() hashdata: string) {
+        return this.jsonrpcService.transactioncomplete(hashdata);
     }
 }
