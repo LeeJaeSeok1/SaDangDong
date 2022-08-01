@@ -15,6 +15,13 @@ export class FavoritesService {
 
     async favorites(id: string, addressId: string) {
         try {
+            if (addressId == `"NOT DEFINED"`) {
+                return Object.assign({
+                    statusCode: 400,
+                    success: true,
+                    statusMsg: `메타마스크에 연결하십시오.`,
+                });
+            }
             const findUser = await this.favoritesRepository.findOne({ where: { token_id: id, address: addressId } });
             const findCount = await this.favoritesRelationRepository.findOne({ where: { token_id: id } });
 
