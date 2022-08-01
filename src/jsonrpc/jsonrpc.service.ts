@@ -19,6 +19,7 @@ export class JsonRpcService {
 
     async getethereumcoin(address: string) {
         try {
+            console.log("이;더리움 받기 ", address);
             if (address == `"NOT DEFINED"`) {
                 return Object.assign({
                     statusCode: 400,
