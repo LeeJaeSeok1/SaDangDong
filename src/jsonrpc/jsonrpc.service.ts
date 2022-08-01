@@ -27,10 +27,12 @@ export class JsonRpcService {
                 });
             }
 
+            const loweraddress = address.toLowerCase();
+
             const [check_getethereum] = await this.ethereumRepository.query(`
             SELECT *
             FROM ethereum
-            WHERE address = "${address}"
+            WHERE address = "${loweraddress}"
             `);
 
             if (check_getethereum) {
@@ -83,7 +85,6 @@ export class JsonRpcService {
                 });
             }
 
-            const loweraddress = address.toLowerCase();
             if (!check_getethereum) {
                 const getethereumtime = new Ethereum();
 
