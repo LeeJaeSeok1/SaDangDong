@@ -111,7 +111,7 @@ export class ExploreService {
             );
 
             const ranking = await this.sellrelationRepository.query(`
-            SELECT user.name, sell_relation.count, user.profile_image
+            SELECT user.name, sell_relation.count, user.profile_image, user.address
             FROM sell_relation, user
             WHERE sell_relation.address = user.address
             AND sell_relation.start_at <= ADDTIME(now(),'9:0:0.000000')

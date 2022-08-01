@@ -243,9 +243,16 @@ export class CollectionsService {
             const json = collectionData.fileInfo;
 
             const obj = JSON.parse(json);
-            const [exisCollection] = await this.collectionRepository.find();
+            console.log(obj);
+            const [exisCollection] = await this.collectionRepository.query(`
+            SELECT *
+            FROM collection
+            WHERE name = "${obj.name}"
+            `);
 
-            if (exisCollection.name === obj.name) {
+            console.log(exisCollection);
+
+            if (exisCollection) {
                 throw new BadRequestException(`${obj.name}은 이미 있는 컬렉션 입니다.`);
             }
 
@@ -271,6 +278,8 @@ export class CollectionsService {
                     }
                 }
             }
+
+            console.log(obj);
 
             const collection = new Collection();
             collection.address = address;
