@@ -10,6 +10,7 @@ import { Auction } from "src/auctions/entities/auction.entity";
 import { date_calculate, parse_Kcalculate } from "src/plug/caculation.function";
 import { Offer } from "src/offer/entities/offer.entity";
 import { Bidding } from "src/offer/entities/bidding.entity";
+import { UpdateItemDto } from "./dto/updateItem.dto";
 
 @Injectable()
 export class ItemsService {
@@ -61,14 +62,11 @@ export class ItemsService {
                 address = undefined;
             }
 
-            console.log(token_id, address);
-
             const [itemIpfsJson] = await this.itemRepository.query(`
                 SELECT item.ipfsJson
                 FROM item
                 WHERE item.token_id = "${token_id}"
                 `);
-            console.log(itemIpfsJson);
 
             const [auction] = await this.auctionRepository.query(`
             SELECT *
@@ -78,7 +76,6 @@ export class ItemsService {
             `);
 
             const ipfsJson = itemIpfsJson.ipfsJson.split("//")[1];
-            console.log(ipfsJson);
             const [favorites] = await this.favoritesRelationRepository.query(`
             SELECT isFavorites
             FROM favorites
@@ -172,8 +169,6 @@ export class ItemsService {
             WHERE auctionId = ${auction.id}
             `);
 
-            console.log(item);
-
             const offers = await this.offerRepository.query(`
                 SELECT offer.price, offer.created_at, offer.auctionId, offer.address, user.name  
                 FROM offer
@@ -232,10 +227,9 @@ export class ItemsService {
                     statusMsg: `메타마스크에 연결하십시오.`,
                 });
             }
-            console.log(1);
             const json = itemData.itemInfo;
-            // console.log(json, "json");
             const obj = JSON.parse(json);
+
             const uploadeImages = [];
             let element;
             if (files) {
@@ -247,15 +241,12 @@ export class ItemsService {
                     uploadeImages.push(file);
                 }
             }
-            console.log(2);
-
-            console.log(obj);
 
             const createItem = new Item();
             createItem.token_id = obj.token_id;
             createItem.name = obj.name;
             createItem.description = obj.description;
-            createItem.collection_name = obj.collection_id;
+            createItem.collection_name = obj.collection_name;
             createItem.ipfsJson = obj.ipfsJson;
             createItem.ipfsImage = obj.ipfsImage;
             createItem.image = element.location;
@@ -263,21 +254,11 @@ export class ItemsService {
             createItem.owner = address;
             await this.itemRepository.save(createItem);
 
-            console.log(3);
-            // const newItem = await this.itemRepository.query(`
-            // INSERT INTO item (token_id, name, description, collection_name, ipfsJson, ipfsImage, image, address, owner)
-            // VALUES ("${obj.token_id}", "${obj.name}", "${obj.description}", "${obj.collection_name}", "${obj.ipfsJson}", "${obj.ipfsImage}", "${element.location}", "${address}", "${address}")
-            // `);
-
             const favoritesCount = new Favorites_Relation();
             favoritesCount.token_id = obj.token_id;
             favoritesCount.count = 0;
             await this.favoritesRelationRepository.save(favoritesCount);
-            // return createItem;
-            console.log(4);
 
-            // 0xfb6c2f43d42d39b88fdb964856eb8ec00ff79016;
-            // 0xa9f0571052289ed8d731d511ede36ece3df3d0d1;
             return Object.assign({
                 statusCode: 201,
                 success: true,
@@ -291,7 +272,7 @@ export class ItemsService {
     }
 
     // 아이템 수정
-    async updateItem(id: string, itemData, address: string) {
+    async updateItem(id: string, itemData: UpdateItemDto, address: string) {
         if (address == `"NOT DEFINED"`) {
             return Object.assign({
                 statusCode: 400,
@@ -308,11 +289,9 @@ export class ItemsService {
             throw new BadRequestException("본인만 수정 가능합니다.");
         }
 
-        console.log(itemData);
-
         exisItem.name = itemData.name;
         exisItem.description = itemData.description;
-        exisItem.collection_name = itemData.collection_id;
+        exisItem.collection_name = itemData.collection_name;
         await this.itemRepository.update(id, exisItem);
 
         return Object.assign({

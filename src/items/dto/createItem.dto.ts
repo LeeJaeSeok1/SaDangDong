@@ -26,5 +26,5 @@ export class CreateItemDto {
         example: "1",
         description: "컬렉션 아이디",
     })
-    collection_id: number;
+    collection_name: string;
 }

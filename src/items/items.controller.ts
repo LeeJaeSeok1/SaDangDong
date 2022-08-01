@@ -18,6 +18,7 @@ import { FilesInterceptor } from "@nestjs/platform-express";
 import { storage } from "src/config/multerS3.config";
 import { AuthToken } from "src/config/auth.decorator";
 import { IsBtcAddress } from "class-validator";
+import { UpdateItemDto } from "./dto/updateItem.dto";
 
 @ApiTags("Items")
 @Controller("api/items")
@@ -46,7 +47,6 @@ export class ItemsController {
     @ApiOperation({ summary: "유저 컬렉션 받아오기" })
     @Get("collections")
     getCollection(@AuthToken() address: string) {
-        console.log("아이템민팅컬렉션", address);
         return this.itemsService.findColleciton(address);
     }
 
@@ -61,7 +61,7 @@ export class ItemsController {
     @ApiOperation({ summary: " 아이템 수정" })
     @UsePipes(TransformInterceptor)
     @Put(":id")
-    updateItem(@Param("id") id: string, @Body(ValidationPipe) itemData, @AuthToken() address: string) {
+    updateItem(@Param("id") id: string, @Body(ValidationPipe) itemData: UpdateItemDto, @AuthToken() address: string) {
         console.log(itemData);
         console.log(id);
         return this.itemsService.updateItem(id, itemData, address);
