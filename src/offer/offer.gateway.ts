@@ -25,7 +25,7 @@ export class OfferGateway implements OnGatewayInit, OnGatewayConnection, OnGatew
         console.log(newData);
 
         if (typeof newData === "string") {
-            this.server.to(`${data.auction_id}`).emit("error", newData);
+            return newData;
         } else {
             this.server.to(`${data.auction_id}`).emit("recOffer", newData);
         }
