@@ -73,10 +73,13 @@ export class JsonRpcService {
             const result = await lastValueFrom(
                 this.httpService.post(url, data, option).pipe(
                     map((response) => {
+                        console.log(response);
                         return response.data;
                     }),
                 ),
             );
+            console.log(result);
+            console.log(result.error);
             if (result.error) {
                 return Object.assign({
                     statusCode: 400,
@@ -103,7 +106,7 @@ export class JsonRpcService {
                 statusMsg: `몇 초 뒤에 이더리움이 지급됩니다.`,
             });
         } catch (error) {
-            throw new BadRequestException(error.message);
+            throw new BadRequestException(error);
         }
     }
 
