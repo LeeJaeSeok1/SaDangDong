@@ -311,10 +311,16 @@ export class ItemsService {
         console.log(itemData);
 
         exisItem.name = itemData.name;
-        exisItem.token_id = itemData.token_id;
         exisItem.description = itemData.description;
         exisItem.collection_name = itemData.collection_id;
         await this.itemRepository.update(id, exisItem);
+
+        return Object.assign({
+            statusCode: 201,
+            success: true,
+            statusMsg: "아이템을 수정 했습니다. 했습니다.",
+            data: exisItem,
+        });
     }
 
     // 아이템 삭제
