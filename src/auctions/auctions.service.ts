@@ -24,6 +24,13 @@ export class AuctionsService {
 
     async startAuction(token_id: string, price: any, address: string) {
         try {
+            if (address == `"NOT DEFINED"`) {
+                return Object.assign({
+                    statusCode: 400,
+                    success: true,
+                    statusMsg: `메타마스크에 연결하십시오.`,
+                });
+            }
             const [[NFTtoken], [Check_auction]] = await Promise.all([
                 this.itemRepository.query(`
                 SELECT item.token_id

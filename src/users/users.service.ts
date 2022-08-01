@@ -42,6 +42,14 @@ export class UsersService {
             // console.log("서비스 어드레스", address);
             const existUser = await this.userRepository.findOne({ where: { address } });
             // console.log("existUser", existUser);
+            if (address == `"NOT DEFINED"`) {
+                return Object.assign({
+                    statusCode: 400,
+                    success: true,
+                    statusMsg: `메타마스크에 연결하십시오.`,
+                });
+            }
+
             if (!existUser) {
                 const user = new User();
                 user.address = address;
@@ -72,6 +80,14 @@ export class UsersService {
     // 유저 수정 페이지
     async settingUser(userData, address: string, files: Express.Multer.File[]) {
         try {
+            if (address == `"NOT DEFINED"`) {
+                return Object.assign({
+                    statusCode: 400,
+                    success: true,
+                    statusMsg: `메타마스크에 연결하십시오.`,
+                });
+            }
+
             const existUser = await this.findByUser(address);
             if (existUser === null) throw new NotFoundException(`본인만 수정 가능합니다.`);
             if (existUser.address !== address) {

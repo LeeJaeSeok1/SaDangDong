@@ -30,6 +30,13 @@ export class SellService {
     ) {}
     async SellComplete(data, auction_id: number, address: string) {
         try {
+            if (address == `"NOT DEFINED"`) {
+                return Object.assign({
+                    statusCode: 400,
+                    success: true,
+                    statusMsg: `메타마스크에 연결하십시오.`,
+                });
+            }
             console.log(data.price, auction_id, address);
             const price = Number(data.price);
 

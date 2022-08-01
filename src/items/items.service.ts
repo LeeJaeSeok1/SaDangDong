@@ -224,6 +224,13 @@ export class ItemsService {
     // 아이템 생성
     async createItem(files: Express.Multer.File[], itemData, address: string) {
         try {
+            if (address == `"NOT DEFINED"`) {
+                return Object.assign({
+                    statusCode: 400,
+                    success: true,
+                    statusMsg: `메타마스크에 연결하십시오.`,
+                });
+            }
             console.log(1);
             const json = itemData.itemInfo;
             // console.log(json, "json");
@@ -284,6 +291,14 @@ export class ItemsService {
 
     // 아이템 수정
     async updateItem(id: string, itemData, address: string) {
+        if (address == `"NOT DEFINED"`) {
+            return Object.assign({
+                statusCode: 400,
+                success: true,
+                statusMsg: `메타마스크에 연결하십시오.`,
+            });
+        }
+
         const exisItem = await this.findByIdItem(id);
 
         if (!exisItem) throw new NotFoundException(`collection not found with the id ${id}`);
@@ -304,6 +319,13 @@ export class ItemsService {
     // 아이템 삭제
     async deleteItem(id: string, address: string) {
         try {
+            if (address == `"NOT DEFINED"`) {
+                return Object.assign({
+                    statusCode: 400,
+                    success: true,
+                    statusMsg: `메타마스크에 연결하십시오.`,
+                });
+            }
             const exisItem = await this.findByIdItem(id);
             if (exisItem.owner !== address) {
                 throw new BadRequestException(`본인만 삭제 가능합니다.`);

@@ -233,9 +233,21 @@ export class CollectionsService {
     // 컬렉션 생성
     async newCollection(collectionData, files: Express.Multer.File[], address: string) {
         try {
+            if (address == `"NOT DEFINED"`) {
+                return Object.assign({
+                    statusCode: 400,
+                    success: true,
+                    statusMsg: `메타마스크에 연결하십시오.`,
+                });
+            }
             const json = collectionData.fileInfo;
 
             const obj = JSON.parse(json);
+            const [exisCollection] = await this.collectionRepository.find();
+
+            if (exisCollection.name === obj.name) {
+                throw new BadRequestException(`${obj.name}은 이미 있는 컬렉션 입니다.`);
+            }
 
             const uploadeImages = [];
 
@@ -285,6 +297,13 @@ export class CollectionsService {
     // 컬렉션 수정
     async updateCollection(name: string, updateData, address: string, files: Express.Multer.File[]) {
         try {
+            if (address == `"NOT DEFINED"`) {
+                return Object.assign({
+                    statusCode: 400,
+                    success: true,
+                    statusMsg: `메타마스크에 연결하십시오.`,
+                });
+            }
             const [exisCollection] = await this.collectionRepository.query(`
             SELECT *
             FROM collection
@@ -343,6 +362,13 @@ export class CollectionsService {
     // 컬렉션 삭제
     async deleteCollection(name: string, address: string) {
         try {
+            if (address == `"NOT DEFINED"`) {
+                return Object.assign({
+                    statusCode: 400,
+                    success: true,
+                    statusMsg: `메타마스크에 연결하십시오.`,
+                });
+            }
             console.log("서비스 아이디 확인", address);
             console.log("컬럼삭제 서비스 아이디 확인", name);
             const [exisCollection] = await this.collectionRepository.query(`
