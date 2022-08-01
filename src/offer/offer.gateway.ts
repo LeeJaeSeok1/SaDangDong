@@ -20,15 +20,7 @@ export class OfferGateway implements OnGatewayInit, OnGatewayConnection, OnGatew
 
     @SubscribeMessage("sendOffer")
     async handleSendMessage(client: Socket, data: CreateOfferDto) {
-        console.log(data);
-        const newData = await this.offerService.createOffer(data);
-        console.log(newData);
-
-        if (typeof newData === "string") {
-            this.server.to(client.id).emit("error", newData);
-        } else {
-            this.server.to(`${data.auction_id}`).emit("recOffer", newData);
-        }
+        this.server.to(`${data.auction_id}`).emit("recOffer", data);
         // data : {price, mycoin}
     }
 

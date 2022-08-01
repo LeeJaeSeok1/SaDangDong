@@ -21,7 +21,7 @@ export class OfferService {
         private userRepository: Repository<User>,
     ) {}
 
-    async createOffer(data: CreateOfferDto) {
+    async createOffer(auction_id, address, data) {
         try {
             data.price = Number(data.price);
             data.mycoin = Number(data.mycoin);
@@ -30,26 +30,38 @@ export class OfferService {
                 this.auctionRepository.query(`
                 SELECT *
                 FROM auction
-                WHERE id = ${data.auction_id}
+                WHERE id = ${auction_id}
                 AND progress = true
                 `),
                 this.biddingRepository.query(`
                 SELECT *
                 FROM bidding
-                WHERE auctionId = ${data.auction_id}
+                WHERE auctionId = ${auction_id}
                 `),
             ]);
 
             if (!auction) {
-                return "없는 경매입니다.";
+                return Object.assign({
+                    statusCode: 400,
+                    success: false,
+                    statusMsg: `없는 경매입니다.`,
+                });
             }
 
-            if (auction.address == data.address) {
-                return "본인 경매에 본인이 가격 제시 못합니다.";
+            if (auction.address == address) {
+                return Object.assign({
+                    statusCode: 400,
+                    success: false,
+                    statusMsg: `본인 경매에 본인이 가격 제시 못합니다.`,
+                });
             }
 
             if (bidding.price >= data.price) {
-                return "현재 최고가보다 작습니다.";
+                return Object.assign({
+                    statusCode: 400,
+                    success: false,
+                    statusMsg: `현재 최고가보다 작습니다.`,
+                });
             }
 
             const totalbidding = await this.biddingRepository.query(`
@@ -57,7 +69,7 @@ export class OfferService {
             FROM bidding, auction
             WHERE auction.progress = true
             AND auction.id = bidding.auctionId
-            AND bidding.address = "${data.address}"
+            AND bidding.address = "${address}"
             `);
 
             let total: number = data.price;
@@ -66,16 +78,20 @@ export class OfferService {
             }
 
             if (total > data.mycoin) {
-                return "현재 지갑의 보유량보다 경매에 참여한 보유량이 더 많습니다.";
+                return Object.assign({
+                    statusCode: 400,
+                    success: false,
+                    statusMsg: `현재 지갑의 보유량보다 경매에 참여한 보유량이 더 많습니다.`,
+                });
             }
 
             const newOffer = new Offer();
             newOffer.price = data.price;
-            newOffer.auctionId = data.auction_id;
-            newOffer.address = data.address;
+            newOffer.auctionId = auction_id;
+            newOffer.address = address;
 
             bidding.price = data.price;
-            bidding.address = data.address;
+            bidding.address = address;
 
             await Promise.all([
                 this.offerRepository.save(newOffer),
@@ -96,14 +112,18 @@ export class OfferService {
                 name: name.name,
                 created_at: Kdate,
                 price: data.price,
-                auctionId: data.auction_id,
-                address: data.address,
+                auctionId: auction_id,
+                address: address,
             };
             console.log(newData);
 
             console.log("newData", newData);
 
-            return newData;
+            return Object.assign({
+                statusCode: 200,
+                success: true,
+                statusMsg: `제안을 성공습니다.`,
+            });
         } catch (error) {
             throw new BadRequestException(error.message);
         }

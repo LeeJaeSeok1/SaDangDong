@@ -39,6 +39,13 @@ export class ChatGateway implements OnGatewayInit {
         client.emit("joinRoom", room);
     }
 
+    @SubscribeMessage("leaveRoom")
+    handleErrorRoom(client: Socket, room: string) {
+        console.log(room);
+        client.leave(room);
+        client.emit("leaveRoom", room);
+    }
+
     afterInit(server: Server) {
         console.log(server);
         //Do stuffs
