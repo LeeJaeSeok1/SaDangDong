@@ -24,7 +24,7 @@ export class Item {
     @Column({ nullable: true })
     description: string;
 
-    @Column({ comment: "제작자" })
+    @Column({ nullable: true })
     address: string;
 
     @Column({ nullable: true })
@@ -48,12 +48,12 @@ export class Item {
     @DeleteDateColumn()
     archived_at: Date;
 
-    @Column()
+    @Column({ nullable: true })
     owner: string;
 
-    @Column()
+    @Column({ nullable: true })
     hashdata: string;
 
-    @Column()
+    @Column({ nullable: true })
     collection_name: string;
 }

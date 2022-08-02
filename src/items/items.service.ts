@@ -218,12 +218,16 @@ export class ItemsService {
     }
 
     // 임시아이템 생성
-    async tempItem(token_id: string) {
-        const item = new Item();
-        item.token_id = token_id;
-        item.archived = 1;
+    async tempItem(token_id) {
+        try {
+            const item = new Item();
+            item.token_id = token_id.token_id;
+            item.archived = 1;
 
-        return this.itemRepository.save(item);
+            return this.itemRepository.save(item);
+        } catch (error) {
+            throw new BadRequestException(error.message);
+        }
     }
 
     // 아이템 생성
