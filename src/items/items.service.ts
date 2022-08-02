@@ -217,6 +217,15 @@ export class ItemsService {
         }
     }
 
+    // 임시아이템 생성
+    async tempItem(token_id: string) {
+        const item = new Item();
+        item.token_id = token_id;
+        item.archived = 1;
+
+        return this.itemRepository.save(item);
+    }
+
     // 아이템 생성
     async createItem(files: Express.Multer.File[], itemData, address: string) {
         try {
@@ -253,7 +262,8 @@ export class ItemsService {
             createItem.address = address;
             createItem.owner = address;
             createItem.hashdata = obj.hashdata;
-            await this.itemRepository.save(createItem);
+            createItem.archived = 0;
+            await this.itemRepository.update(obj.token_id, createItem);
 
             const favoritesCount = new Favorites_Relation();
             favoritesCount.token_id = obj.token_id;

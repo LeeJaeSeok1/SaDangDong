@@ -25,6 +25,12 @@ import { UpdateItemDto } from "./dto/updateItem.dto";
 export class ItemsController {
     constructor(private readonly itemsService: ItemsService) {}
 
+    // 임시아이템 생성
+    @Post("temp")
+    tempItem(@Body() token_id: string) {
+        return this.itemsService.tempItem(token_id);
+    }
+
     // 아이템 생성
     @ApiOperation({ summary: "아이템 민팅", description: "아이템 민팅 페이지" })
     @Post("minting")

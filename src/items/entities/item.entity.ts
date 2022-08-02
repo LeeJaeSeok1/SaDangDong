@@ -18,7 +18,7 @@ export class Item {
     @PrimaryColumn({ unique: true })
     token_id: string;
 
-    @Column({ unique: true })
+    @Column({ nullable: true })
     name: string;
 
     @Column({ nullable: true })
