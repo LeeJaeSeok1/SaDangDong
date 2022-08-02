@@ -383,13 +383,13 @@ export class UsersService {
                             console.log(Kdate);
                             element.message = "경매에 성공했습니다.";
                         } else {
-                            element.message = "아쉽게 낙찰되었습니다.";
+                            element.message = "아쉽게 유찰되었습니다.";
                         }
                     } else {
                         if (element.bidding_price == element.user_offer) {
                             element.message = "거래를 완료했습니다.";
                         } else {
-                            element.message = "아쉽게 낙찰되었습니다.";
+                            element.message = "아쉽게 유찰되었습니다.";
                         }
                     }
                 });
