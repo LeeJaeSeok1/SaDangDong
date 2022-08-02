@@ -30,7 +30,7 @@ async function bootstrap() {
     );
 
     app.enableCors({
-        origin: "*",
+        origin: "https://sadangdong.com, localhost:3030",
         methods: "GET, HEAD, PUT, PATCH, POST, DELETE, OPTIONS",
         credentials: true,
     });
