@@ -28,8 +28,8 @@ export class ChatGateway implements OnGatewayInit {
     @WebSocketServer() public server: Server;
 
     @SubscribeMessage("sendMessage")
-    handleSendMessage(client: Socket, data: createMessageDto) {
-        // this.chatService.createMessage(data);
+    async handleSendMessage(client: Socket, data: createMessageDto) {
+        await this.chatService.createMessage(data);
         this.server.to(`${data.auction_id}`).emit("recMessage", data);
     }
 
