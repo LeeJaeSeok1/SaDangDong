@@ -81,7 +81,7 @@ export class OfferService {
 
             let total: number = data.price;
             for (let i = 0; i < totalbidding.length; i++) {
-                total += totalbidding[i].price;
+                total += Number(totalbidding[i].price);
             }
 
             if (total > data.mycoin) {
