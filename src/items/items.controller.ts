@@ -28,7 +28,7 @@ export class ItemsController {
     // 임시아이템 생성
     @Post("temp")
     tempItem(@Body() data) {
-        return this.itemsService.tempItem(token_id);
+        return this.itemsService.tempItem(data);
     }
 
     // 아이템 생성
