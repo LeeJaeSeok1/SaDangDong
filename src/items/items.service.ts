@@ -242,6 +242,7 @@ export class ItemsService {
                 });
             }
             const json = itemData.itemInfo;
+            console.log(json);
             const obj = JSON.parse(json);
 
             const uploadeImages = [];

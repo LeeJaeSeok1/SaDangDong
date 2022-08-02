@@ -264,6 +264,7 @@ export class CollectionsService {
 
             if (files) {
                 for (element of files) {
+                    console.log(element, "image 정보");
                     const file = new ImageUpload();
                     file.originalName = element.originalname;
                     file.mimeType = element.mimetype;
@@ -271,9 +272,11 @@ export class CollectionsService {
                     uploadeImages.push(file);
 
                     if (file.originalName === "bannerImg") {
+                        console.log(file.originalName);
                         bannerImage = file.url;
                     }
                     if (file.originalName === "featuredImg") {
+                        console.log(file.originalName);
                         featureImage = file.url;
                     }
                 }

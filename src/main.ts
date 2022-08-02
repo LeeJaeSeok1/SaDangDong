@@ -9,7 +9,8 @@ import { Credentials } from "aws-sdk";
 // import { RedisIoAdapter } from './chat/redis.adapter';
 
 async function bootstrap() {
-    const app = await NestFactory.create<NestExpressApplication>(AppModule, { cors: true });
+    const app = await NestFactory.create<NestExpressApplication>(AppModule);
+
     const configService = app.get(ConfigService);
     const port = configService.get<string>("server.port");
     // app.useWebSocketAdapter(new RedisIoAdapter(app));
@@ -31,9 +32,12 @@ async function bootstrap() {
     );
 
     app.enableCors({
-        origin: "*",
+        origin: true,
+        allowedHeaders: "X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept, Observe",
+        methods: "GET,PUT,POST,DELETE,UPDATE,OPTIONS",
         credentials: true,
     });
+
     await app.listen(port);
     Logger.log(`Application runnin on port ${port}`);
 }
