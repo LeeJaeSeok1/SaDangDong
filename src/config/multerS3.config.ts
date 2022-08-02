@@ -16,9 +16,6 @@ AWS.config.update({
 export const storage = multerS3({
     s3: s3,
     bucket: bucketName,
-    limits: {
-        filesize: 1024 * 1024,
-    },
     contentType: multerS3.AUTO_CONTENT_TYPE,
     acl: "public-read",
     key: function (req, file, cb) {
