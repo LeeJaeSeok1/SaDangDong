@@ -32,7 +32,6 @@ async function bootstrap() {
     app.enableCors({
         origin: ["https://sadangdong.com/", "localhost:3030"],
         methods: "GET, HEAD, PUT, PATCH, POST, DELETE, OPTIONS",
-        allowedHeaders: ["access-control-allow-origin", "X-Requested_With", "Content-Type", "Accept"],
         credentials: true,
     });
     await app.listen(port);
