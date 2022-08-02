@@ -218,10 +218,11 @@ export class ItemsService {
     }
 
     // 임시아이템 생성
-    async tempItem(token_id) {
+    async tempItem(data) {
         try {
+            console.log(data);
             const item = new Item();
-            item.token_id = token_id.token_id;
+            item.token_id = data.token_id;
             item.archived = 1;
 
             return this.itemRepository.save(item);
