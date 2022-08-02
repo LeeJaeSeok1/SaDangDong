@@ -101,7 +101,7 @@ export class SellService {
                 this.sellrelationRepository.query(`
                 SELECT *
                 FROM sell_relation
-                WHERE address = "${bidding.address}"
+                WHERE address = "${auction.address}"
                 AND start_at <= ADDTIME(now(),'9:0:0.000000')
                 AND ADDTIME(now(),'9:0:0.000000') < end_at
                 `),
