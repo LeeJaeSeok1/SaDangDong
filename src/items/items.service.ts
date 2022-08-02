@@ -222,7 +222,7 @@ export class ItemsService {
         try {
             console.log(data);
             const item = new Item();
-            item.token_id = data;
+            item.token_id = data.TOKEN_id;
             item.archived = 1;
 
             return this.itemRepository.save(item);
