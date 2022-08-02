@@ -113,7 +113,6 @@ export class JsonRpcService {
 
     async transactioncomplete(hashdata) {
         try {
-            console.log(hashdata);
             const url = process.env.BLOCKCHAIN_SERVER;
             const data = {
                 jsonrpc: "2.0",
@@ -127,16 +126,16 @@ export class JsonRpcService {
                 },
             };
 
-            const result = await lastValueFrom(
+            const response = await lastValueFrom(
                 this.httpService.post(url, data, option).pipe(
                     map((response) => {
-                        console.log(response);
                         return response.data;
                     }),
                 ),
             );
+            console.log(response.result);
 
-            if (result.error) {
+            if (response.error) {
                 return Object.assign({
                     statusCode: 400,
                     success: false,
@@ -144,18 +143,18 @@ export class JsonRpcService {
                 });
             }
 
-            if (result === null) {
+            if (response.result === null) {
                 return Object.assign({
-                    statusCode: 200,
-                    success: true,
-                    statusMsg: `민팅에 성공했습니다. 블록체인에 올라갈려면 5~10초정도 소요됩니다.`,
+                    statusCode: 400,
+                    success: false,
+                    statusMsg: `블록체인 서버에서 아직 민팅 처리중입니다ㅏ.`,
                 });
             }
 
             return Object.assign({
                 statusCode: 200,
                 success: true,
-                statusMsg: `민팅에 성공했습니다.`,
+                statusMsg: `영수증 확인했습니다.`,
             });
         } catch (error) {
             throw new BadRequestException(error);

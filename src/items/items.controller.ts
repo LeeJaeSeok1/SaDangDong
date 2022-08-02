@@ -43,6 +43,11 @@ export class ItemsController {
         return this.itemsService.createItem(files, itemData, address);
     }
 
+    @Get("lasttoken")
+    findLastinfor() {
+        return this.itemsService.findLastItem();
+    }
+
     // 유저의 컬렉션 가져오기
     @ApiOperation({ summary: "유저 컬렉션 받아오기" })
     @Get("collections")
@@ -72,10 +77,5 @@ export class ItemsController {
     @Delete(":id")
     deleteItem(@Param("id") id: string, @AuthToken() address: string) {
         return this.itemsService.deleteItem(id, address);
-    }
-
-    @Get("lasttoken")
-    findLastinfor() {
-        return this.itemsService.findLastItem();
     }
 }

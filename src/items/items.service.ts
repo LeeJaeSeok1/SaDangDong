@@ -100,7 +100,7 @@ export class ItemsService {
                 const [item] = await this.itemRepository.query(`
                 SELECT DISTINCT item.token_id, item.name, item.description, item.address, item.image, item.ipfsImage,
                 item.collection_name, collection.description AS collection_description, 
-                user.name AS user_name, user.profile_image, item.owner,
+                user.name AS user_name, user.profile_image, item.owner, item.hashdata,
                 favorites_relation.count AS favorites_count
                 FROM item, user, favorites_relation, collection
                 WHERE item.token_id = ${token_id}
@@ -333,7 +333,7 @@ export class ItemsService {
     async findLastItem() {
         try {
             const [item] = await this.itemRepository.query(`
-            SELECT *
+            SELECT token_id
             FROM item
             ORDER BY created_at DESC
             LIMIT 1;
@@ -345,7 +345,7 @@ export class ItemsService {
                     statusCode: 201,
                     success: true,
                     statusMsg: "마지막 아이템 아이디를 불러왔습니다.",
-                    data: item.token_id + 1,
+                    data: Number(item.token_id) + 1,
                 });
             }
 
