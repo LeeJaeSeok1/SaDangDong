@@ -30,7 +30,7 @@ async function bootstrap() {
     );
 
     app.enableCors({
-        origin: "https://sadangdong.com/",
+        origin: "*",
         credentials: true,
     });
     await app.listen(port);
