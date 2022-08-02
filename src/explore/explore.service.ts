@@ -156,7 +156,7 @@ export class ExploreService {
                     LEFT JOIN user
                     ON collection.address = user.address
                 WHERE collection.archived = 0
-                ORDER BY collection.created_at DESC
+                ORDER BY collection.created_at ASC
                 LIMIT ${start}, ${_limit}
                 `);
                 // 오더바이 아래에 추가
