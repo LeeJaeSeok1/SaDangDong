@@ -73,4 +73,9 @@ export class ItemsController {
     deleteItem(@Param("id") id: string, @AuthToken() address: string) {
         return this.itemsService.deleteItem(id, address);
     }
+
+    @Get("lasttoken")
+    findLastinfor() {
+        return this.itemsService.findLastItem();
+    }
 }

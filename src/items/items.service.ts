@@ -329,4 +329,34 @@ export class ItemsService {
             throw new BadRequestException(error.message);
         }
     }
+
+    async findLastItem() {
+        try {
+            const [item] = await this.itemRepository.query(`
+            SELECT *
+            FROM item
+            ORDER BY created_at DESC
+            LIMIT 1;
+            `);
+
+            if (item) {
+                console.log("마지막 아이템을 불러왔습니다.", item.token_id);
+                return Object.assign({
+                    statusCode: 201,
+                    success: true,
+                    statusMsg: "마지막 아이템 아이디를 불러왔습니다.",
+                    data: item.token_id + 1,
+                });
+            }
+
+            return Object.assign({
+                statusCode: 201,
+                success: true,
+                statusMsg: "마지막 아이템 아이디 불러왔습니다.",
+                data: 1,
+            });
+        } catch (error) {
+            throw new BadRequestException(error.message);
+        }
+    }
 }
