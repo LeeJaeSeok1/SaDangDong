@@ -29,7 +29,11 @@ async function bootstrap() {
         }),
     );
 
-    app.enableCors();
+    app.enableCors({
+        origin: "*",
+        methods: "GET, HEAD, PUT, PATCH, POST, DELETE, OPTIONS",
+        credentials: true,
+    });
     await app.listen(port);
     Logger.log(`Application runnin on port ${port}`);
 }
