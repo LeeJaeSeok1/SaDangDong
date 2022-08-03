@@ -52,7 +52,8 @@ export class ExploreService {
             SELECT *
             FROM (
                 SELECT item.token_id, item.image, item.name, auction.id AS auction_id,
-                auction.ended_at, auction.progress, user.name AS user_name, favorites_relation.count
+                auction.ended_at, auction.progress, favorites_relation.count,
+                user.name AS user_name, item.address
                 FROM item
                     LEFT JOIN auction
                     ON item.token_id = auction.token_id

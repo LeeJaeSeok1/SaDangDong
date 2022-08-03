@@ -24,7 +24,7 @@ export class Item {
     @Column({ nullable: true })
     description: string;
 
-    @Column({ nullable: true })
+    @Column({ nullable: true, comment: "제작자" })
     address: string;
 
     @Column({ nullable: true })
