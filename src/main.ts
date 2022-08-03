@@ -32,7 +32,7 @@ async function bootstrap() {
     );
 
     app.enableCors({
-        origin: true,
+        origin: "*",
         methods: "GET,PUT,POST,DELETE,UPDATE,OPTIONS",
         credentials: true,
     });
