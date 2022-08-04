@@ -33,7 +33,7 @@
 
 ## 🛠 Tech & Platfrom
 ### Front-end
-![image](https://user-images.githubusercontent.com/81402579/182836128-f03873e0-14cd-400d-8078-8029e09fa601.png)
+![javascript](https://user-images.githubusercontent.com/98381653/182859549-a6697245-6869-49ae-8914-9a8393e47f87.svg)
 ![image](https://user-images.githubusercontent.com/81402579/182836136-bb891a91-576d-40c9-b491-00e5ff0eae81.png)
 ![image](https://user-images.githubusercontent.com/81402579/182836143-d88bf3a1-6780-47c9-b84f-22294b7ac5bd.png)
 ![image](https://user-images.githubusercontent.com/81402579/182836159-bef2c15a-63f7-4032-a748-2845d3f87836.png)
