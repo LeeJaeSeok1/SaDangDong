@@ -353,7 +353,7 @@ export class UsersService {
                 WHERE progress = true
                 ORDER BY auction.ended_at DESC
                 `);
-                information.foreach((element) => {
+                information.map((element) => {
                     const startParse = parse_Kcalculate(element.started_at, 0);
                     const endParse = parse_Kcalculate(element.ended_at, 0);
                     element.started_at = startParse;
