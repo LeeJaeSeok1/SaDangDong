@@ -82,11 +82,11 @@
 | 라이브러리 | 설명 |
 |---|---|
 | MySQL | TypeORM |
-| socket.io <br> @nestjs/websockets | 실시간 양방향 통신 |
+| socket.io, <br> @nestjs/websockets | 실시간 양방향 통신 |
 | class-validator | 유효성 검사	 |
 | dotenv | 환경변수 설정 |
 | Swagger |	API 문서화 |
-| multer,<br>multer-s3 | 이미지 업로드 |
+| multer, multer-s3 | 이미지 업로드 |
 | json-rpc | 원격 프로시저 호출 |
 ***
 ## more info
