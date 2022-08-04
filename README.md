@@ -44,23 +44,22 @@
 <img src="https://img.shields.io/badge/amazon s3-569A31?style=for-the-badge&logo=amazon s3&logoColor=white">
 <img src="https://img.shields.io/badge/git-F05032?style=for-the-badge&logo=git&logoColor=white">
 <img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white">
-
-
-    
-     
+<img src="https://img.shields.io/badge/ipfs-65C2CB?style=for-the-badge&logo=ipfs&logoColor=white">
+  
 
 ### Back-end
-![image](https://user-images.githubusercontent.com/81402579/182857987-ac85c025-4d28-4aef-963b-9a883b837958.png)
-![image](https://user-images.githubusercontent.com/81402579/182858010-ba39b23a-392b-4a24-b11a-7693e17369cc.png)
-![image](https://user-images.githubusercontent.com/81402579/182858027-270c8720-14e9-4496-84af-25988af7bb25.png)
-![image](https://user-images.githubusercontent.com/81402579/182858045-5a3edd13-cb90-415b-ae23-dda20149f2d6.png)
-![image](https://user-images.githubusercontent.com/81402579/182858056-357649b1-2707-4444-8c06-e90bed8a727e.png)
-![image](https://user-images.githubusercontent.com/81402579/182858068-832006cd-3702-4443-b57d-ce6d1d2a9531.png)
-![image](https://user-images.githubusercontent.com/81402579/182858078-85370378-6a9d-47a9-a09d-bbed49ec9acb.png)
-![image](https://user-images.githubusercontent.com/81402579/182858416-160ea5a4-4b12-4714-a148-b2527fcaf767.png)
+<img src="https://img.shields.io/badge/vscode-007ACC?style=for-the-badge&logo=vscode&logoColor=white">
+<img src="https://img.shields.io/badge/slack-4A154B?style=for-the-badge&logo=slack&logoColor=white">
+<img src="https://img.shields.io/badge/node.js-339933?style=for-the-badge&logo=node.js&logoColor=white">
+<img src="https://img.shields.io/badge/nestjs-E0234E?style=for-the-badge&logo=nestjs&logoColor=white">
+<img src="https://img.shields.io/badge/javascript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black">
+<img src="https://img.shields.io/badge/typescript-3178C6?style=for-the-badge&logo=typescript&logoColor=white">
+<img src="https://img.shields.io/badge/socket.io-010101?style=for-the-badge&logo=socket.io&logoColor=white">
+<img src="https://img.shields.io/badge/aws ec2-FF9900?style=for-the-badge&logo=aws ec2&logoColor=white">
+<img src="https://img.shields.io/badge/nginx-009639?style=for-the-badge&logo=nginx&logoColor=white">
+<img src="https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white">
 
 
-    
 ***
 ## 📘 주요 라이브러리
 라이브러리	설명
