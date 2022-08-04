@@ -39,8 +39,8 @@
 <img src="https://img.shields.io/badge/html-E34F26?style=for-the-badge&logo=html5&logoColor=white">
 <img src="https://img.shields.io/badge/css-1572B6?style=for-the-badge&logo=css3&logoColor=white">
 <img src="https://img.shields.io/badge/socket.io-010101?style=for-the-badge&logo=socket.io&logoColor=white">
-<img src="https://img.shields.io/badge/cloudfront-232F3E?style=for-the-badge&logo=amazon aws&logoColor=white">
-
+<img src="https://img.shields.io/badge/cloudfront-FF9900?style=for-the-badge&logo=amazon aws&logoColor=white">
+<img src="https://img.shields.io/badge/route53-232F3E?style=for-the-badge&logo=amazon aws&logoColor=white">
 
 ![image](https://user-images.githubusercontent.com/81402579/182836159-bef2c15a-63f7-4032-a748-2845d3f87836.png)
 ![image](https://user-images.githubusercontent.com/81402579/182836182-41da71f3-c6f0-4fb9-b768-7202800561d1.png)   
