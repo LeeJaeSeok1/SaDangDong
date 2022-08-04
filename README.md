@@ -5,8 +5,10 @@
 ## BackEnd 핵심기능
 
 * ethers.js 민팅, 블록체인 거래기능 구현
-* IPFS 분산형 파일 시스템에 데이터 저장, 속도 및 보안성 강화
+* 블록체인 프라이빗 네트워크 구축
 * socket.io 실시간 경매 및 채팅기능 구현
+* 메타마스트를 통한 
+
 ***
 ## 👨‍💻 프로젝트 소개
 
@@ -23,8 +25,6 @@
 ### Links
 [Home Page](https://sadangdong.com/)   
 [Team Notion](https://www.notion.so/2-cef47c67331c4b0d9445d55302fc51de)   
-[Demonstration Video]() 1:30   
-[Presentation Link]() 10:33   
    
    
 ## 💎Service Architecture
@@ -33,53 +33,59 @@
 
 ## 🛠 Tech & Platfrom
 ### Front-end
+<div>
 <img src="https://img.shields.io/badge/javascript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black">
 <img src="https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=black">
 <img src="https://img.shields.io/badge/redux-764ABC?style=for-the-badge&logo=redux&logoColor=white">
 <img src="https://img.shields.io/badge/html-E34F26?style=for-the-badge&logo=html5&logoColor=white">
 <img src="https://img.shields.io/badge/css-1572B6?style=for-the-badge&logo=css3&logoColor=white">
+<br>
 <img src="https://img.shields.io/badge/socket.io-ffffff?style=for-the-badge&logo=socket.io&logoColor=black">
 <img src="https://img.shields.io/badge/cloudfront-FF9900?style=for-the-badge&logo=amazon aws&logoColor=white">
 <img src="https://img.shields.io/badge/route53-232F3E?style=for-the-badge&logo=amazon aws&logoColor=white">
 <img src="https://img.shields.io/badge/amazon s3-569A31?style=for-the-badge&logo=amazon s3&logoColor=white">
-<img src="https://img.shields.io/badge/git-F05032?style=for-the-badge&logo=git&logoColor=white">
-<img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white">
+
 <img src="https://img.shields.io/badge/ipfs-65C2CB?style=for-the-badge&logo=ipfs&logoColor=white">
-  
+</div>
 
 ### Back-end
-<img src="https://img.shields.io/badge/vscode-007ACC?style=for-the-badge&logo=visual studio code&logoColor=white">
-<img src="https://img.shields.io/badge/slack-4A154B?style=for-the-badge&logo=slack&logoColor=white">
+<div>
+
 <img src="https://img.shields.io/badge/node.js-339933?style=for-the-badge&logo=node.js&logoColor=white">
 <img src="https://img.shields.io/badge/nestjs-E0234E?style=for-the-badge&logo=nestjs&logoColor=white">
 <img src="https://img.shields.io/badge/javascript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black">
 <img src="https://img.shields.io/badge/typescript-3178C6?style=for-the-badge&logo=typescript&logoColor=white">
 <img src="https://img.shields.io/badge/socket.io-ffffff?style=for-the-badge&logo=socket.io&logoColor=black">
-<img src="https://img.shields.io/badge/aws ec2-FF9900?style=for-the-badge&logo=amazon ec2&logoColor=white">
-<img src="https://img.shields.io/badge/nginx-009639?style=for-the-badge&logo=nginx&logoColor=white">
 <img src="https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white">
-<img src="https://img.shields.io/badge/jsonrpc-000000?style=for-the-badge&logo=json&logoColor=white">
 <img src="https://img.shields.io/badge/swagger-85EA2D?style=for-the-badge&logo=swagger&logoColor=white">
-<img src="https://img.shields.io/badge/amazon s3-569A31?style=for-the-badge&logo=amazon s3&logoColor=white">
+<br>
 <img src="https://img.shields.io/badge/solidity-363636?style=for-the-badge&logo=solidity&logoColor=white">
 <img src="https://img.shields.io/badge/ethers.js-3C3C3D?style=for-the-badge&logo=ethereum&logoColor=white">
-<img src="https://img.shields.io/badge/ethereum-3C3C3D?style=for-the-badge&logo=ethereum&logoColor=white">
 <img src="https://img.shields.io/badge/truffle-000000?style=for-the-badge&logo=truffle&logoColor=white">
-<img src="https://img.shields.io/badge/multer-000000?style=for-the-badge&logo=multer&logoColor=white">
-<img src="https://img.shields.io/badge/typeorm-000000?style=for-the-badge&logo=typeorm&logoColor=white">
+<img src="https://img.shields.io/badge/jsonrpc-000000?style=for-the-badge&logo=json&logoColor=white">
+<br>
+<img src="https://img.shields.io/badge/aws ec2-FF9900?style=for-the-badge&logo=amazon ec2&logoColor=white">
+<img src="https://img.shields.io/badge/nginx-009639?style=for-the-badge&logo=nginx&logoColor=white">
+<img src="https://img.shields.io/badge/amazon s3-569A31?style=for-the-badge&logo=amazon s3&logoColor=white">
+</div>
+
+### Tools
+<div>
+<img src="https://img.shields.io/badge/vscode-007ACC?style=for-the-badge&logo=visual studio code&logoColor=white">
+<img src="https://img.shields.io/badge/slack-4A154B?style=for-the-badge&logo=slack&logoColor=white">
+<img src="https://img.shields.io/badge/git-F05032?style=for-the-badge&logo=git&logoColor=white">
+<img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white">
+</div>
 
 ***
 ## 📘 주요 라이브러리
-라이브러리	설명
-ethers.js	블록체인서버 통신
-IPFS	분산형 파일 시스템에 데이터 저장 및 공유
-redux-toolkit	전역 상태관리
-socket.io	실시간 양방향 통신
-axios	API 통신
-react-infinite-scroll-component	lazy-loading(무한스크롤)
-react-modal	modal
-🔥이슈 및 트러블슈팅
-일명 이미지 엑박 문제 - WIKI
-영상채팅 과정에서 오디오 하울링 발생 - WIKI
-영상채팅 videoView 동적 추가, 제거 - WIKI
-소켓으로 유저 포트폴리오 데이터 보내기 - WIKI
+| 라이브러리 | 설명 |
+|---|---|
+| MySQL | TypeORM |
+| socket.io <br> @nestjs/websockets | 실시간 양방향 통신 |
+| class-validator | 유효성 검사	 |
+| dotenv | 환경변수 설정 |
+| Swagger |	API 문서화 |
+| multer,<br>multer-s3 | 이미지 업로드 |
+| json-rpc | 원격 프로시저 호출 |
+
