@@ -33,8 +33,9 @@
 
 ## 🛠 Tech & Platfrom
 ### Front-end
-
-![image](https://user-images.githubusercontent.com/81402579/182836136-bb891a91-576d-40c9-b491-00e5ff0eae81.png)
+<img src="https://img.shields.io/badge/javascript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black">
+<img src="https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=black">
+<img src="https://img.shields.io/badge/redux-764ABC?style=for-the-badge&logo=redux&logoColor=white">
 ![image](https://user-images.githubusercontent.com/81402579/182836143-d88bf3a1-6780-47c9-b84f-22294b7ac5bd.png)
 ![image](https://user-images.githubusercontent.com/81402579/182836159-bef2c15a-63f7-4032-a748-2845d3f87836.png)
 ![image](https://user-images.githubusercontent.com/81402579/182836182-41da71f3-c6f0-4fb9-b768-7202800561d1.png)   
