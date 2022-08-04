@@ -102,7 +102,7 @@
 <details>
 <summary>DB ERD</summary>
 <div markdown="1">
-<img src = "https://user-images.githubusercontent.com/81402579/182879548-9bb1a8d2-1950-4803-b0e9-99cfb905697f.JPG">
+<img src = "https://user-images.githubusercontent.com/81402579/182881733-be68331b-507b-49cd-ab92-948da9ac8ea9.png">
 </div>
 </details>
 <details>
