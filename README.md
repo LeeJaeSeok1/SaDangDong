@@ -41,15 +41,9 @@
 <img src="https://img.shields.io/badge/socket.io-010101?style=for-the-badge&logo=socket.io&logoColor=white">
 <img src="https://img.shields.io/badge/cloudfront-FF9900?style=for-the-badge&logo=amazon aws&logoColor=white">
 <img src="https://img.shields.io/badge/route53-232F3E?style=for-the-badge&logo=amazon aws&logoColor=white">
-
-![image](https://user-images.githubusercontent.com/81402579/182836159-bef2c15a-63f7-4032-a748-2845d3f87836.png)
-![image](https://user-images.githubusercontent.com/81402579/182836182-41da71f3-c6f0-4fb9-b768-7202800561d1.png)   
-![image](https://user-images.githubusercontent.com/81402579/182836219-2600349f-a754-47bb-b909-714d0272d136.png)
-![image](https://user-images.githubusercontent.com/81402579/182836243-52e7506f-6192-4fc0-9f49-8d82aec47fc8.png)
-![image](https://user-images.githubusercontent.com/81402579/182836259-97ce231e-c399-4123-b129-6a52353f7ec9.png)
-![image](https://user-images.githubusercontent.com/81402579/182836269-008c7155-fa7c-4b29-a619-d3a946314ce9.png)
-![image](https://user-images.githubusercontent.com/81402579/182836277-106be626-0627-4afc-9f29-ad07e7734b37.png)
-![image](https://user-images.githubusercontent.com/81402579/182836289-d8cf3a39-e6ff-41b3-8669-1b8d118592ba.png)
+<img src="https://img.shields.io/badge/amazon s3-569A31?style=for-the-badge&logo=amazon s3&logoColor=white">
+<img src="https://img.shields.io/badge/git-F05032?style=for-the-badge&logo=git&logoColor=white">
+<img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white">
 
 
     
