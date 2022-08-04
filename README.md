@@ -36,8 +36,12 @@
 <img src="https://img.shields.io/badge/javascript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black">
 <img src="https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=black">
 <img src="https://img.shields.io/badge/redux-764ABC?style=for-the-badge&logo=redux&logoColor=white">
+<img src="https://img.shields.io/badge/html-E34F26?style=for-the-badge&logo=html5&logoColor=white">
+<img src="https://img.shields.io/badge/css-1572B6?style=for-the-badge&logo=css3&logoColor=white">
+<img src="https://img.shields.io/badge/socket.io-010101?style=for-the-badge&logo=socket.io&logoColor=white">
+<img src="https://img.shields.io/badge/amazon aws-232F3E?style=for-the-badge&logo=amazon aws&logoColor=white">
 
-![image](https://user-images.githubusercontent.com/81402579/182836143-d88bf3a1-6780-47c9-b84f-22294b7ac5bd.png)
+
 ![image](https://user-images.githubusercontent.com/81402579/182836159-bef2c15a-63f7-4032-a748-2845d3f87836.png)
 ![image](https://user-images.githubusercontent.com/81402579/182836182-41da71f3-c6f0-4fb9-b768-7202800561d1.png)   
 ![image](https://user-images.githubusercontent.com/81402579/182836219-2600349f-a754-47bb-b909-714d0272d136.png)
