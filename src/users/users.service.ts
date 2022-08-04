@@ -353,6 +353,14 @@ export class UsersService {
                 WHERE progress = true
                 ORDER BY auction.ended_at DESC
                 `);
+                await Promise.all([
+                    information.map(async (element) => {
+                        const startParse = parse_Kcalculate(element.started_at, 0);
+                        const endParse = parse_Kcalculate(element.end_at, 0);
+                        element.start_at = startParse;
+                        element.end_at = endParse;
+                    }),
+                ]);
             }
 
             if (tab === "complete") {
