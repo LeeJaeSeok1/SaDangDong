@@ -33,7 +33,7 @@
 
 ## 🛠 Tech & Platfrom
 ### Front-end
-<img src="https://img.shields.io/badge/javascript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black">
+
 ![image](https://user-images.githubusercontent.com/81402579/182836136-bb891a91-576d-40c9-b491-00e5ff0eae81.png)
 ![image](https://user-images.githubusercontent.com/81402579/182836143-d88bf3a1-6780-47c9-b84f-22294b7ac5bd.png)
 ![image](https://user-images.githubusercontent.com/81402579/182836159-bef2c15a-63f7-4032-a748-2845d3f87836.png)
