@@ -63,6 +63,7 @@
 <img src="https://img.shields.io/badge/ethers.js-3C3C3D?style=for-the-badge&logo=ethereum&logoColor=white">
 <img src="https://img.shields.io/badge/truffle-000000?style=for-the-badge&logo=truffle&logoColor=white">
 <img src="https://img.shields.io/badge/jsonrpc-000000?style=for-the-badge&logo=json&logoColor=white">
+<img src="https://img.shields.io/badge/geth-000000?style=for-the-badge&logo=geth&logoColor=white">
 <br>
 <img src="https://img.shields.io/badge/aws ec2-FF9900?style=for-the-badge&logo=amazon ec2&logoColor=white">
 <img src="https://img.shields.io/badge/nginx-009639?style=for-the-badge&logo=nginx&logoColor=white">
