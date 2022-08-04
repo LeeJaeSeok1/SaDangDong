@@ -58,9 +58,15 @@
 <img src="https://img.shields.io/badge/aws ec2-FF9900?style=for-the-badge&logo=amazon ec2&logoColor=white">
 <img src="https://img.shields.io/badge/nginx-009639?style=for-the-badge&logo=nginx&logoColor=white">
 <img src="https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white">
-<img src="https://img.shields.io/badge/json-000000?style=for-the-badge&logo=jsonrpc&logoColor=white">
-
-
+<img src="https://img.shields.io/badge/jsonrpc-000000?style=for-the-badge&logo=json&logoColor=white">
+<img src="https://img.shields.io/badge/swagger-85EA2D?style=for-the-badge&logo=swagger&logoColor=white">
+<img src="https://img.shields.io/badge/amazon s3-569A31?style=for-the-badge&logo=amazon s3&logoColor=white">
+<img src="https://img.shields.io/badge/solidity-363636?style=for-the-badge&logo=solidity&logoColor=white">
+<img src="https://img.shields.io/badge/ethers.js-3C3C3D?style=for-the-badge&logo=ethereum&logoColor=white">
+<img src="https://img.shields.io/badge/ethereum-3C3C3D?style=for-the-badge&logo=ethereum&logoColor=white">
+<img src="https://img.shields.io/badge/truffle-000000?style=for-the-badge&logo=truffle&logoColor=white">
+<img src="https://img.shields.io/badge/multer-000000?style=for-the-badge&logo=multer&logoColor=white">
+<img src="https://img.shields.io/badge/typeorm-000000?style=for-the-badge&logo=typeorm&logoColor=white">
 
 ***
 ## 📘 주요 라이브러리
