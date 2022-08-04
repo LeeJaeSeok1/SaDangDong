@@ -2,8 +2,8 @@ import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateCol
 
 @Entity()
 export class ImageUpload {
-    @PrimaryGeneratedColumn("uuid")
-    id: string;
+    @PrimaryGeneratedColumn()
+    id: number;
 
     @Column({ nullable: true })
     originalName: string;
@@ -15,7 +15,10 @@ export class ImageUpload {
     url: string;
 
     @Column({ nullable: true })
-    target: string;
+    name: string;
+
+    @Column({ nullable: true })
+    description: string;
 
     @CreateDateColumn()
     createdAt: Date;

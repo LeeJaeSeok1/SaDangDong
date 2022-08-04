@@ -1,10 +1,6 @@
 import { isNotEmpty } from "class-validator";
-import { Chat } from "src/auctions/entities/chat.entity";
-import { Offer } from "src/auctions/entities/offer.entity";
 import { Collection } from "src/collections/entities/collection.entity";
-import { Like } from "src/like/entities/like.entity";
 import { Item } from "src/items/entities/item.entity";
-import { Sell } from "src/sell/entities/sell.entity";
 import {
     Column,
     CreateDateColumn,
@@ -21,7 +17,7 @@ export class User {
     @PrimaryColumn({ unique: true })
     address: string;
 
-    @Column({ nullable: true, default: "unnamed" })
+    @Column({ unique: true })
     name: string;
 
     @Column({
@@ -30,30 +26,9 @@ export class User {
     })
     profile_image: string;
 
-    @Column({ nullable: true })
-    banner_image: string;
-
     @CreateDateColumn()
     createdAt: Date;
 
     @UpdateDateColumn()
     updatedAt: Date;
-
-    @OneToOne((type) => Sell, (sell) => sell.user)
-    sell: Sell;
-
-    @OneToMany((type) => Collection, (collection) => collection.user, { eager: true })
-    collection: Collection[];
-
-    @OneToMany((type) => Item, (item) => item.user, { eager: true })
-    item: Item[];
-
-    @OneToMany((type) => Like, (like) => like.user)
-    like: Like;
-
-    @ManyToMany((type) => Offer, (offer) => offer.user)
-    offer: Offer[];
-
-    @ManyToMany((type) => Chat, (chat) => chat.user)
-    chat: Chat[];
 }

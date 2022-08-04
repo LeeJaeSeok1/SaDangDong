@@ -1,12 +1,12 @@
 import { Auction } from "src/auctions/entities/auction.entity";
 import { Collection } from "src/collections/entities/collection.entity";
-import { Like, Like_relation } from "src/like/entities/like.entity";
 import { User } from "src/users/entities/user.entity";
 import {
     Column,
     CreateDateColumn,
     DeleteDateColumn,
     Entity,
+    JoinColumn,
     ManyToOne,
     OneToOne,
     PrimaryColumn,
@@ -15,26 +15,26 @@ import {
 
 @Entity()
 export class Item {
-    @PrimaryColumn()
+    @PrimaryColumn({ unique: true })
     token_id: string;
 
-    @Column()
+    @Column({ nullable: true })
     name: string;
 
     @Column({ nullable: true })
     description: string;
 
-    @Column()
-    supply: number;
-
-    @Column()
-    Blockchain: string;
-
-    @Column({ name: "producer", comment: "제작자" })
+    @Column({ nullable: true, comment: "제작자" })
     address: string;
 
-    @Column()
+    @Column({ nullable: true })
     image: string;
+
+    @Column({ nullable: true })
+    ipfsImage: string;
+
+    @Column({ nullable: true })
+    ipfsJson: string;
 
     @CreateDateColumn()
     created_at: Date;
@@ -42,31 +42,18 @@ export class Item {
     @UpdateDateColumn()
     updated_at: Date;
 
-    @Column({ comment: "삭제여부 0 or 1" })
+    @Column({ comment: "삭제여부 0 or 1", default: 0 })
     archived: number;
 
     @DeleteDateColumn()
     archived_at: Date;
 
-    @Column()
+    @Column({ nullable: true })
     owner: string;
-    @ManyToOne((type) => User, (user) => user.item)
-    // @JoinColumn({ name: "owner" })
-    user: User;
 
-    @OneToOne((type) => Auction, (auction) => auction.item)
-    // @JoinColumn({ name: "token_id" })
-    auction: Auction;
+    @Column({ nullable: true })
+    hashdata: string;
 
-    @Column()
-    collection_id: number;
-    @ManyToOne((type) => Collection, (collection) => collection.item)
-    // @JoinColumn({ name: "token_id" })
-    collection: Collection;
-
-    @OneToOne((type) => Like, (like) => like.item)
-    like: Like;
-
-    @OneToOne((type) => Like_relation, (like_relation) => like_relation.item)
-    like_relation: Like_relation;
+    @Column({ nullable: true })
+    collection_name: string;
 }

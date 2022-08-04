@@ -1,5 +1,7 @@
 import * as multerS3 from "multer-s3";
 import * as AWS from "aws-sdk";
+import * as dotenv from "dotenv";
+dotenv.config();
 
 const bucketName = process.env.AWS_S3_BUCKET_NAME;
 
@@ -17,7 +19,7 @@ export const storage = multerS3({
     contentType: multerS3.AUTO_CONTENT_TYPE,
     acl: "public-read",
     key: function (req, file, cb) {
-        const fileName: string = `${Date.now().toString()}-${file.originalname}`;
+        const fileName = `${Date.now().toString()}-${file.originalname}`;
         cb(null, fileName);
     },
 });

@@ -24,25 +24,7 @@ export class CreateItemDto {
 
     @ApiProperty({
         example: "1",
-        description: "아이템 갯수",
-    })
-    supply: number;
-
-    @ApiProperty({
-        example: "ETH",
-        description: "블록체인 종류",
-    })
-    Blockchain: string;
-
-    @ApiProperty({
-        example: "https://sadangdong99.s3.ap-northeast-2.amazonaws.com/1657871846145-image.png",
-        description: "이미지 URL",
-    })
-    image: string;
-
-    @ApiProperty({
-        example: "1",
         description: "컬렉션 아이디",
     })
-    collection_id: number;
+    collection_name: string;
 }

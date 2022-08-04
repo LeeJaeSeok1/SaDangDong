@@ -1,43 +1,53 @@
-import { Logger } from '@nestjs/common';
 import {
-  OnGatewayConnection,
-  OnGatewayDisconnect,
-  OnGatewayInit,
-  SubscribeMessage,
-  WebSocketGateway,
-  WebSocketServer,
-} from '@nestjs/websockets';
-import { Server, Socket } from 'socket.io';
+    Logger,
+    CACHE_MANAGER,
+    CacheTTL,
+    UseInterceptors,
+    HttpException,
+    Inject,
+    Injectable,
+    Controller,
+} from "@nestjs/common";
+import {
+    ConnectedSocket,
+    MessageBody,
+    OnGatewayConnection,
+    OnGatewayDisconnect,
+    OnGatewayInit,
+    SubscribeMessage,
+    WebSocketGateway,
+    WebSocketServer,
+} from "@nestjs/websockets";
+import { Server, Socket } from "socket.io";
+import { ChatService } from "./chat.service";
+import { createMessageDto } from "./dto/createMessage.dto";
 
-@WebSocketGateway({ namespace: 'chat' })
-export class ChatGateway
-  implements OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit {
-  private static readonly logger = new Logger(ChatGateway.name);
+@WebSocketGateway({ namespace: "/chat", cors: { origin: "*" } })
+export class ChatGateway implements OnGatewayInit {
+    constructor(private chatService: ChatService) {}
+    @WebSocketServer() public server: Server;
 
-  @WebSocketServer()
-  server: Server;
+    @SubscribeMessage("sendMessage")
+    handleSendMessage(client: Socket, data: createMessageDto) {
+        // this.chatService.createMessage(data);
+        this.server.to(`${data.auction_id}`).emit("recMessage", data);
+    }
 
-  afterInit() {
-    ChatGateway.logger.debug(`Socket Server Init Complete`);
-  }
+    @SubscribeMessage("joinRoom")
+    handleJoinRoom(client: Socket, room: string) {
+        client.join(room);
+        client.emit("joinRoom", room);
+    }
 
-  handleConnection(client: Socket) {
-    ChatGateway.logger.debug(
-      `${client.id}(${client.handshake.query['username']}) is connected!`,
-    );
+    @SubscribeMessage("leaveRoom")
+    handleErrorRoom(client: Socket, room: string) {
+        console.log(room);
+        client.leave(room);
+        client.emit("leaveRoom", room);
+    }
 
-    this.server.emit('msgToClient', {
-      name: `admin`,
-      text: `join chat.`,
-    });
-  }
-
-  handleDisconnect(client: Socket) {
-    ChatGateway.logger.debug(`${client.id} is disconnected...`);
-  }
-
-  @SubscribeMessage('msgToServer')
-  handleMessage(client: Socket, message: { name: string; text: string }): void {
-    this.server.emit('msgToClient', message);
-  }
+    afterInit(server: Server) {
+        console.log(server);
+        //Do stuffs
+    }
 }

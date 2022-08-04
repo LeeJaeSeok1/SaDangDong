@@ -1,4 +1,4 @@
-import { Body, Controller, Post, UploadedFiles, UseInterceptors } from "@nestjs/common";
+import { BadRequestException, Body, Controller, Post, UploadedFiles, UseInterceptors } from "@nestjs/common";
 import { FilesInterceptor } from "@nestjs/platform-express";
 import { ApiBody, ApiConsumes, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { ImagesService } from "./images.service";
@@ -31,12 +31,14 @@ export class ImagesController {
     })
     @Post()
     @UseInterceptors(FilesInterceptor("files", 3, { storage: storage }))
-    async uploadImage(@UploadedFiles() files: Express.Multer.File[]) {
+    async uploadImage(@UploadedFiles() files: Express.Multer.File[], @Body() fileInfo: CreateImageDto) {
         console.log("여긴 뜨나?");
         try {
-            return await this.imagesService.uploadImage(files);
+            console.log("이미지 콘솔", files);
+            console.log("파일정보", fileInfo);
+            return await this.imagesService.uploadImage(files, fileInfo);
         } catch (error) {
-            console.log("컨트롤러 에러", error);
+            throw new BadRequestException(error.message);
         }
     }
 

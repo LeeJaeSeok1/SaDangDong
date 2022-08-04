@@ -9,24 +9,23 @@ import {
     PrimaryGeneratedColumn,
     UpdateDateColumn,
     JoinColumn,
+    PrimaryColumn,
+    DeleteDateColumn,
 } from "typeorm";
 
-@Entity({ schema: "sadangdong", name: "collection" })
+@Entity()
 export class Collection {
-    @PrimaryGeneratedColumn()
-    id: number;
-
-    @Column({ name: "name", unique: true })
+    @PrimaryColumn({ unique: true })
     name: string;
 
     @Column({ nullable: true })
     description: string;
 
-    @Column({ nullable: true })
+    @Column({ type: "decimal", precision: 7, scale: 4, default: 0 })
     commission: number;
 
     @Column({ nullable: true })
-    benner_image: string;
+    banner_image: string;
 
     @Column({ nullable: true })
     feature_image: string;
@@ -37,13 +36,18 @@ export class Collection {
     @UpdateDateColumn()
     updated_at: Date;
 
-    // @Column({ nullable: true })
-    // address: string;
+    @Column({ comment: "삭제여부 0 or 1", default: 0 })
+    archived: number;
 
-    @ManyToOne((type) => User, (user) => user.collection, { onDelete: "SET NULL", onUpdate: "CASCADE" })
-    @JoinColumn()
-    user: User;
+    @DeleteDateColumn()
+    archived_at: Date;
 
-    @OneToMany((type) => Item, (item) => item.collection)
-    item: Item[];
+    @Column({ nullable: true })
+    address: string;
+
+    // @ManyToOne((type) => User, (user) => user.collection, { onDelete: "SET NULL", onUpdate: "CASCADE" })
+    // user: User;
+
+    // @OneToMany((type) => Item, (item) => item.collection)
+    // item: Item[];
 }

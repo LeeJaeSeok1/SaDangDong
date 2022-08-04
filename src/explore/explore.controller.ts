@@ -1,8 +1,7 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from "@nestjs/common";
+import { Controller, Get, Query, UseFilters } from "@nestjs/common";
 import { ExploreService } from "./explore.service";
-import { CreateExploreDto } from "./dto/create-explore.dto";
-import { UpdateExploreDto } from "./dto/update-explore.dto";
 import { ApiOperation, ApiQuery, ApiTags } from "@nestjs/swagger";
+import { AuthToken } from "src/config/auth.decorator";
 
 @ApiTags("Explore")
 @Controller("api")
@@ -14,9 +13,11 @@ export class ExploreController {
         description: "메인 패이지",
     })
     @Get("main")
-    findMain() {
-        return this.exploreService.findAll();
+    getMainInfo(@Query("_page") _page: number, @AuthToken() address: string) {
+        console.log(_page, address);
+        return this.exploreService.mainInfo(_page, address);
     }
+
     @ApiQuery({
         name: "tab",
         required: true,
@@ -27,7 +28,13 @@ export class ExploreController {
         description: "전체보기 패이지",
     })
     @Get("explore")
-    findAll() {
-        return this.exploreService.findAll();
+    getExploreInfo(
+        @Query("tab") tab: string,
+        @Query("_page") _page: number,
+        @Query("_limit") _limit: number,
+        @AuthToken() address: string,
+    ) {
+        console.log(tab);
+        return this.exploreService.exploreInfo(tab, address, _page, _limit);
     }
 }

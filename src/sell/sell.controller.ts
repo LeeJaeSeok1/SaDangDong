@@ -2,33 +2,19 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from "@nestjs/commo
 import { SellService } from "./sell.service";
 import { CreateSellDto } from "./dto/create-sell.dto";
 import { UpdateSellDto } from "./dto/update-sell.dto";
+import { AuthToken } from "src/config/auth.decorator";
 
-@Controller("sell")
+@Controller("api/sell")
 export class SellController {
     constructor(private readonly sellService: SellService) {}
 
-    // @Post()
-    // create(@Body() createSellDto: CreateSellDto) {
-    //   return this.sellService.create(createSellDto);
-    // }
+    @Post(":auction_id")
+    SellComplete(@Body() data, @Param("auction_id") auction_id: number, @AuthToken() address: string) {
+        return this.sellService.SellComplete(data, auction_id, address);
+    }
 
-    // @Get()
-    // findAll() {
-    //   return this.sellService.findAll();
-    // }
-
-    // @Get(':id')
-    // findOne(@Param('id') id: string) {
-    //   return this.sellService.findOne(+id);
-    // }
-
-    // @Patch(':id')
-    // update(@Param('id') id: string, @Body() updateSellDto: UpdateSellDto) {
-    //   return this.sellService.update(+id, updateSellDto);
-    // }
-
-    // @Delete(':id')
-    // remove(@Param('id') id: string) {
-    //   return this.sellService.remove(+id);
-    // }
+    @Get()
+    findAll() {
+        return this.sellService.findAll();
+    }
 }

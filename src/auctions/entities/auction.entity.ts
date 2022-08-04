@@ -1,28 +1,32 @@
 import { Item } from "src/items/entities/item.entity";
-import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from "typeorm";
-import { Chat } from "./chat.entity";
-import { Offer } from "./offer.entity";
+import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class Auction {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column()
+    @Column({ type: "decimal", precision: 7, scale: 4 })
     price: number;
 
     @Column()
-    start_at: Date;
+    token_id: string;
 
     @Column()
-    end_at: Date;
+    started_at: Date;
 
-    @OneToOne((type) => Item, (item) => item.auction)
-    item: Item;
+    @Column()
+    ended_at: Date;
 
-    @OneToOne((type) => Offer, (offer) => offer.auction)
-    offer: Offer;
+    @Column()
+    transaction_at: Date;
 
-    @OneToOne((type) => Chat, (chat) => chat.auction)
-    chat: Chat;
+    @Column()
+    progress: boolean;
+
+    @Column()
+    transaction: boolean;
+
+    @Column()
+    address: string;
 }
