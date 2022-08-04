@@ -88,4 +88,27 @@
 | Swagger |	API 문서화 |
 | multer,<br>multer-s3 | 이미지 업로드 |
 | json-rpc | 원격 프로시저 호출 |
-
+***
+## more info
+<details>
+<summary>API 명세서</summary>
+<div markdown="1">
+<img src ="https://user-images.githubusercontent.com/81402579/182878896-8bdbddc2-8244-48b7-b64a-3ea80a607cc2.png">
+<img src = "https://user-images.githubusercontent.com/81402579/182878973-f3404687-e1e8-4602-8e73-8efcfe1a2ac4.png">
+<img src = "https://user-images.githubusercontent.com/81402579/182879041-0c9fb569-e403-4b38-96cd-6bddb40c8ba9.png">
+<img src = "https://user-images.githubusercontent.com/81402579/182879104-431ceec9-54e6-414a-843a-fc414f2288b9.png">
+</div>
+</details>
+<details>
+<summary>DB ERD</summary>
+<div markdown="1">
+<img src = "https://user-images.githubusercontent.com/81402579/182879548-9bb1a8d2-1950-4803-b0e9-99cfb905697f.JPG">
+</div>
+</details>
+<details>
+<summary>WireFrame</summary>
+<div markdown="1">
+<img src = "https://user-images.githubusercontent.com/81402579/182880143-1d755ed6-131d-4ece-94d2-19d236f6b1ea.png">
+<img src = "https://user-images.githubusercontent.com/81402579/182880300-0aa55f0e-503a-49f3-bd64-6e20a5dec42b.png">
+</div>
+</details>
