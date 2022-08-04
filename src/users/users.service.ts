@@ -356,9 +356,9 @@ export class UsersService {
                 await Promise.all([
                     information.map(async (element) => {
                         const startParse = parse_Kcalculate(element.started_at, 0);
-                        const endParse = parse_Kcalculate(element.end_at, 0);
-                        element.start_at = startParse;
-                        element.end_at = endParse;
+                        const endParse = parse_Kcalculate(element.ended_at, 0);
+                        element.startedx_at = startParse;
+                        element.ended_at = endParse;
                     }),
                 ]);
             }
