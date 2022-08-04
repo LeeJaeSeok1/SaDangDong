@@ -353,7 +353,7 @@ export class UsersService {
                 WHERE progress = true
                 ORDER BY auction.ended_at DESC
                 `);
-                information.map((element) => {
+                information.forEach((element) => {
                     const startParse = parse_Kcalculate(element.started_at, 0);
                     const endParse = parse_Kcalculate(element.ended_at, 0);
                     element.started_at = startParse;
@@ -382,6 +382,10 @@ export class UsersService {
                 console.log(information);
 
                 information.map((element) => {
+                    const startParse = parse_Kcalculate(element.started_at, 0);
+                    const endParse = parse_Kcalculate(element.ended_at, 0);
+                    element.started_at = startParse;
+                    element.ended_at = endParse;
                     if (element.transaction == 0) {
                         if (element.bidding_price == element.user_offer) {
                             console.log(element.ended_at);
