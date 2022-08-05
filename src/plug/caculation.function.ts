@@ -14,7 +14,7 @@ export function create_date() {
     start.setHours(UTC_date.getHours() + 9);
     const end = new Date(start);
     // end.setDate(start.getDate() + 1);
-    end.setHours(start.getHours() + 6);
+    end.setHours(start.getHours() + 2);
     return { start, end };
 }
 
