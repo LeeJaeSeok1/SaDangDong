@@ -48,6 +48,7 @@
 <img src="https://img.shields.io/badge/route53-232F3E?style=for-the-badge&logo=amazon aws&logoColor=white">
 <img src="https://img.shields.io/badge/amazon s3-569A31?style=for-the-badge&logo=amazon s3&logoColor=white">
 <img src="https://img.shields.io/badge/ipfs-65C2CB?style=for-the-badge&logo=ipfs&logoColor=white">
+<img src="https://img.shields.io/badge/ethers.js-3C3C3D?style=for-the-badge&logo=ethereum&logoColor=white">
 </div>
 
 ### Back-end
@@ -61,7 +62,6 @@
 <img src="https://img.shields.io/badge/swagger-85EA2D?style=for-the-badge&logo=swagger&logoColor=white">
 <br>
 <img src="https://img.shields.io/badge/solidity-363636?style=for-the-badge&logo=solidity&logoColor=white">
-<img src="https://img.shields.io/badge/ethers.js-3C3C3D?style=for-the-badge&logo=ethereum&logoColor=white">
 <img src="https://img.shields.io/badge/truffle-000000?style=for-the-badge&logo=truffle&logoColor=white">
 <img src="https://img.shields.io/badge/jsonrpc-000000?style=for-the-badge&logo=json&logoColor=white">
 <img src="https://img.shields.io/badge/geth-000000?style=for-the-badge&logo=geth&logoColor=white">
@@ -103,30 +103,17 @@
    -  하나의 데이터를 여러 항목으로 집합시켜 표시한다. 관계형 데이터베이스 관리 시스템은 서로 관계를 맺는 여러 개의 테이블에 항목을 나누어 저장하고, 필요한 테이블에서 필요한 부분만 가져다가 사용이 가능기 때문에 선택 했습니다.
 5. swagger
    - API 문서를 자동화하고, 명세서를 통해 프론트엔드와의 소통을 원할이 하기 위해 선택했습니다.
-
 6. solidity
+   - 프라이빗 네트워크 구축을 위해 선택했습니다.
+   
    - truffle
-      - solidity의 프레임 워크
-      - 
+      - 스마트컨트렉트를 컴파일 및 배포를 위해 사용했습니다.      
 7. Geth
    - 기존의 널리 퍼져있는 테스트 네트워크는 한정직인 코인과 트랜잭션 속도 저하 등으로 인해 프라이빗 네트워크를 구축을 위해 선택 했습니다.
    - 프라이빗 네트워크는 직접 체국 하기 때문에 많은 코인으로 테스트를 해볼 수가 있고, 블록캐는 속도가 빨라 트랜젝션 속도가 빠름니다.
-   - 
-7. ether.sj
-   - 이더리움 블록체인과 연결을 캡슐화 하기 위해 선택했습니다.
-8. 
+8. json-RPC
+   - 이더리움과 상호 작용하는 json-PRC를 이용하여 solidiy 와 nestjs 간 통신을 위해 선택 했습니다. 
 
-***
-## 📘 주요 라이브러리
-| 라이브러리 | 설명 |
-|---|---|
-| MySQL | TypeORM |
-| socket.io, <br> @nestjs/websockets | 실시간 양방향 통신 |
-| class-validator | 유효성 검사	 |
-| dotenv | 환경변수 설정 |
-| Swagger |	API 문서화 |
-| multer, multer-s3 | 이미지 업로드 |
-| json-rpc | 원격 프로시저 호출 |
 ***
 ## more info
 <details>
