@@ -23,7 +23,7 @@
    
    
 ### Links
-[시연영상]()
+[시연영상]()   
 [사당동 보러가기](https://sadangdong.com/)   
 [Team Notion](https://www.notion.so/2-cef47c67331c4b0d9445d55302fc51de)
    
