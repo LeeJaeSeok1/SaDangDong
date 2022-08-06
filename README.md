@@ -5,9 +5,9 @@
    
 ### Links
 [시연영상](https://www.youtube.com/watch?v=jTech_pwjCU)   
-[Team Notion](https://www.notion.so/2-cef47c67331c4b0d9445d55302fc51de)
-[Front-End Github](https://github.com/damiiya/sadangdong)
-[Blockchain Github](https://github.com/eunchong2lee/SDD_Blockchain)
+[Team Notion](https://www.notion.so/2-cef47c67331c4b0d9445d55302fc51de)   
+[Front-End Github](https://github.com/damiiya/sadangdong)   
+[Blockchain Github](https://github.com/eunchong2lee/SDD_Blockchain)   
 
 ## 👨‍💻 프로젝트 소개
 ### 사실은 오래전부터  당신만을 위한  동물을 준비해왔다우
