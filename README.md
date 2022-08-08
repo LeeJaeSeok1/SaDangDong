@@ -34,10 +34,9 @@
    
 ## BackEnd 핵심기능
 
-* ethers.js 민팅, 블록체인 거래기능 구현
+* solidity smart contract 민팅, 블록체인 거래기능 구현
 * 블록체인 프라이빗 네트워크 구축
 * socket.io 실시간 경매 및 채팅기능 구현
-* 메타마스크를 통한 결제 
 
 
 
